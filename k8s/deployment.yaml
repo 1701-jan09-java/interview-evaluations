@@ -1,0 +1,40 @@
+  apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:  
+    name: "interview-evaluations"
+    labels: 
+      app: "interview-evaluations"
+      track: "stable"
+  spec: 
+    replicas: 3
+    template: 
+      metadata: 
+        name: "interview-evaluations"
+        labels: 
+          app: "interview-evaluations"
+          track: "stable"
+      spec: 
+        containers: 
+          - name: "interview-evaluations"
+            image: "revature/interview-evaluations:0.1"
+            ports: 
+              - containerPort: 8080
+            resources:
+              requests:
+                cpu: 0.1
+                memory: 400M
+              limits:
+                cpu: 0.1
+                memory: 400M
+#            livenessProbe:
+#              httpGet:
+#                path: /healthz
+#                port: 8080
+#              initialDelaySeconds: 20
+#              timeoutSeconds: 5
+#            readinessProbe:
+#              httpGet:
+#                path: /readiness
+#                port: 8080
+#              initialDelaySeconds: 40
+#              timeoutSeconds: 5

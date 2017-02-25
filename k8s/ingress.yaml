@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: "interview-evaluations"
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - interview-evaluations.revaturelabs.com
+    secretName: interview-evaluations-tls
+  rules:
+  - host: interview-evaluations.revaturelabs.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: interview-evaluations
+          servicePort: 80
