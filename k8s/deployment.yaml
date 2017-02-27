@@ -6,7 +6,7 @@
       app: "interview-evaluations"
       track: "stable"
   spec: 
-    replicas: 3
+    replicas: 2
     template: 
       metadata: 
         name: "interview-evaluations"
