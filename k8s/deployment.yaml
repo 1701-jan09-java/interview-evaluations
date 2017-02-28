@@ -7,6 +7,7 @@
       track: "stable"
   spec: 
     replicas: 2
+    revisionHistoryLimit: 10
     template: 
       metadata: 
         name: "interview-evaluations"
