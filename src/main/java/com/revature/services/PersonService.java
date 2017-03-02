@@ -15,15 +15,4 @@ public class PersonService {
 		repository.save(person);
 		
 	}
-	/*
-	public static void main(String[] args) {
-		
-//		PersonService test = new PersonService();
-//		
-//		Person person = new Person("Sharang", "Wakankar");
-//
-//		test.addPerson(person);
-		
-	}
-	*/
 }

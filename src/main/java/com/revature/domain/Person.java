@@ -5,18 +5,23 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="ie_person")
 public class Person {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name = "p_id")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="perSeq")
+	@SequenceGenerator(allocationSize=1, name="perSeq", sequenceName="person_seq")
 	private int id;
 
-	@Column(nullable = false)
+	@Column(name = "p_firstname", nullable = false)
 	private String firstName;
 	
-	@Column(nullable = false)
+	@Column(name = "p_lastname", nullable = false)
 	private String lastName;
 	
 	public Person() {}
