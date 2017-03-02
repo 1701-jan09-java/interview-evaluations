@@ -64,3 +64,4 @@ nbactions.xml
 /keyrings/live/pubring.gpg~
 /keyrings/live/pubring.kbx~
 /keyrings/live/secring.gpg
+/k8s/secrets/evaluations-database.yaml
