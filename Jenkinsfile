@@ -35,7 +35,11 @@ podTemplate(label: 'jenkins-worker', containers: [
                                       usernameVariable: 'INTEVAL_USER', passwordVariable: 'INTEVAL_PASS']]) {
                 withCredentials([string(credentialsId: 'f9ca6321-287d-4402-b0f6-9f661e06d399', variable: 'INTEVAL_URL')]) {
                   
-            	  sh "mvn clean package"
+            	  sh "mvn clean \
+                      -DINTEVAL_URL=${INTEVAL_URL}   \
+                      -DINTEVAL_USER=${INTEVAL_USER} \
+                      -DINTEVAL_PASS=${INTEVAL_PASS} \
+                      package"
                   
                 } // withCredentials
                 } // withCredentials
