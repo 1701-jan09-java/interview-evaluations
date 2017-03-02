@@ -1,5 +1,5 @@
 package com.revature.services;
 
-public class EvalLogic {
-
+public interface EvalLogic {
+	
 }

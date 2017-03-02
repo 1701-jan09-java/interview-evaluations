@@ -13,23 +13,31 @@ public class Eval {
 	@Id
 	@Column(name="e_id")
 	private Integer id;
+	
 	@Column(name="e_week")
 	private Integer week;
+	
 	@Column(name="e_date")
 	private Date date;
-	@Column(name="e_eval_type")
-	private Integer interviewType;
-	@Column(name="e_pid_trainee")
-	private Integer trainee;
-	@Column(name="e_batch")
-	private Integer batch;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="e_eval_type")
+	private EvalType evalType;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="e_pid_trainee")
+	private Person trainee;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="e_batch")
+	private Batch batch;
 	
 	public Eval(Integer id, Integer week, Date date, Integer interviewType, Integer trainee, Integer batch) {
 		super();
 		this.id = id;
 		this.week = week;
 		this.date = date;
-		this.interviewType = interviewType;
+		this.evalType = interviewType;
 		this.trainee = trainee;
 		this.batch = batch;
 	}
@@ -47,7 +55,7 @@ public class Eval {
 	}
 
 	public Integer getInterviewType() {
-		return interviewType;
+		return evalType;
 	}
 
 	public Integer getTrainee() {
