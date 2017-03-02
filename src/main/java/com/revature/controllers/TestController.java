@@ -3,6 +3,7 @@ package com.revature.controllers;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,10 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.domain.Person;
+import com.revature.domain.PersonRepository;
+
 @RestController
 @RequestMapping("/api/dog/")
 public class TestController {
 	
+	@Autowired
+	private PersonRepository repository;
 	
 	@RequestMapping(value="", method=RequestMethod.GET)
 	public ResponseEntity<List<Dog>> getAllDogs() {
@@ -40,7 +46,18 @@ public class TestController {
 		return ResponseEntity.ok(new Dog(name, "lab"));
 	}
 	
-
+	@RequestMapping(value="person", method=RequestMethod.GET)
+	public ResponseEntity<?> getAllPersons() {
+		return ResponseEntity.ok(repository.findAll());
+	}
+	
+	@RequestMapping(value="person", method=RequestMethod.POST)
+	public ResponseEntity<?> creatPerson() {
+		Person person = new Person("Sharang", "Wakankar");
+		return ResponseEntity.ok(repository.save(person));
+	}
+	
+	
 	
 }
 
