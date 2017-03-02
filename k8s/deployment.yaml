@@ -25,17 +25,17 @@
                 valueFrom:
                   secretKeyRef:
                     name: evaluations-database
-                    value: url
+                    key: url
               - name: INTEVAL_USER
                 valueFrom:
                   secretKeyRef:
                     name: evaluations-database
-                    value: username
+                    key: username
               - name: INTEVAL_PASS
                 valueFrom:
                   secretKeyRef:
                     name: evaluations-database
-                    value: password
+                    key: password
             resources:
               requests:
                 cpu: 0.1
