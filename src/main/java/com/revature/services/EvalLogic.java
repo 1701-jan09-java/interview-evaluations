@@ -1,5 +1,8 @@
 package com.revature.services;
 
-public class EvalLogic {
+import com.revature.domain.Eval;
 
+public interface EvalLogic {
+	
+	Eval getEvalById(int id);
 }
