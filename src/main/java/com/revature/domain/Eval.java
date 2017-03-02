@@ -32,12 +32,12 @@ public class Eval {
 	@JoinColumn(name="e_batch")
 	private Batch batch;
 	
-	public Eval(Integer id, Integer week, Date date, Integer interviewType, Integer trainee, Integer batch) {
+	public Eval(Integer id, Integer week, Date date, EvalType evalType, Person trainee, Batch batch) {
 		super();
 		this.id = id;
 		this.week = week;
 		this.date = date;
-		this.evalType = interviewType;
+		this.evalType = evalType;
 		this.trainee = trainee;
 		this.batch = batch;
 	}
@@ -54,15 +54,15 @@ public class Eval {
 		return date;
 	}
 
-	public Integer getInterviewType() {
+	public EvalType getEvalType() {
 		return evalType;
 	}
 
-	public Integer getTrainee() {
+	public Person getTrainee() {
 		return trainee;
 	}
 
-	public Integer getBatch() {
+	public Batch getBatch() {
 		return batch;
 	}
 	

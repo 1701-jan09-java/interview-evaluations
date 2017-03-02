@@ -58,4 +58,6 @@ buildNumber.properties
 # Unignore maven wrapper jar
 !/.mvn/wrapper/maven-wrapper.jar
 
-
+# NetBeans
+nb-configuration.xml
+nbactions.xml
