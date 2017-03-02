@@ -17,9 +17,9 @@ public class Eval {
 	private Integer week;
 	@Column(name="e_date")
 	private Date date;
-	@Column(name="e_type")
+	@Column(name="e_eval_type")
 	private Integer interviewType;
-	@Column(name="e_trainee")
+	@Column(name="e_pid_trainee")
 	private Integer trainee;
 	@Column(name="e_batch")
 	private Integer batch;
