@@ -47,13 +47,13 @@ public class TestController {
 	}
 	
 	@RequestMapping(value="person", method=RequestMethod.GET)
-	public ResponseEntity<?> getAllPersons() {
+	public ResponseEntity<Iterable<Person>> getAllPersons() {
 		return ResponseEntity.ok(repository.findAll());
 	}
 	
 	@RequestMapping(value="person", method=RequestMethod.POST)
-	public ResponseEntity<?> creatPerson() {
-		Person person = new Person("Sharang", "Wakankar");
+	public ResponseEntity<Person> creatPerson() {
+		Person person = new Person("Efren", "Olivas");
 		return ResponseEntity.ok(repository.save(person));
 	}
 	
