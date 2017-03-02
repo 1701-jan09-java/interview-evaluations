@@ -11,17 +11,17 @@ import org.springframework.data.annotation.Id;
 public class Eval {
 	
 	@Id
-	@Column
+	@Column(name="e_id")
 	private Integer id;
-	@Column
+	@Column(name="e_week")
 	private Integer week;
-	@Column
+	@Column(name="e_date")
 	private Date date;
-	@Column
+	@Column(name="e_type")
 	private Integer interviewType;
-	@Column
+	@Column(name="e_trainee")
 	private Integer trainee;
-	@Column
+	@Column(name="e_batch")
 	private Integer batch;
 	
 	public Eval(Integer id, Integer week, Date date, Integer interviewType, Integer trainee, Integer batch) {
