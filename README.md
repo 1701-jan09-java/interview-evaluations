@@ -39,6 +39,17 @@ docker build -t revature/interview-evaluations:0.1 .
 docker run --rm -d -p 8080:8080 revature/interview-evaluations:0.1
 ```
 
+If above failed, then run the following.  It passes in environment variables for the Postgres connection.
+* Note you have to supply values for url, user, and pass.
+
+```
+docker run --rm -d -p 8080:8080 \
+-e INTEVAL_URL=<someUrl> \
+-e INTEVAL_USER=<someUser> \
+-e INTEVAL_PASS=<somePass> \
+revature/interview-evaluations:0.1
+```
+
 ### List running containers
 
 ```
