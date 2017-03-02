@@ -24,7 +24,9 @@ public class Person {
 	@Column(name = "p_lastname", nullable = false)
 	private String lastName;
 	
-	public Person() {}
+	public Person() { 
+		// only exists for the sake of JPA
+	}
 
 	public Person(String firstName, String lastName) {
 		super();
