@@ -25,10 +25,31 @@ public class EvalController {
 		return eval;
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "batches/{id}/week/{num}")
+	public ArrayList<Eval> getEvalsByWeek(@PathVariable("id") Integer id, @PathVariable("num") Integer num){
+		
+		ArrayList<Eval> evals = evalLogic.getEvalsByWeek(id,num);
+		return evals;
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "batches/{id}")
 	public ArrayList<Eval> getEvalsByBatch(@PathVariable("id") Integer id){
 		
 		ArrayList<Eval> evals = evalLogic.getEvalsByBatch(id);
+		return evals;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "trainees/{id}")
+	public ArrayList<Eval> getEvalsByPerson(@PathVariable("id") Integer id){
+		
+		ArrayList<Eval> evals = evalLogic.getEvalsByPerson(id);
+		return evals;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "trainees/{id}/week/{num}")
+	public ArrayList<Eval> getTraineeEvalsByWeek(@PathVariable("id") Integer id, @PathVariable("num") Integer num){
+		
+		ArrayList<Eval> evals = evalLogic.getPersonEvalsByWeek(id,num);
 		return evals;
 	}
 }

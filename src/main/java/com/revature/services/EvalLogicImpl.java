@@ -32,4 +32,25 @@ public class EvalLogicImpl implements EvalLogic {
 		System.out.println(evals);
 		return evals;
 	}
+	
+	@Override
+	public ArrayList<Eval> getEvalsByWeek(int id, int num){
+		ArrayList<Eval> evals = dao.findAllByWeekNumber(id,num);
+		System.out.println(evals);
+		return evals;
+	}
+
+	@Override
+	public ArrayList<Eval> getEvalsByPerson(int id) {
+		ArrayList<Eval> evals = dao.findAllByPersonId(id);
+		System.out.println(evals);
+		return evals;
+	}
+
+	@Override
+	public ArrayList<Eval> getPersonEvalsByWeek(int id, int num) {
+		ArrayList<Eval> evals = dao.findAllByPersonIdAndWeekNumber(id,num);
+		System.out.println(evals);
+		return evals;
+	}
 }
