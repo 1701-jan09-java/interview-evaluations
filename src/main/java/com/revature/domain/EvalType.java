@@ -1,13 +1,10 @@
 package com.revature.domain;
 
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import org.springframework.data.annotation.Id;
+import javax.persistence.*;
 
 @Entity
-@Table(name="public.ie_eval_type")
+@Table(name="ie_eval_type")
 public class EvalType {
 
 	@Id
@@ -17,8 +14,7 @@ public class EvalType {
 	@Column(name="et_description")
 	private String description;
 	
-	public EvalType() {
-	}
+	public EvalType() {}
 
 	public Integer getId() {
 		return id;

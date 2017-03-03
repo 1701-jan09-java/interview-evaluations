@@ -18,8 +18,8 @@ public interface BatchRepository extends JpaRepository<Batch, Integer> {
 	Batch save(Batch batchName);
 	List<Batch> findAll();
 	
-	@Modifying
-	@Query("update ie_batch Batch set Batch.b_name = ?1, where Batch.b_id = ?2")
-	void setBatchInfoById(String name, int id);
+//	@Modifying
+//	@Query("update ie_batch Batch set Batch.b_name = ?1, where Batch.b_id = ?2")
+//	void setBatchInfoById(String name, int id);
 
 }
