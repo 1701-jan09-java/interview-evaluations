@@ -1,1 +1,1 @@
-insert into ie_person values(103,'Chris','Matheny');
+insert into ie_person values(103, 'Chris', 'Matheny');
