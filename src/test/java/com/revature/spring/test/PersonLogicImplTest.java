@@ -43,7 +43,7 @@ public class PersonLogicImplTest {
 		
 		System.out.println("here");
 		List<Person> persons = pLogic.getPersonByFirstName("Chris");
-		System.out.println("testing");
+		System.out.println("testingg");
 		System.out.println(persons.toString());
 		assertEquals(persons.toString(), "Person [id=103, firstName=Chris, lastName=Matheny]" );
 				
