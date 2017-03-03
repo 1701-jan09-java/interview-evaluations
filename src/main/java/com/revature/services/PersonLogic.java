@@ -1,18 +1,17 @@
 package com.revature.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.revature.domain.Person;
 import com.revature.domain.PersonRepository;
 
-public class PersonService {
+public interface PersonLogic {
 
-	@Autowired 
-	private PersonRepository repository;
+	List<Person> getPersonByFirstName(String firstName);
 	
-	public void addPerson(Person person) {		
-				
-		repository.save(person);
-		
-	}
+	List<Person> getPersonByLastName(String lastName);
+	
+	
 }
