@@ -8,11 +8,11 @@ public interface EvalLogic {
 	
 	Eval getEvalById(int id);
 	
-	ArrayList<Eval> getEvalsByBatch(int id);
+	ArrayList<Eval> getEvalsByBatch(int id, String evalParam);
 	
-	ArrayList<Eval> getEvalsByWeek(int id, int num);
+	ArrayList<Eval> getEvalsByWeek(int id, int num, String evalParam);
 	
-	ArrayList<Eval> getEvalsByPerson(int id);
+	ArrayList<Eval> getEvalsByPerson(int id, String evalParam);
 
-	ArrayList<Eval> getPersonEvalsByWeek(int id, int num);
+	ArrayList<Eval> getPersonEvalsByWeek(int id, int num, String evalParam);
 }

@@ -25,31 +25,57 @@ public class EvalLogicImpl implements EvalLogic {
 	}
 	
 	@Override
-	public ArrayList<Eval> getEvalsByBatch(int id){
-		
-		ArrayList<Eval> evals = dao.findAllByBatchId(id);
+	public ArrayList<Eval> getEvalsByBatch(int id, String evalParam){
+		ArrayList<Eval> evals;
+		if (evalParam.equalsIgnoreCase("both")) {
+			evals = dao.findAllByBatchId(id);
+		} else {
+			evals = dao.findAllByBatchIdAndEvalTypeDescription(id, matchEvalType(evalParam));
+		}
 		System.out.println(evals);
 		return evals;
 	}
 	
 	@Override
-	public ArrayList<Eval> getEvalsByWeek(int id, int num){
-		ArrayList<Eval> evals = dao.findAllByWeek(id,num);
+	public ArrayList<Eval> getEvalsByWeek(int id, int num, String evalParam){
+		ArrayList<Eval> evals;
+		if (evalParam.equalsIgnoreCase("both")) {
+			evals = dao.findAllByBatchIdAndWeek(id,num);
+		} else {
+			evals = dao.findAllByBatchIdAndWeekAndEvalTypeDescription(id, num, matchEvalType(evalParam));
+		}
 		System.out.println(evals);
+		return evals;
+	}
+	
+	@Override
+	public ArrayList<Eval> getEvalsByPerson(int id, String evalParam) {
+		ArrayList<Eval> evals;
+		if (evalParam.equalsIgnoreCase("both")) {
+			evals = dao.findAllByTraineeId(id);
+		} else {
+			evals = dao.findAllByTraineeIdAndEvalTypeDescription(id, matchEvalType(evalParam));
+		}
 		return evals;
 	}
 
 	@Override
-	public ArrayList<Eval> getEvalsByPerson(int id) {
-		ArrayList<Eval> evals = dao.findAllByTraineeId(id);
+	public ArrayList<Eval> getPersonEvalsByWeek(int id, int num, String evalParam) {
+		ArrayList<Eval> evals;
+		if (evalParam.equalsIgnoreCase("both")) {
+			evals = dao.findAllByTraineeIdAndWeek(id,num);
+		} else {
+			evals = dao.findAllByTraineeIdAndWeekAndEvalTypeDescription(id, num, matchEvalType(evalParam));
+		}	
 		System.out.println(evals);
 		return evals;
 	}
-
-	@Override
-	public ArrayList<Eval> getPersonEvalsByWeek(int id, int num) {
-		ArrayList<Eval> evals = dao.findAllByTraineeIdAndWeek(id,num);
-		System.out.println(evals);
-		return evals;
+	
+	private String matchEvalType(String evalParam) {
+		if (evalParam.equalsIgnoreCase("trainer")) {
+			return "Trainer";
+		} else if (evalParam.equalsIgnoreCase("qc")) {
+			return "QC";
+		} else throw new IllegalArgumentException("EvalType not recognized");
 	}
 }
