@@ -1,11 +1,12 @@
 package com.revature.domain;
 
+import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
 @Table(name="ie_eval_type")
-public class EvalType {
+public class EvalType implements Serializable {
 
 	@Id
 	@Column(name="et_id")

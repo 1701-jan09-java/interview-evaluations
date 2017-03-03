@@ -1,5 +1,6 @@
 package com.revature.domain;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
 import javax.persistence.*;
@@ -8,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="ie_eval")
-public class Eval {
+public class Eval implements Serializable{
 	
 	@Id
 	@Column(name="e_id")
@@ -22,15 +23,15 @@ public class Eval {
 	@Column(name="e_date")
 	private Date date;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="e_eval_type")
 	private EvalType evalType;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="e_pid_trainee")
 	private Person trainee;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="e_batch")
 	private Batch batch;
 
