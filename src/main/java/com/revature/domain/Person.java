@@ -24,17 +24,21 @@ public class Person {
 	@Column(name = "p_lastname", nullable = false)
 	private String lastName;
 	
+	@Column(name = "p_role", nullable = false)
+	private int personRole;
+	
 	public Person() {}
 
-	public Person(String firstName, String lastName) {
+	public Person(String firstName, String lastName, int personRole) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.personRole = personRole;
 	}
 
 	@Override
 	public String toString() {
-		return "Person [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+		return "Person [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", personRole=" + personRole + "]";
 	}
 
 	public int getId() {
@@ -60,6 +64,14 @@ public class Person {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	
+	public int getPersonRole() {
+		return personRole;
+	}
+	
+	public void setPersonRole(int personRole) {
+		this.personRole = personRole;
+	}
 
 	@Override
 	public int hashCode() {
@@ -68,6 +80,7 @@ public class Person {
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + personRole;
 		return result;
 	}
 
@@ -91,6 +104,8 @@ public class Person {
 			if (other.lastName != null)
 				return false;
 		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (personRole != other.personRole)
 			return false;
 		return true;
 	}
