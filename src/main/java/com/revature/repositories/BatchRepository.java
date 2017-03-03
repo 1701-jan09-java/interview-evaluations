@@ -1,5 +1,6 @@
 package com.revature.repositories;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,7 +17,7 @@ public interface BatchRepository extends JpaRepository<Batch, Integer> {
 	Batch findBatchById(int id);
 	void delete(Batch batchName);
 	Batch save(Batch batchName);
-	List<Batch> findAll();
+	ArrayList<Batch> findAll();
 	
 //	@Modifying
 //	@Query("update ie_batch Batch set Batch.b_name = ?1, where Batch.b_id = ?2")
