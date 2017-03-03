@@ -1,17 +1,19 @@
 package com.revature.domain;
 
 import java.sql.Date;
-
+import java.util.Objects;
 import javax.persistence.*;
 
-import org.springframework.data.annotation.Id;
+
 
 @Entity
-@Table(name="public.ie_eval")
+@Table(name="ie_eval")
 public class Eval {
 	
 	@Id
 	@Column(name="e_id")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="evalSeq")
+	@SequenceGenerator(allocationSize=1, name="evalSeq", sequenceName="eval_seq")
 	private Integer id;
 	
 	@Column(name="e_week")
@@ -31,6 +33,8 @@ public class Eval {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="e_batch")
 	private Batch batch;
+
+	public Eval() {}
 	
 	public Eval(Integer id, Integer week, Date date, EvalType evalType, Person trainee, Batch batch) {
 		super();
@@ -65,6 +69,57 @@ public class Eval {
 	public Batch getBatch() {
 		return batch;
 	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 47 * hash + Objects.hashCode(this.id);
+		hash = 47 * hash + Objects.hashCode(this.week);
+		hash = 47 * hash + Objects.hashCode(this.date);
+		hash = 47 * hash + Objects.hashCode(this.evalType);
+		hash = 47 * hash + Objects.hashCode(this.trainee);
+		hash = 47 * hash + Objects.hashCode(this.batch);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Eval other = (Eval) obj;
+		if (!Objects.equals(this.id, other.id)) {
+			return false;
+		}
+		if (!Objects.equals(this.week, other.week)) {
+			return false;
+		}
+		if (!Objects.equals(this.date, other.date)) {
+			return false;
+		}
+		if (!Objects.equals(this.evalType, other.evalType)) {
+			return false;
+		}
+		if (!Objects.equals(this.trainee, other.trainee)) {
+			return false;
+		}
+		if (!Objects.equals(this.batch, other.batch)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Eval{" + "id=" + id + ", week=" + week + ", date=" + date + ", evalType=" + evalType + ", trainee=" + trainee + ", batch=" + batch + '}';
+	}
+	
 	
 	
 }
