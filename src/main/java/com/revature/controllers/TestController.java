@@ -51,11 +51,11 @@ public class TestController {
 		return ResponseEntity.ok(repository.findAll());
 	}
 	
-	@RequestMapping(value="person", method=RequestMethod.POST)
+/*	@RequestMapping(value="person", method=RequestMethod.POST)
 	public ResponseEntity<?> creatPerson() {
 		Person person = new Person("Sharang", "Wakankar");
 		return ResponseEntity.ok(repository.save(person));
-	}
+	}*/
 	
 	
 	

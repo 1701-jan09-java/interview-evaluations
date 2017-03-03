@@ -21,6 +21,8 @@ public class Batch {
 	@Column(name="b_name")
 	private String name;
 
+	public Batch() {}
+		
 	public Batch(int id, String name) {
 		super();
 		this.id = id;
