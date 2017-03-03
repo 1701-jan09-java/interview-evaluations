@@ -26,15 +26,19 @@ public class PersonController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "trainees/")
-	public ResponseEntity<ArrayList<Person>> getTrainees(@PathVariable("1") Integer personRole) {
+	public ArrayList<Person> getTrainees() {
 		
-		return ResponseEntity.ok(personLogic.getAllTrainees());
+		ArrayList<Person> personTrainees = personLogic.getAllTrainees();
+		
+		return personTrainees;
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "trainers/")
-	public ResponseEntity<ArrayList<Person>> getTrainers(@PathVariable("2") Integer personRole) {
+	public ArrayList<Person> getTrainers() {
 		
-		return ResponseEntity.ok(personLogic.getAllTrainers());
+		ArrayList<Person> personTrainers = personLogic.getAllTrainers();
+		
+		return personTrainers;
 	}
 
 }
