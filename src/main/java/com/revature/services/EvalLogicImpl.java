@@ -19,7 +19,6 @@ public class EvalLogicImpl implements EvalLogic {
 
 	@Override
 	public Eval getEvalById(int id) {
-
 		Eval eval = dao.findOne(id);
 		System.out.println(eval);
 		return eval;
