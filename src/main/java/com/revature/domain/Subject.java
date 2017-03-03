@@ -2,9 +2,8 @@ package com.revature.domain;
 
 import javax.persistence.*;
 
-import org.springframework.data.annotation.Id;
-
 @Entity
+@Table(name="ie_subject")
 public class Subject {
 	
 	@Id

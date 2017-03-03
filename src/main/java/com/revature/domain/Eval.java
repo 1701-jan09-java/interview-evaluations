@@ -3,6 +3,7 @@ package com.revature.domain;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.*;
 
 
@@ -35,6 +36,9 @@ public class Eval implements Serializable{
 	@JoinColumn(name="e_batch")
 	private Batch batch;
 
+	@OneToMany(mappedBy="eval")
+	private Set<QuestionEval> questions;
+	
 	public Eval() {}
 	
 	public Eval(Integer id, Integer week, Date date, EvalType evalType, Person trainee, Batch batch) {
@@ -70,16 +74,25 @@ public class Eval implements Serializable{
 	public Batch getBatch() {
 		return batch;
 	}
+	
+	public Set<QuestionEval> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(Set<QuestionEval> questions) {
+		this.questions = questions;
+	}
 
 	@Override
 	public int hashCode() {
-		int hash = 7;
-		hash = 47 * hash + Objects.hashCode(this.id);
-		hash = 47 * hash + Objects.hashCode(this.week);
-		hash = 47 * hash + Objects.hashCode(this.date);
-		hash = 47 * hash + Objects.hashCode(this.evalType);
-		hash = 47 * hash + Objects.hashCode(this.trainee);
-		hash = 47 * hash + Objects.hashCode(this.batch);
+		int hash = 3;
+		hash = 17 * hash + Objects.hashCode(this.id);
+		hash = 17 * hash + Objects.hashCode(this.week);
+		hash = 17 * hash + Objects.hashCode(this.date);
+		hash = 17 * hash + Objects.hashCode(this.evalType);
+		hash = 17 * hash + Objects.hashCode(this.trainee);
+		hash = 17 * hash + Objects.hashCode(this.batch);
+		hash = 17 * hash + Objects.hashCode(this.questions);
 		return hash;
 	}
 
@@ -113,14 +126,15 @@ public class Eval implements Serializable{
 		if (!Objects.equals(this.batch, other.batch)) {
 			return false;
 		}
+		if (!Objects.equals(this.questions, other.questions)) {
+			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Eval{" + "id=" + id + ", week=" + week + ", date=" + date + ", evalType=" + evalType + ", trainee=" + trainee + ", batch=" + batch + '}';
+		return "Eval{" + "id=" + id + ", week=" + week + ", date=" + date + ", evalType=" + evalType + ", trainee=" + trainee + ", batch=" + batch + ", questions=" + questions + '}';
 	}
-	
-	
-	
+
 }

@@ -46,7 +46,7 @@ CREATE TABLE ie_question_pool(
 
 CREATE TABLE ie_question_eval (
     qe_id INTEGER PRIMARY KEY,
-    qe_commucation_score INTEGER NOT NULL,
+    qe_communication_score INTEGER NOT NULL,
     qe_knowledge_score INTEGER NOT NULL,
     qe_eid INTEGER NOT NULL,FOREIGN KEY(qe_eid) REFERENCES ie_eval(e_id),
     qe_qpid INTEGER NOT NULL,FOREIGN KEY(qe_qpid) REFERENCES ie_question_pool(qp_id)

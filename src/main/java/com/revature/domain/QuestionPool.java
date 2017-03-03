@@ -4,8 +4,8 @@ import java.sql.Date;
 
 import javax.persistence.*;
 
-import org.springframework.data.annotation.Id;
-
+@Entity
+@Table(name="ie_question_pool")
 public class QuestionPool {
 
 	@Id

@@ -1,7 +1,10 @@
 package com.revature.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
+@Entity
+@Table(name="ie_question_eval")
 public class QuestionEval {
 
 	@Id
@@ -60,6 +63,7 @@ public class QuestionEval {
 		this.knowledgeScore = knowledgeScore;
 	}
 
+	@JsonIgnore
 	public Eval getEval() {
 		return eval;
 	}
@@ -81,7 +85,7 @@ public class QuestionEval {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((communicationScore == null) ? 0 : communicationScore.hashCode());
-		result = prime * result + ((eval == null) ? 0 : eval.hashCode());
+		result = prime * result + ((eval == null) ? 0 : eval.getId().hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((knowledgeScore == null) ? 0 : knowledgeScore.hashCode());
 		result = prime * result + ((questionPool == null) ? 0 : questionPool.hashCode());
@@ -128,7 +132,7 @@ public class QuestionEval {
 	@Override
 	public String toString() {
 		return "QuestionEval [id=" + id + ", communicationScore=" + communicationScore + ", knowledgeScore="
-				+ knowledgeScore + ", eval=" + eval + ", questionPool=" + questionPool + "]";
+				+ knowledgeScore + ", questionPool=" + questionPool + "]";
 	}
 	
 	

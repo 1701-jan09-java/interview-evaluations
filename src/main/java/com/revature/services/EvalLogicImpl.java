@@ -20,7 +20,9 @@ public class EvalLogicImpl implements EvalLogic {
 	@Override
 	public Eval getEvalById(int id) {
 		Eval eval = dao.findOne(id);
-		System.out.println(eval);
+		try {
+			System.out.println(eval);
+		} catch (Exception e) {e.printStackTrace();}
 		return eval;
 	}
 	
