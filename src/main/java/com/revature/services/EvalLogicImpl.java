@@ -19,7 +19,6 @@ public class EvalLogicImpl implements EvalLogic {
 
 	@Override
 	public Eval getEvalById(int id) {
-
 		Eval eval = dao.findOne(id);
 		System.out.println(eval);
 		return eval;
@@ -29,6 +28,27 @@ public class EvalLogicImpl implements EvalLogic {
 	public ArrayList<Eval> getEvalsByBatch(int id){
 		
 		ArrayList<Eval> evals = dao.findAllByBatchId(id);
+		System.out.println(evals);
+		return evals;
+	}
+	
+	@Override
+	public ArrayList<Eval> getEvalsByWeek(int id, int num){
+		ArrayList<Eval> evals = dao.findAllByWeekNumber(id,num);
+		System.out.println(evals);
+		return evals;
+	}
+
+	@Override
+	public ArrayList<Eval> getEvalsByPerson(int id) {
+		ArrayList<Eval> evals = dao.findAllByPersonId(id);
+		System.out.println(evals);
+		return evals;
+	}
+
+	@Override
+	public ArrayList<Eval> getPersonEvalsByWeek(int id, int num) {
+		ArrayList<Eval> evals = dao.findAllByPersonIdAndWeekNumber(id,num);
 		System.out.println(evals);
 		return evals;
 	}

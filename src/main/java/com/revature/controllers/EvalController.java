@@ -22,14 +22,26 @@ public class EvalController {
 	@RequestMapping(method = RequestMethod.GET, value = "evaluations/{id}")
 	public ResponseEntity<Eval> getEvaluation(@PathVariable("id") Integer id) {
 
-		Eval eval = evalLogic.getEvalById(id);
-		return ResponseEntity.ok(eval);
+		return ResponseEntity.ok(evalLogic.getEvalById(id));
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "batches/{id}/week/{num}")
+	public ResponseEntity<ArrayList<Eval>> getEvalsByWeek(@PathVariable("id") Integer id, @PathVariable("num") Integer num){
+		return ResponseEntity.ok(evalLogic.getEvalsByWeek(id,num));
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "batches/{id}")
-	public ArrayList<Eval> getEvalsByBatch(@PathVariable("id") Integer id){
-		
-		ArrayList<Eval> evals = evalLogic.getEvalsByBatch(id);
-		return evals;
+	public ResponseEntity<ArrayList<Eval>> getEvalsByBatch(@PathVariable("id") Integer id){
+		return ResponseEntity.ok(evalLogic.getEvalsByBatch(id));
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "trainees/{id}")
+	public ResponseEntity<ArrayList<Eval>> getEvalsByPerson(@PathVariable("id") Integer id){
+		return ResponseEntity.ok(evalLogic.getEvalsByPerson(id));
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "trainees/{id}/week/{num}")
+	public ResponseEntity<ArrayList<Eval>> getTraineeEvalsByWeek(@PathVariable("id") Integer id, @PathVariable("num") Integer num){
+		return ResponseEntity.ok(evalLogic.getPersonEvalsByWeek(id,num));
 	}
 }
