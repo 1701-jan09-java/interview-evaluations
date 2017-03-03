@@ -51,6 +51,12 @@ public class TestController {
 		return ResponseEntity.ok(repository.findAll());
 	}
 	
+	//this one
+	@RequestMapping(value="person/{name}", method=RequestMethod.GET)
+	public ResponseEntity<List<Person>> getPerson(@PathVariable("name") String name) {
+		return ResponseEntity.ok(repository.findByFirstName(name));
+	}
+	
 	@RequestMapping(value="person", method=RequestMethod.POST)
 	public ResponseEntity<Person> creatPerson() {
 		Person person = new Person("Efren", "Olivas");
