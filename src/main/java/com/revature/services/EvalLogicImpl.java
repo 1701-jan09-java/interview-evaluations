@@ -1,6 +1,6 @@
 package com.revature.services;
 
-import com.revature.dao.EvalRepository;
+import com.revature.repositories.EvalRepository;
 import com.revature.domain.Eval;
 
 import java.util.ArrayList;
@@ -34,21 +34,21 @@ public class EvalLogicImpl implements EvalLogic {
 	
 	@Override
 	public ArrayList<Eval> getEvalsByWeek(int id, int num){
-		ArrayList<Eval> evals = dao.findAllByWeekNumber(id,num);
+		ArrayList<Eval> evals = dao.findAllByWeek(id,num);
 		System.out.println(evals);
 		return evals;
 	}
 
 	@Override
 	public ArrayList<Eval> getEvalsByPerson(int id) {
-		ArrayList<Eval> evals = dao.findAllByPersonId(id);
+		ArrayList<Eval> evals = dao.findAllByTraineeId(id);
 		System.out.println(evals);
 		return evals;
 	}
 
 	@Override
 	public ArrayList<Eval> getPersonEvalsByWeek(int id, int num) {
-		ArrayList<Eval> evals = dao.findAllByPersonIdAndWeekNumber(id,num);
+		ArrayList<Eval> evals = dao.findAllByTraineeIdAndWeek(id,num);
 		System.out.println(evals);
 		return evals;
 	}
