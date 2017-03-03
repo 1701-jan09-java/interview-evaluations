@@ -32,5 +32,12 @@ public class PersonLogicImpl implements PersonLogic {
 		
 		return persons;
 	}
+	
+public static void main(String[] args) {
+	PersonLogic pLog = new PersonLogicImpl();
+	Person pers = (Person) pLog.getPersonByFirstName("Efren");
+	System.out.println(pLog);
+	System.out.println(pers);
+}
 
 }
