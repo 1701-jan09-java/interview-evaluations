@@ -2,9 +2,11 @@ package com.revature.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -24,6 +26,7 @@ public class Person {
 	@Column(name = "p_lastname", nullable = false)
 	private String lastName;
 	
+	@OneToOne(fetch = FetchType.EAGER)
 	@Column(name = "p_role", nullable = false)
 	private int personRole;
 	
