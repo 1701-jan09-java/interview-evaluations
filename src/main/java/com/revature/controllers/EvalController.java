@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,22 +27,22 @@ public class EvalController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "batches/{id}/week/{num}")
-	public ResponseEntity<ArrayList<Eval>> getEvalsByWeek(@PathVariable("id") Integer id, @PathVariable("num") Integer num){
-		return ResponseEntity.ok(evalLogic.getEvalsByWeek(id,num));
+	public ResponseEntity<ArrayList<Eval>> getEvalsByWeek(@PathVariable("id") Integer id, @PathVariable("num") Integer num, @RequestParam(defaultValue="both") String type){
+		return ResponseEntity.ok(evalLogic.getEvalsByWeek(id,num,type));
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "batches/{id}")
-	public ResponseEntity<ArrayList<Eval>> getEvalsByBatch(@PathVariable("id") Integer id){
-		return ResponseEntity.ok(evalLogic.getEvalsByBatch(id));
+	public ResponseEntity<ArrayList<Eval>> getEvalsByBatch(@PathVariable("id") Integer id, @RequestParam(defaultValue="both") String type){
+		return ResponseEntity.ok(evalLogic.getEvalsByBatch(id,type));
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "trainees/{id}")
-	public ResponseEntity<ArrayList<Eval>> getEvalsByPerson(@PathVariable("id") Integer id){
-		return ResponseEntity.ok(evalLogic.getEvalsByPerson(id));
+	public ResponseEntity<ArrayList<Eval>> getEvalsByPerson(@PathVariable("id") Integer id, @RequestParam(defaultValue="both") String type){
+		return ResponseEntity.ok(evalLogic.getEvalsByPerson(id,type));
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "trainees/{id}/week/{num}")
-	public ResponseEntity<ArrayList<Eval>> getTraineeEvalsByWeek(@PathVariable("id") Integer id, @PathVariable("num") Integer num){
-		return ResponseEntity.ok(evalLogic.getPersonEvalsByWeek(id,num));
+	public ResponseEntity<ArrayList<Eval>> getTraineeEvalsByWeek(@PathVariable("id") Integer id, @PathVariable("num") Integer num, @RequestParam(defaultValue="both") String type){
+		return ResponseEntity.ok(evalLogic.getPersonEvalsByWeek(id,num,type));
 	}
 }
