@@ -15,7 +15,7 @@ import com.revature.domain.Person;
 import com.revature.domain.PersonRepository;
 
 @RestController
-@RequestMapping("/api/dog/")
+@RequestMapping("/api/v1/")
 public class TestController {
 	
 	@Autowired
