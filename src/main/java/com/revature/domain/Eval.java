@@ -3,9 +3,8 @@ package com.revature.domain;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
-import java.util.Set;
+import java.util.List;
 import javax.persistence.*;
-
 
 
 @Entity
@@ -37,11 +36,15 @@ public class Eval implements Serializable{
 	private Batch batch;
 
 	@OneToMany(mappedBy="eval")
-	private Set<QuestionEval> questions;
+	private List<QuestionEval> questions;
+	
+	@OneToMany(mappedBy="eval")
+	private List<EvalComment> comments;
 	
 	public Eval() {}
-	
-	public Eval(Integer id, Integer week, Date date, EvalType evalType, Person trainee, Batch batch) {
+
+	public Eval(Integer id, Integer week, Date date, EvalType evalType, Person trainee, Batch batch,
+			List<QuestionEval> questions, List<EvalComment> comments) {
 		super();
 		this.id = id;
 		this.week = week;
@@ -49,92 +52,146 @@ public class Eval implements Serializable{
 		this.evalType = evalType;
 		this.trainee = trainee;
 		this.batch = batch;
+		this.questions = questions;
+		this.comments = comments;
 	}
 
 	public Integer getId() {
 		return id;
 	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public Integer getWeek() {
 		return week;
+	}
+
+	public void setWeek(Integer week) {
+		this.week = week;
 	}
 
 	public Date getDate() {
 		return date;
 	}
 
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
 	public EvalType getEvalType() {
 		return evalType;
+	}
+
+	public void setEvalType(EvalType evalType) {
+		this.evalType = evalType;
 	}
 
 	public Person getTrainee() {
 		return trainee;
 	}
 
+	public void setTrainee(Person trainee) {
+		this.trainee = trainee;
+	}
+
 	public Batch getBatch() {
 		return batch;
 	}
-	
-	public Set<QuestionEval> getQuestions() {
+
+	public void setBatch(Batch batch) {
+		this.batch = batch;
+	}
+
+	public List<QuestionEval> getQuestions() {
 		return questions;
 	}
 
-	public void setQuestions(Set<QuestionEval> questions) {
+	public void setQuestions(List<QuestionEval> questions) {
 		this.questions = questions;
+	}
+
+	public List<EvalComment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<EvalComment> comments) {
+		this.comments = comments;
 	}
 
 	@Override
 	public int hashCode() {
-		int hash = 3;
-		hash = 17 * hash + Objects.hashCode(this.id);
-		hash = 17 * hash + Objects.hashCode(this.week);
-		hash = 17 * hash + Objects.hashCode(this.date);
-		hash = 17 * hash + Objects.hashCode(this.evalType);
-		hash = 17 * hash + Objects.hashCode(this.trainee);
-		hash = 17 * hash + Objects.hashCode(this.batch);
-		hash = 17 * hash + Objects.hashCode(this.questions);
-		return hash;
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((batch == null) ? 0 : batch.hashCode());
+		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		result = prime * result + ((evalType == null) ? 0 : evalType.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((questions == null) ? 0 : questions.hashCode());
+		result = prime * result + ((trainee == null) ? 0 : trainee.hashCode());
+		result = prime * result + ((week == null) ? 0 : week.hashCode());
+		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
-		final Eval other = (Eval) obj;
-		if (!Objects.equals(this.id, other.id)) {
+		Eval other = (Eval) obj;
+		if (batch == null) {
+			if (other.batch != null)
+				return false;
+		} else if (!batch.equals(other.batch))
 			return false;
-		}
-		if (!Objects.equals(this.week, other.week)) {
+		if (comments == null) {
+			if (other.comments != null)
+				return false;
+		} else if (!comments.equals(other.comments))
 			return false;
-		}
-		if (!Objects.equals(this.date, other.date)) {
+		if (date == null) {
+			if (other.date != null)
+				return false;
+		} else if (!date.equals(other.date))
 			return false;
-		}
-		if (!Objects.equals(this.evalType, other.evalType)) {
+		if (evalType == null) {
+			if (other.evalType != null)
+				return false;
+		} else if (!evalType.equals(other.evalType))
 			return false;
-		}
-		if (!Objects.equals(this.trainee, other.trainee)) {
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
-		}
-		if (!Objects.equals(this.batch, other.batch)) {
+		if (questions == null) {
+			if (other.questions != null)
+				return false;
+		} else if (!questions.equals(other.questions))
 			return false;
-		}
-		if (!Objects.equals(this.questions, other.questions)) {
+		if (trainee == null) {
+			if (other.trainee != null)
+				return false;
+		} else if (!trainee.equals(other.trainee))
 			return false;
-		}
+		if (week == null) {
+			if (other.week != null)
+				return false;
+		} else if (!week.equals(other.week))
+			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Eval{" + "id=" + id + ", week=" + week + ", date=" + date + ", evalType=" + evalType + ", trainee=" + trainee + ", batch=" + batch + ", questions=" + questions + '}';
+		return "Eval [id=" + id + ", week=" + week + ", date=" + date + ", evalType=" + evalType + ", trainee="
+				+ trainee + ", batch=" + batch + ", questions=" + questions + ", comments=" + comments + "]";
 	}
-
+	
+	
 }
