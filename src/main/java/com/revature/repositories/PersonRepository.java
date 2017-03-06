@@ -10,7 +10,12 @@ import com.revature.domain.Person;
 @Repository
 public interface PersonRepository extends JpaRepository<Person,Integer> {
 
-	List<Person> findByFirstName(String firstName);
+	Person getPersonById(int id);
+	
+//	List<Person> findAllPersons();
 	List<Person> findByLastName(String lastName);
+	List<Person> findByFirstName(String firstName);
+	List<Person> findByFirstNameAndLastName(String firstName, String lastName);
+	List<Person> findByPersonRole(int personRole);
 	
 }
