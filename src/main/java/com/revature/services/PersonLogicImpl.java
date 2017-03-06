@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.domain.Person;
-import com.revature.domain.PersonRepository;
+import com.revature.repositories.PersonRepository;
 
 @Service
 @Transactional(readOnly=false, isolation=Isolation.READ_COMMITTED)

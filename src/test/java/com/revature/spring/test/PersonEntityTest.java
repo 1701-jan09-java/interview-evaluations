@@ -14,7 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.revature.domain.Person;
-import com.revature.domain.PersonRepository;
+import com.revature.repositories.PersonRepository;
 
 /**
  * This Test creates a Person instance and stores it in an embedded database, namely the com.h2database.
