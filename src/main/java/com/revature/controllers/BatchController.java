@@ -20,6 +20,8 @@ public class BatchController {
 	
 	@Autowired
 	private BatchLogic batchLogic;
+	
+	@Autowired
 	private PersonBatchLogic personBatchLogic;
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/batch/{id}")

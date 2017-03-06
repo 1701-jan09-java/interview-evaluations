@@ -9,6 +9,6 @@ import com.revature.domain.PersonBatchJoin;
 
 public interface PersonBatchRepository extends JpaRepository<PersonBatchJoin, Integer>{
 
-	List<Person> findAllPersonByBatchId(Integer batchId);
+	List<PersonBatchJoin> findAllByBatchId(Integer batchId);
 
 }
