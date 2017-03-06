@@ -38,24 +38,48 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>9.4-1200-jdbc4</version>
+			<version>9.4-1200-jdbc4</version><!--$NO-MVN-MAN-VER$-->
 		 </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
     		<groupId>org.hsqldb</groupId>
     		<artifactId>hsqldb</artifactId>
    		    <scope>runtime</scope>
 		</dependency>
-        
+		
+		<!-- Exlusion to disable Logback -->
+		<dependency>
+  			<groupId>org.springframework.boot</groupId>
+ 		    <artifactId>spring-boot-starter</artifactId>
+  			<exclusions>
+   		   	 	<exclusion>
+     			 	<groupId>org.springframework.boot</groupId>
+      				<artifactId>spring-boot-starter-logging</artifactId>
+    			</exclusion>
+  			</exclusions>
+		</dependency>
+
+		<dependency>
+ 			 <groupId>org.springframework.boot</groupId>
+ 			 <artifactId>spring-boot-starter-web</artifactId>
+ 			 <exclusions>
+  			 	<exclusion>
+     				<groupId>org.springframework.boot</groupId>
+      				<artifactId>spring-boot-starter-logging</artifactId>
+    			</exclusion>
+  			</exclusions>
+		</dependency>
+
     	<!-- Spring Boot -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
+        <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -71,8 +95,14 @@
 		    <groupId>io.springfox</groupId>
 		    <artifactId>springfox-swagger-ui</artifactId>
 		    <version>2.6.1</version>
-		</dependency>	
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons</artifactId>
+		</dependency>
 	</dependencies>
+	
+
 
 	<build>
 		<plugins>
