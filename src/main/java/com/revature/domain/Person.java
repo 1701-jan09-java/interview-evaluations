@@ -1,5 +1,7 @@
 package com.revature.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="ie_person")
-public class Person {
+public class Person implements Serializable {
 
 	@Id
 	@Column(name = "p_id")
