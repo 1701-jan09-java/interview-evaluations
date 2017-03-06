@@ -26,6 +26,6 @@ public interface PersonRepository extends JpaRepository<Person,Integer> {
 	//List<Person> findAllByBatchId(Integer id);
 	
 	
-	@Query("SELECT Person.firstName, Person.lastName, Person.id FROM Person INNER JOIN Eval ON Person.id=Eval.trainee INNER JOIN Person ON Eval.batch=Batch.id where name=?1")
-	List<Person> findAllByBatchName(String batchName);
+	//@Query("SELECT Person.firstName, Person.lastName, Person.id FROM Person INNER JOIN Eval ON Person.id=Eval.trainee INNER JOIN Person ON Eval.batch=Batch.id where name=?1")
+	//List<Person> findAllByBatchName(String batchName);
 }
