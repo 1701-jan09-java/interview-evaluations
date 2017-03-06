@@ -20,24 +20,15 @@ public class PersonLogicImpl implements PersonLogic {
 	@Override
 	public List<Person> getPersonByFirstName(String firstName) {
 		
-		List<Person> persons = personRepository.findByFirstName(firstName);
-		
-		return persons;
+		return personRepository.findByFirstName(firstName);
+
 	}
 
 	@Override
 	public List<Person> getPersonByLastName(String lastName) {
 		
-		List<Person> persons = personRepository.findByLastName(lastName);
-		
-		return persons;
+		return personRepository.findByLastName(lastName);
 	}
 	
-public static void main(String[] args) {
-	PersonLogic pLog = new PersonLogicImpl();
-	Person pers = (Person) pLog.getPersonByFirstName("Efren");
-	System.out.println(pLog);
-	System.out.println(pers);
-}
 
 }
