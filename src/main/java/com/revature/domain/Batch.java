@@ -1,7 +1,10 @@
 package com.revature.domain;
 
 import java.io.Serializable;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1b15384c24f88347cd3d7a1d8d48248432832e1a
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +15,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="ie_batch")
+<<<<<<< HEAD
 public class Batch implements Serializable  {
+=======
+public class Batch implements Serializeable {
+>>>>>>> 1b15384c24f88347cd3d7a1d8d48248432832e1a
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="batch_sequence")
