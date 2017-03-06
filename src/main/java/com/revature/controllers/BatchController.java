@@ -1,5 +1,7 @@
 package com.revature.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.domain.Batch;
 import com.revature.domain.Person;
 import com.revature.services.BatchLogic;
+import com.revature.services.PersonBatchLogic;
 
 @RestController
 @RequestMapping(value = "/api/v1/")
@@ -37,11 +40,11 @@ public class BatchController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/batch/{id}/members")
 	
-		public ResponseEntity<Person>getAllBatchMembers(@PathVariable("id") int id){
+		public ResponseEntity<List<Person>> getAllBatchMembers(@PathVariable("id") int id){
 		
-			return Responsibility.ok(personBatchLogic.getAllBatchMembers(id));
+			return ResponseEntity.ok(personBatchLogic.getAllBatchMembers(id));
 		}
-	}
+	
 	
 	
 }
