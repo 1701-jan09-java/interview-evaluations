@@ -2,7 +2,7 @@ package com.revature.spring.test;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -42,7 +42,7 @@ public class PersonEntityTest {
 	@Test
 	public void testFindPersonByFirstName() {
 		
-		ArrayList<Person> person = personRepository.findByFirstName("Christ");
+		List<Person> person = personRepository.findByFirstName("Christ");
 		System.out.println(person.toString());
 		assertEquals("[Person [id=1, firstName=Christ, lastName=McFeeny, personRole=1]]", person.toString());
 	}
@@ -50,7 +50,7 @@ public class PersonEntityTest {
 	@Test
 	public void testFindPersonByLastName() {
 		
-		ArrayList<Person> person = personRepository.findByLastName("McFeeny");
+		List<Person> person = personRepository.findByLastName("McFeeny");
 		System.out.println(person.toString());
 		assertEquals("[Person [id=2, firstName=Christ, lastName=McFeeny, personRole=1]]", person.toString());
 	}
@@ -58,7 +58,7 @@ public class PersonEntityTest {
 	@Test
 	public void testFindPersonByRole() {
 		
-		ArrayList<Person> person = personRepository.findByPersonRole(1);
+		List<Person> person = personRepository.findByPersonRole(1);
 		System.out.println(person.toString());
 		assertEquals("[Person [id=3, firstName=Christ, lastName=McFeeny, personRole=1]]", person.toString());
 	}

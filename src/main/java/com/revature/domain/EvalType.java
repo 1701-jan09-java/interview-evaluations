@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="ie_eval_type")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class EvalType implements Serializable {
 
 	@Id

@@ -10,9 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="ie_batch")
-
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Batch implements Serializable  {
 
 	

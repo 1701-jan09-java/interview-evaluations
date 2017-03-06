@@ -5,10 +5,13 @@ import java.sql.Date;
 import java.util.Objects;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 
 @Entity
 @Table(name="ie_eval")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Eval implements Serializable{
 	
 	@Id

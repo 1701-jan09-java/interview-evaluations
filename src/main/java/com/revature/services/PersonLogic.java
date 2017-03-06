@@ -8,6 +8,7 @@ import com.revature.domain.Person;
 public interface PersonLogic {
 
 
+	List<Person> getAllPersons();
 	List<Person> getPersonByFirstName(String firstName);
 	
 	List<Person> getPersonByLastName(String lastName);

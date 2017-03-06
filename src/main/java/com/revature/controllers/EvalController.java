@@ -3,7 +3,7 @@ package com.revature.controllers;
 import com.revature.domain.Eval;
 import com.revature.services.EvalLogic;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,22 +26,22 @@ public class EvalController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "batches/{id}/week/{num}")
-	public ResponseEntity<ArrayList<Eval>> getEvalsByWeek(@PathVariable("id") Integer id, @PathVariable("num") Integer num){
+	public ResponseEntity<List<Eval>> getEvalsByWeek(@PathVariable("id") Integer id, @PathVariable("num") Integer num){
 		return ResponseEntity.ok(evalLogic.getEvalsByWeek(id,num));
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "batches/{id}")
-	public ResponseEntity<ArrayList<Eval>> getEvalsByBatch(@PathVariable("id") Integer id){
+	public ResponseEntity<List<Eval>> getEvalsByBatch(@PathVariable("id") Integer id){
 		return ResponseEntity.ok(evalLogic.getEvalsByBatch(id));
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "trainees/{id}")
-	public ResponseEntity<ArrayList<Eval>> getEvalsByPerson(@PathVariable("id") Integer id){
+	public ResponseEntity<List<Eval>> getEvalsByPerson(@PathVariable("id") Integer id){
 		return ResponseEntity.ok(evalLogic.getEvalsByPerson(id));
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "trainees/{id}/week/{num}")
-	public ResponseEntity<ArrayList<Eval>> getTraineeEvalsByWeek(@PathVariable("id") Integer id, @PathVariable("num") Integer num){
+	public ResponseEntity<List<Eval>> getTraineeEvalsByWeek(@PathVariable("id") Integer id, @PathVariable("num") Integer num){
 		return ResponseEntity.ok(evalLogic.getPersonEvalsByWeek(id,num));
 	}
 }
