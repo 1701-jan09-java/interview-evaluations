@@ -2,13 +2,13 @@ package com.revature.repositories;
 
 import java.util.ArrayList;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.revature.domain.Eval;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EvalRepository extends JpaRepository<Eval, Integer> {
+public interface EvalRepository extends PagingAndSortingRepository<Eval, Integer> {
 
 	ArrayList<Eval> findAllByBatchId(int id);
 	

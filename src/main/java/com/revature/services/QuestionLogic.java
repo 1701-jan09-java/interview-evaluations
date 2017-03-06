@@ -1,10 +1,12 @@
 package com.revature.services;
 
-import java.util.ArrayList;
-
 import com.revature.domain.QuestionPool;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface QuestionLogic {
 	
-	ArrayList<QuestionPool> getAllQuestions(String type);
+	Page<QuestionPool> getAllQuestions(Pageable pageable, String subject);
+	
+	Page<QuestionPool> searchQuestions(Pageable pageable, String text, String subject);
 }

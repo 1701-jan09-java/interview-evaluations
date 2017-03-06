@@ -1,12 +1,13 @@
 package com.revature.domain;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name="ie_question_pool")
-public class QuestionPool {
+public class QuestionPool implements Serializable {
 
 	@Id
 	@Column(name="qp_id")
