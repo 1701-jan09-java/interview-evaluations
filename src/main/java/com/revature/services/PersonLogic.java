@@ -1,14 +1,22 @@
 package com.revature.services;
 
-import java.util.List;
+
+import java.util.ArrayList;
 
 import com.revature.domain.Person;
 
 public interface PersonLogic {
 
-	List<Person> getPersonByFirstName(String firstName);
+
+	ArrayList<Person> getPersonByFirstName(String firstName);
 	
-	List<Person> getPersonByLastName(String lastName);
+	ArrayList<Person> getPersonByLastName(String lastName);
+
 	
+	Person getPersonById(int id);
 	
+	ArrayList<Person> getPersonsByPersonRole(int personRole);
+	ArrayList<Person> getAllTrainees();
+	ArrayList<Person> getAllTrainers();
+
 }

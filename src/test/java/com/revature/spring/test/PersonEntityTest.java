@@ -2,7 +2,7 @@ package com.revature.spring.test;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import org.junit.After;
 import org.junit.Before;
@@ -36,23 +36,32 @@ public class PersonEntityTest {
     public void setUp() {
     	
     	System.out.println("begin");
-		entityManager.persist(new Person("Christ", "Matheny"));
+		entityManager.persist(new Person("Christ", "McFeeny", 1));
     }
 	
 	@Test
 	public void testFindPersonByFirstName() {
 		
-		List<Person> person = personRepository.findByFirstName("Christ");
+		ArrayList<Person> person = personRepository.findByFirstName("Christ");
 		System.out.println(person.toString());
-		assertEquals("[Person [id=1, firstName=Christ, lastName=Matheny]]", person.toString());
+		assertEquals("[Person [id=1, firstName=Christ, lastName=McFeeny, personRole=1]]", person.toString());
 	}
 	
 	@Test
 	public void testFindPersonByLastName() {
 		
-		List<Person> person = personRepository.findByLastName("Matheny");
+		ArrayList<Person> person = personRepository.findByLastName("McFeeny");
 		System.out.println(person.toString());
-		assertEquals("[Person [id=2, firstName=Christ, lastName=Matheny]]", person.toString());
+		assertEquals("[Person [id=2, firstName=Christ, lastName=McFeeny, personRole=1]]", person.toString());
 	}
+	
+	@Test
+	public void testFindPersonByRole() {
+		
+		ArrayList<Person> person = personRepository.findByPersonRole(1);
+		System.out.println(person.toString());
+		assertEquals("[Person [id=3, firstName=Christ, lastName=McFeeny, personRole=1]]", person.toString());
+	}
+
 	
 }
