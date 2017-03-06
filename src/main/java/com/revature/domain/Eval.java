@@ -3,7 +3,7 @@ package com.revature.domain;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
-import java.util.Set;
+import java.util.List;
 import javax.persistence.*;
 
 
@@ -37,7 +37,7 @@ public class Eval implements Serializable{
 	private Batch batch;
 
 	@OneToMany(mappedBy="eval")
-	private Set<QuestionEval> questions;
+	private List<QuestionEval> questions;
 	
 	public Eval() {}
 	
@@ -75,11 +75,11 @@ public class Eval implements Serializable{
 		return batch;
 	}
 	
-	public Set<QuestionEval> getQuestions() {
+	public List<QuestionEval> getQuestions() {
 		return questions;
 	}
 
-	public void setQuestions(Set<QuestionEval> questions) {
+	public void setQuestions(List<QuestionEval> questions) {
 		this.questions = questions;
 	}
 
