@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.domain.Person;
-import com.revature.domain.PersonRepository;
+import com.revature.repositories.PersonRepository;
 
 @RestController
-@RequestMapping("/api/dog/")
+@RequestMapping("/api/v1/")
 public class TestController {
 	
 	@Autowired
@@ -47,13 +47,19 @@ public class TestController {
 	}
 	
 	@RequestMapping(value="person", method=RequestMethod.GET)
-	public ResponseEntity<?> getAllPersons() {
+	public ResponseEntity<Iterable<Person>> getAllPersons() {
 		return ResponseEntity.ok(repository.findAll());
 	}
 	
+	//this one
+	@RequestMapping(value="person/{name}", method=RequestMethod.GET)
+	public ResponseEntity<List<Person>> getPerson(@PathVariable("name") String name) {
+		return ResponseEntity.ok(repository.findByFirstName(name));
+	}
+	
 	@RequestMapping(value="person", method=RequestMethod.POST)
-	public ResponseEntity<?> creatPerson() {
-		Person person = new Person("Sharang", "Wakankar");
+	public ResponseEntity<Person> creatPerson() {
+		Person person = new Person("Efren", "Olivas");
 		return ResponseEntity.ok(repository.save(person));
 	}
 	
