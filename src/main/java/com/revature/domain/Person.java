@@ -2,9 +2,12 @@ package com.revature.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -24,12 +27,13 @@ public class Person {
 	@Column(name = "p_lastname", nullable = false)
 	private String lastName;
 	
-	@Column(name = "p_role", nullable = false)
-	private int personRole;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "p_role", nullable = false)
+	private PersonRole personRole;
 	
 	public Person() {}
 
-	public Person(String firstName, String lastName, int personRole) {
+	public Person(String firstName, String lastName, PersonRole personRole) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -65,11 +69,11 @@ public class Person {
 		this.lastName = lastName;
 	}
 	
-	public int getPersonRole() {
+	public PersonRole getPersonRole() {
 		return personRole;
 	}
 	
-	public void setPersonRole(int personRole) {
+	public void setPersonRole(PersonRole personRole) {
 		this.personRole = personRole;
 	}
 
@@ -80,7 +84,7 @@ public class Person {
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + personRole;
+		result = prime * result + ((personRole == null) ? 0 : personRole.hashCode());
 		return result;
 	}
 
@@ -105,10 +109,15 @@ public class Person {
 				return false;
 		} else if (!lastName.equals(other.lastName))
 			return false;
-		if (personRole != other.personRole)
+		if (personRole == null) {
+			if (other.personRole != null)
+				return false;
+		} else if (!personRole.equals(other.personRole))
 			return false;
 		return true;
 	}
+
+	
 
 	
 		
