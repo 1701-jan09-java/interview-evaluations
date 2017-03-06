@@ -35,7 +35,7 @@ public class Eval implements Serializable{
 	@JoinColumn(name="e_batch")
 	private Batch batch;
 
-	public Eval() {}
+	public Eval() {/*empty constructor needed*/}
 	
 	public Eval(Integer id, Integer week, Date date, EvalType evalType, Person trainee, Batch batch) {
 		super();

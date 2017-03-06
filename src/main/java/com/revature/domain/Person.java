@@ -30,7 +30,7 @@ public class Person implements Serializable {
 	@Column(name = "p_role", nullable = false)
 	private int personRole;
 	
-	public Person() {}
+	public Person() {/*empty constructor needed*/}
 
 
 	public Person(String firstName, String lastName, int personRole) {

@@ -3,8 +3,7 @@ package com.revature.services;
 
 
 
-import java.util.ArrayList;
-
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.domain.Person;
-
 import com.revature.repositories.PersonRepository;
 
 
@@ -25,14 +23,14 @@ public class PersonLogicImpl implements PersonLogic {
 	private PersonRepository dao;
 	
 	@Override
-	public ArrayList<Person> getPersonByFirstName(String firstName) {
+	public List<Person> getPersonByFirstName(String firstName) {
 		
 		return  dao.findByFirstName(firstName);
 
 	}
 
 	@Override
-	public ArrayList<Person> getPersonByLastName(String lastName) {
+	public List<Person> getPersonByLastName(String lastName) {
 		
 		return dao.findByLastName(lastName);
 	}
@@ -40,21 +38,21 @@ public class PersonLogicImpl implements PersonLogic {
 
 
 	@Override
-	public ArrayList<Person> getPersonsByPersonRole(int personRole) {
+	public List<Person> getPersonsByPersonRole(int personRole) {
 		
 		return dao.findByPersonRole(personRole);
 	
 	}
 
 	@Override
-	public ArrayList<Person> getAllTrainees() {
+	public List<Person> getAllTrainees() {
 		
 		return dao.findByPersonRole(1);
 
 	}
 
 	@Override
-	public ArrayList<Person> getAllTrainers() {
+	public List<Person> getAllTrainers() {
 		
 		return dao.findByPersonRole(2);
 

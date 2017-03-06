@@ -4,6 +4,7 @@ import com.revature.repositories.EvalRepository;
 import com.revature.domain.Eval;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,25 +25,25 @@ public class EvalLogicImpl implements EvalLogic {
 	}
 	
 	@Override
-	public ArrayList<Eval> getEvalsByBatch(int id){
+	public List<Eval> getEvalsByBatch(int id){
 		
 		return dao.findAllByBatchId(id);
 	}
 	
 	@Override
-	public ArrayList<Eval> getEvalsByWeek(int id, int num){
+	public List<Eval> getEvalsByWeek(int id, int num){
 		return dao.findAllByWeek(id,num);
 
 	}
 
 	@Override
-	public ArrayList<Eval> getEvalsByPerson(int id) {
+	public List<Eval> getEvalsByPerson(int id) {
 		return dao.findAllByTraineeId(id);
 
 	}
 
 	@Override
-	public ArrayList<Eval> getPersonEvalsByWeek(int id, int num) {
+	public List<Eval> getPersonEvalsByWeek(int id, int num) {
 		return dao.findAllByTraineeIdAndWeek(id,num);
 
 	}

@@ -15,7 +15,7 @@ public class EvalType implements Serializable {
 	@Column(name="et_description")
 	private String description;
 	
-	public EvalType() {}
+	public EvalType() {/*empty constructor needed*/}
 
 	public Integer getId() {
 		return id;
