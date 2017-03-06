@@ -36,10 +36,9 @@ public class QuestionPool implements Serializable {
 	
 	public QuestionPool(){}
 
-	public QuestionPool(Integer id, String questionText, Integer maxCommunicationScore, Integer maxKnowledgeScore,
+	public QuestionPool(String questionText, Integer maxCommunicationScore, Integer maxKnowledgeScore,
 			Subject subject, Integer useCount, Date dateLastUsed) {
 		super();
-		this.id = id;
 		this.questionText = questionText;
 		this.maxCommunicationScore = maxCommunicationScore;
 		this.maxKnowledgeScore = maxKnowledgeScore;

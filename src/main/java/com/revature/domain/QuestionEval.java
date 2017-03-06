@@ -29,10 +29,9 @@ public class QuestionEval {
 	
 	public QuestionEval(){}
 
-	public QuestionEval(Integer id, Integer communicationScore, Integer knowledgeScore, Eval eval,
+	public QuestionEval(Integer communicationScore, Integer knowledgeScore, Eval eval,
 			QuestionPool questionPool) {
 		super();
-		this.id = id;
 		this.communicationScore = communicationScore;
 		this.knowledgeScore = knowledgeScore;
 		this.eval = eval;

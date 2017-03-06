@@ -17,9 +17,8 @@ public class Subject {
 	
 	public Subject(){}
 
-	public Subject(Integer id, String subject) {
+	public Subject(String subject) {
 		super();
-		this.id = id;
 		this.subject = subject;
 	}
 

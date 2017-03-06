@@ -21,7 +21,9 @@ public class QuestionController {
 	@RequestMapping(method = RequestMethod.GET, value="")
 	public ResponseEntity<Page<QuestionPool>> getAllQuestions(
 			@RequestParam(defaultValue="all") String subject
-			, Pageable pageable
+			, @PageableDefault(size = 10)
+				@SortDefaults({@SortDefault(sort = "subject"), @SortDefault(sort = "id")})
+				Pageable pageable 
 		){
 		return ResponseEntity.ok(questionLogic.getAllQuestions(pageable, subject));
 	}

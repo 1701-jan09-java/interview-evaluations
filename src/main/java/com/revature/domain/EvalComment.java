@@ -23,9 +23,8 @@ public class EvalComment {
 	
 	public EvalComment(){}
 
-	public EvalComment(Integer id, String commentText, Eval eval) {
+	public EvalComment(String commentText, Eval eval) {
 		super();
-		this.id = id;
 		this.commentText = commentText;
 		this.eval = eval;
 	}

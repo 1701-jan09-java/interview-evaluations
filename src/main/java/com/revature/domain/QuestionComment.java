@@ -1,13 +1,13 @@
 package com.revature.domain;
 
 import javax.persistence.*;
-import org.springframework.data.annotation.Id;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
 
 @Entity
 @Table(name="ie_question_comment")
-public class QuestionComment {
+public class QuestionComment implements Serializable {
 
 	@Id
 	@Column(name="qc_id")
@@ -24,9 +24,8 @@ public class QuestionComment {
 
 	public QuestionComment(){}
 
-	public QuestionComment(Integer id, String commentText, QuestionEval eval) {
+	public QuestionComment(String commentText, QuestionEval eval) {
 		super();
-		this.id = id;
 		this.commentText = commentText;
 		this.eval = eval;
 	}
