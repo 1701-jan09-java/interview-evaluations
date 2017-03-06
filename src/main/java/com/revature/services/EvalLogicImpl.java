@@ -19,6 +19,12 @@ public class EvalLogicImpl implements EvalLogic {
 	
 
 //CREATE----------------------------
+	@Override
+	@Transactional
+	public Eval createEval(Eval eval) {
+		dao.save(eval);
+		return eval;
+	}
 
 //RETRIEVE--------------------------
 	@Override

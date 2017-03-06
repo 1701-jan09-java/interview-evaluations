@@ -15,4 +15,6 @@ public interface EvalLogic {
 	ArrayList<Eval> getEvalsByPerson(int id, String evalParam);
 
 	ArrayList<Eval> getPersonEvalsByWeek(int id, int num, String evalParam);
+
+	Eval createEval(Eval eval);
 }
