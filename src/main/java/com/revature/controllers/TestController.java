@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.domain.Person;
-import com.revature.domain.PersonRepository;
+import com.revature.repositories.PersonRepository;
 
 @RestController
 @RequestMapping("/api/dog/")

@@ -27,9 +27,11 @@ public class Person {
 	@Column(name = "p_lastname", nullable = false)
 	private String lastName;
 	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "p_role", nullable = false)
 	private PersonRole personRole;
+
 	
 	public Person() {}
 
