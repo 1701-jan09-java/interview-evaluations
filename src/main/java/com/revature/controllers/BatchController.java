@@ -1,6 +1,5 @@
 package com.revature.controllers;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.domain.Batch;
+import com.revature.domain.Person;
 import com.revature.services.BatchLogic;
 
 @RestController
@@ -17,6 +17,7 @@ public class BatchController {
 	
 	@Autowired
 	private BatchLogic batchLogic;
+	private PersonBatchLogic personBatchLogic;
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/batch/{id}")
 	
@@ -34,6 +35,13 @@ public class BatchController {
 		} 
 		
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/batch/{id}/members")
+	
+		public ResponseEntity<Person>getAllBatchMembers(@PathVariable("id") int id){
+		
+			return Responsibility.ok(personBatchLogic.getAllBatchMembers(id));
+		}
+	}
 	
 	
 }
