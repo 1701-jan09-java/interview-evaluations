@@ -55,9 +55,8 @@ public class PersonBatchJoin {
 
 	public PersonBatchJoin(){}
 	
-	public PersonBatchJoin(int id, Person person, Batch batch) {
+	public PersonBatchJoin(Person person, Batch batch) {
 		super();
-		this.id = id;
 		this.person = person;
 		this.batch = batch;
 	}
