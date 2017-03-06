@@ -1,30 +1,29 @@
 package com.revature.domain;
 
 import javax.persistence.*;
-import org.springframework.data.annotation.Id;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="ie_question_comment")
-public class QuestionComment {
-
+@Table(name="ie_eval_comment")
+public class EvalComment {
+	
 	@Id
-	@Column(name="qc_id")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="questionCommentSeq")
-	@SequenceGenerator(allocationSize=1, name="questionCommentSeq", sequenceName="question_comment_seq")
+	@Column(name="ec_id")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="evalCommentSeq")
+	@SequenceGenerator(allocationSize=1, name="evalCommentSeq", sequenceName="eval_comment_seq")
 	private Integer id;
 	
-	@Column(name="qc_comment_text")
+	@Column(name="ec_comment_text")
 	private String commentText;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="qc_eid")
-	private QuestionEval eval;
+	@JoinColumn(name="ec_eid")
+	private Eval eval;
+	
+	public EvalComment(){}
 
-	public QuestionComment(){}
-
-	public QuestionComment(Integer id, String commentText, QuestionEval eval) {
+	public EvalComment(Integer id, String commentText, Eval eval) {
 		super();
 		this.id = id;
 		this.commentText = commentText;
@@ -46,13 +45,13 @@ public class QuestionComment {
 	public void setCommentText(String commentText) {
 		this.commentText = commentText;
 	}
-
+	
 	@JsonIgnore
-	public QuestionEval getEval() {
+	public Eval getEval() {
 		return eval;
 	}
 
-	public void setEval(QuestionEval eval) {
+	public void setEval(Eval eval) {
 		this.eval = eval;
 	}
 
@@ -74,7 +73,7 @@ public class QuestionComment {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		QuestionComment other = (QuestionComment) obj;
+		EvalComment other = (EvalComment) obj;
 		if (commentText == null) {
 			if (other.commentText != null)
 				return false;
@@ -95,8 +94,6 @@ public class QuestionComment {
 
 	@Override
 	public String toString() {
-		return "QuestionComment [id=" + id + ", commentText=" + commentText + "]";
+		return "EvalComment [id=" + id + ", commentText=" + commentText + "]";
 	}
-	
-	
 }

@@ -16,7 +16,11 @@ public class EvalLogicImpl implements EvalLogic {
 
 	@Autowired
 	private EvalRepository dao;
+	
 
+//CREATE----------------------------
+
+//RETRIEVE--------------------------
 	@Override
 	public Eval getEvalById(int id) {
 		Eval eval = dao.findOne(id);
@@ -80,4 +84,8 @@ public class EvalLogicImpl implements EvalLogic {
 			return "QC";
 		} else throw new IllegalArgumentException("EvalType not recognized");
 	}
+	
+//UPDATE-------------------------------
+	
+//DELETE-------------------------------
 }
