@@ -11,11 +11,17 @@ import com.revature.domain.Batch;
 
 @Repository
 public interface BatchRepository extends JpaRepository<Batch, Integer> {
-	
+	 
 	Batch findBatchByName(String name);
+	
 	Batch findBatchById(int id);
+	@Override
 	void delete(Batch batchName);
+	
+	@Override
 	Batch save(Batch batchName);
+	
+	@Override
 	List<Batch> findAll();
 	
 //	@Modifying

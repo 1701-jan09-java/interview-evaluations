@@ -5,9 +5,12 @@ import java.sql.Date;
 import java.util.List;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 @Table(name="ie_eval")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Eval implements Serializable{
 	
 	@Id
@@ -33,14 +36,13 @@ public class Eval implements Serializable{
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="e_batch")
 	private Batch batch;
-
 	@OneToMany(mappedBy="eval")
 	private List<QuestionEval> questions;
 	
 	@OneToMany(mappedBy="eval")
 	private List<EvalComment> comments;
-	
-	public Eval() {}
+
+	public Eval() {/*empty constructor needed*/}
 
 	public Eval(Integer week, Date date, EvalType evalType, Person trainee, Batch batch,
 			List<QuestionEval> questions, List<EvalComment> comments) {
