@@ -43,10 +43,9 @@ public class Eval implements Serializable{
 	
 	public Eval() {}
 
-	public Eval(Integer id, Integer week, Date date, EvalType evalType, Person trainee, Batch batch,
+	public Eval(Integer week, Date date, EvalType evalType, Person trainee, Batch batch,
 			List<QuestionEval> questions, List<EvalComment> comments) {
 		super();
-		this.id = id;
 		this.week = week;
 		this.date = date;
 		this.evalType = evalType;
