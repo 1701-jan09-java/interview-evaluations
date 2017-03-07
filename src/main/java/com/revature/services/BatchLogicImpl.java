@@ -19,7 +19,7 @@ public class BatchLogicImpl implements BatchLogic {
 	
 	@Override
 	public Batch getBatchByName(String batchName) {
-		Batch batch = dao.findByName(batchName);
+		Batch batch = dao.findByNameIgnoreCase(batchName);
 		return batch;
 	}
 

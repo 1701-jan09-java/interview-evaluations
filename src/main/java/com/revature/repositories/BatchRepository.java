@@ -8,5 +8,5 @@ import com.revature.domain.Batch;
 @Repository
 public interface BatchRepository extends JpaRepository<Batch, Integer> {
 
-		Batch findByName(String batchName);
+		Batch findByNameIgnoreCase(String batchName);
 }
