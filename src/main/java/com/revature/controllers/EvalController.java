@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/api/v1/")
+@RequestMapping(value = "/api/v1/evaluations")
 public class EvalController {
 
 	@Autowired
 	private EvalLogic evalLogic;
 
-	@RequestMapping(method = RequestMethod.GET, value = "evaluations/{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<Eval> getEvaluation(@PathVariable("id") Integer id) {
 
 		return ResponseEntity.ok(evalLogic.getEvalById(id));
