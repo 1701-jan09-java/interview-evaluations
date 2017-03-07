@@ -63,5 +63,25 @@ public class PersonController {
 		 }
 	}	
 		
+	@RequestMapping(method = RequestMethod.POST, value = "persons")
+	public ResponseEntity<Person> createPerson(@RequestParam(required=true) String firstname,
+			@RequestParam(required=true) String lastname, 
+			@RequestParam(required=true) Integer role){
+		
+				Person person = new Person(firstname, lastname, role);
+				personLogic.savePerson(person);
+				return ResponseEntity.ok(person);
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "persons")
+	public ResponseEntity<String> deletePerson(int pId){
+				Person pers = personLogic.getPersonById(pId);
+				String message = pers.getFirstName() + " " + pers.getLastName() + " was deleted.";
+				personLogic.deletePerson(pers);
+				return ResponseEntity.ok(message);
+	}
+	
+	
+	
 
 }

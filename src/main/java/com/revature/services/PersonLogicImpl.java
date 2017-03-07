@@ -96,7 +96,8 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Override
 	public void deletePerson(Person p) {
-		dao.delete(p);
+		
+		dao.delete(p.getId());
 	}
 
 
