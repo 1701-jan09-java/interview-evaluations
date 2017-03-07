@@ -1,18 +1,16 @@
 package com.revature.services;
 
-
-
-
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.domain.Person;
+import com.revature.log.IntEvalLogger;
 import com.revature.repositories.PersonRepository;
 
 
@@ -23,7 +21,6 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Autowired
 	private PersonRepository dao;
-	
 
 	
 	@Override
@@ -70,13 +67,13 @@ public class PersonLogicImpl implements PersonLogic {
 		try {
 			 
 			p = dao.getOne(id);
-			System.out.println("This is my P: "+p);
+			IntEvalLogger.LOGGER.info("This is my P: "+p);
 			 
-		 } catch (Exception e) {		
+		 } catch (EntityNotFoundException e) {		
 			 
-			 p = new Person("","",0);
+			 p = new Person("Persondoes","Notexist",0);
 			 p.setId(0);
-			 System.out.println("setting P to new person");
+			 IntEvalLogger.LOGGER.info("setting P to new person");
 			 return p;
 		 }
 		 return p;
@@ -86,5 +83,64 @@ public class PersonLogicImpl implements PersonLogic {
 	public List<Person> getAllPersons() {
 		return dao.findAll();
 	}
+
+	@Override
+	public void savePerson(Person p) {
+		dao.save(p);
+	}
+
+	@Override
+	public Person updatePerson(Person p, String firstname, String lastname, int role) {	
+		
+		if (!"".equals(firstname)) {
+			
+			 IntEvalLogger.LOGGER.info("changing first to " + firstname);
+			 p.setFirstName(firstname);
+			 
+		} else {
+			
+			IntEvalLogger.LOGGER.info("no change to first " + p.getFirstName());
+			p.setFirstName(p.getFirstName());
+		}
+		
+		
+		
+		if (!"".equals(lastname)) {
+			
+			 IntEvalLogger.LOGGER.info("changing last to " + lastname);
+			 p.setLastName(lastname);
+			 
+		} else {
+			
+			IntEvalLogger.LOGGER.info("no change to last " + p.getLastName());
+			p.setLastName(p.getLastName());
+		}
+		
+		
+	   
+		if (role != 0) {
+			
+			IntEvalLogger.LOGGER.info("changing role to " + role);
+			p.setPersonRole(role);
+			 
+		} else {
+			
+			IntEvalLogger.LOGGER.info("no change to role " + p.getPersonRole());
+			p.setPersonRole(p.getPersonRole());
+			
+		}	    
+		
+		dao.save(p);
+		
+		return p;
+	}
+
+	@Override
+	public void deletePerson(Person p) {
+		
+		dao.delete(p.getId());
+	}
+
+
 
 }
