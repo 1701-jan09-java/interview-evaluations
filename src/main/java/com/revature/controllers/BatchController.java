@@ -1,10 +1,11 @@
 package com.revature.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
+import org.springframework.data.web.SortDefault.SortDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ public class BatchController {
 	@Autowired
 	private PersonBatchLogic personBatchLogic;
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/batch/{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/batches/{id}")
 	
 		public ResponseEntity<Batch> getBatch(@PathVariable("id") String id){
 			
@@ -42,9 +43,9 @@ public class BatchController {
 		} 
 		
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/batch/{id}/members")
+	@RequestMapping(method = RequestMethod.GET, value = "/batches/{id}/members")
 	
-		public ResponseEntity<Page<Person>> getAllBatchMembers(Pageable pageable, @PathVariable("id") int id){
+		public ResponseEntity<Page<Person>> getAllBatchMembers(@PageableDefault(size=10) @SortDefaults({@SortDefault(sort="lastName"), @SortDefault(sort="firstName")}) Pageable pageable, @PathVariable("id") int id){
 		
 			return ResponseEntity.ok(personBatchLogic.getAllBatchMembers(pageable, id));
 		}

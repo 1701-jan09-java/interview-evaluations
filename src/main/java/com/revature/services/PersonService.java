@@ -13,24 +13,23 @@ public class PersonService implements PersonLogic {
 
 	@Autowired 
 	private PersonRepository repository;
+	
+	@Autowired
 	private PersonBatchLogic personBatchLogic;
 
 	@Override
 	public List<Person> getAllByLastName(String lastName) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findAllByLastName(lastName);
 	}
 
 	@Override
 	public List<Person> getAllByFirstName(String firstName) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findAllByFirstName(firstName);
 	}
 
 	@Override
 	public List<Person> getByFirstNameAndLastName(String firstName, String lastName) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findAllByFirstNameAndLastName(firstName, lastName);
 	}
 
 	@Override
@@ -39,25 +38,23 @@ public class PersonService implements PersonLogic {
 			PersonBatchJoin personBatchJoin = new PersonBatchJoin(person, batch);
 			personBatchLogic.createPersonBatchEntry(personBatchJoin);
 		}
-		repository.save(person);
-		
+		repository.save(person);	
 	}
+	
+	
 
 	@Override
 	public void updatePerson(Person person) {
-		// TODO Auto-generated method stub
-		
+		repository.save(person);
 	}
 
 	@Override
 	public void deletePerson(Person person) {
-		// TODO Auto-generated method stub
-		
+		repository.delete(person);
 	}
 
 	@Override
 	public List<Person> findAllPeople() {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findAll();
 	}
 }
