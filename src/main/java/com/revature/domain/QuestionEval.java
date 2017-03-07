@@ -1,11 +1,14 @@
 package com.revature.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
 @Table(name="ie_question_eval")
-public class QuestionEval {
+public class QuestionEval implements Serializable {
 
 	@Id
 	@Column(name="qe_id")
@@ -26,6 +29,9 @@ public class QuestionEval {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="qe_qpid")
 	private QuestionPool questionPool;
+	
+	@OneToMany(mappedBy="questionEval")
+	private List<QuestionComment> comments;
 	
 	public QuestionEval(){}
 
@@ -79,60 +85,62 @@ public class QuestionEval {
 		this.questionPool = questionPool;
 	}
 
+	public List<QuestionComment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<QuestionComment> comments) {
+		this.comments = comments;
+	}
+
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((communicationScore == null) ? 0 : communicationScore.hashCode());
-		result = prime * result + ((eval == null) ? 0 : eval.getId().hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((knowledgeScore == null) ? 0 : knowledgeScore.hashCode());
-		result = prime * result + ((questionPool == null) ? 0 : questionPool.hashCode());
-		return result;
+		int hash = 5;
+		hash = 41 * hash + Objects.hashCode(this.id);
+		hash = 41 * hash + Objects.hashCode(this.communicationScore);
+		hash = 41 * hash + Objects.hashCode(this.knowledgeScore);
+		hash = 41 * hash + Objects.hashCode(this.eval);
+		hash = 41 * hash + Objects.hashCode(this.questionPool);
+		hash = 41 * hash + Objects.hashCode(this.comments);
+		return hash;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
-		QuestionEval other = (QuestionEval) obj;
-		if (communicationScore == null) {
-			if (other.communicationScore != null)
-				return false;
-		} else if (!communicationScore.equals(other.communicationScore))
+		}
+		final QuestionEval other = (QuestionEval) obj;
+		if (!Objects.equals(this.id, other.id)) {
 			return false;
-		if (eval == null) {
-			if (other.eval != null)
-				return false;
-		} else if (!eval.equals(other.eval))
+		}
+		if (!Objects.equals(this.communicationScore, other.communicationScore)) {
 			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
+		}
+		if (!Objects.equals(this.knowledgeScore, other.knowledgeScore)) {
 			return false;
-		if (knowledgeScore == null) {
-			if (other.knowledgeScore != null)
-				return false;
-		} else if (!knowledgeScore.equals(other.knowledgeScore))
+		}
+		if (!Objects.equals(this.eval, other.eval)) {
 			return false;
-		if (questionPool == null) {
-			if (other.questionPool != null)
-				return false;
-		} else if (!questionPool.equals(other.questionPool))
+		}
+		if (!Objects.equals(this.questionPool, other.questionPool)) {
 			return false;
+		}
+		if (!Objects.equals(this.comments, other.comments)) {
+			return false;
+		}
 		return true;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "QuestionEval [id=" + id + ", communicationScore=" + communicationScore + ", knowledgeScore="
-				+ knowledgeScore + ", questionPool=" + questionPool + "]";
-	}
-	
+		return "QuestionEval{" + "id=" + id + ", communicationScore=" + communicationScore + ", knowledgeScore=" + knowledgeScore + ", eval=" + eval + ", questionPool=" + questionPool + ", comments=" + comments + '}';
+	}	
 	
 }
