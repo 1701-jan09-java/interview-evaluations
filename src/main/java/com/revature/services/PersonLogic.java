@@ -13,7 +13,6 @@ public interface PersonLogic {
 	void createPerson(Person person, Batch batch);
 	void updatePerson(Person person);
 	void deletePerson(Person person);
-	
 	List<Person> findAllPeople();
 	
 	
