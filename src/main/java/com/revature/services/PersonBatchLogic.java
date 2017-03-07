@@ -1,13 +1,14 @@
 package com.revature.services;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.revature.domain.Person;
 import com.revature.domain.PersonBatchJoin;
 
 public interface PersonBatchLogic {
 
-	List<Person> getAllBatchMembers(Integer batchId);
+	Page<Person> getAllBatchMembers(Pageable pageable, Integer batchId);
 	void createPersonBatchEntry(PersonBatchJoin newPBJ);
 	void deletePersonBatchEntry(PersonBatchJoin oldPBJ);
 }

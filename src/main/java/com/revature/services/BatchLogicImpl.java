@@ -1,9 +1,8 @@
 package com.revature.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,15 +19,13 @@ public class BatchLogicImpl implements BatchLogic {
 	
 	@Override
 	public Batch getBatchByName(String batchName) {
-		Batch batch = dao.findBatchByName(batchName);
-		System.out.println(batch);
+		Batch batch = dao.findByName(batchName);
 		return batch;
 	}
 
 	@Override
 	public Batch getBatchById(int batchId) {
-		Batch batch = dao.findBatchById(batchId);
-		System.out.print(batch);
+		Batch batch = dao.findOne(batchId);
 		return batch;
 		}
 
@@ -39,10 +36,8 @@ public class BatchLogicImpl implements BatchLogic {
 	
 
 	@Override
-	public ArrayList<Batch> getAllBatches() {
-		ArrayList<Batch> allBatches = dao.findAll();
-		System.out.println(allBatches);
-		return allBatches;
+	public Page<Batch> getAllBatches(Pageable pageable) {
+		return dao.findAll(pageable);
 	}
 
 	@Override

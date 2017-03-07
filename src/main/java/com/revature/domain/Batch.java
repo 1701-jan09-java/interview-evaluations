@@ -23,9 +23,8 @@ public class Batch {
 
 	public Batch() {}
 		
-	public Batch(int id, String name) {
+	public Batch(String name) {
 		super();
-		this.id = id;
 		this.name = name;
 	}
 

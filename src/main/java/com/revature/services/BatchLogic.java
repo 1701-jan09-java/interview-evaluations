@@ -1,6 +1,7 @@
 package com.revature.services;
 
-import java.util.ArrayList;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.revature.domain.Batch;
 
@@ -9,7 +10,7 @@ public interface BatchLogic {
 	Batch getBatchByName(String batchName);
 	Batch getBatchById(int batchId);
 	void deleteBatch(Batch batchName);
-	ArrayList<Batch> getAllBatches();
+	Page<Batch> getAllBatches(Pageable pageable);
 	void createBatch(Batch batchName);
 	void updateBatch(Batch batchName);
 	
