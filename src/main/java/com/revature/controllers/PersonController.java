@@ -61,16 +61,35 @@ public class PersonController {
 			 return ResponseEntity.ok(singlePerson);
 			 
 		 }
-	}	
-		
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, value = "persons")
 	public ResponseEntity<Person> createPerson(@RequestParam(required=true) String firstname,
 			@RequestParam(required=true) String lastname, 
 			@RequestParam(required=true) Integer role){
 		
-				Person person = new Person(firstname, lastname, role);
-				personLogic.savePerson(person);
-				return ResponseEntity.ok(person);
+			Person person = new Person(firstname, lastname, role);
+			
+			personLogic.savePerson(person);
+
+			return ResponseEntity.ok(person);
+		
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "persons")
+	public ResponseEntity<Person> modifyPerson(@RequestParam(required=true) Integer id,
+			@RequestParam(defaultValue="", required=false) String firstname,
+			@RequestParam(defaultValue="", required=false) String lastname, 
+			@RequestParam(defaultValue="0", required=false) Integer role){
+	
+			Person person = personLogic.getPersonById(id);
+			
+			System.out.println("first " + firstname + " last " + lastname + " role " + role);
+			
+			person = personLogic.updatePerson(person, firstname, lastname, role);
+
+			return ResponseEntity.ok(person);
+		
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "persons")

@@ -16,7 +16,7 @@ public interface PersonLogic {
 	List<Person> getAllTrainees();
 	List<Person> getAllTrainers();
 	void savePerson(Person p);
-	void updatePerson(Person p);
+	Person updatePerson(Person p, String firstname, String lastname, int role);
 	void deletePerson(Person p);
 
 }

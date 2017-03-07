@@ -5,7 +5,10 @@ package com.revature.services;
 
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,9 +72,9 @@ public class PersonLogicImpl implements PersonLogic {
 			p = dao.getOne(id);
 			System.out.println("This is my P: "+p);
 			 
-		 } catch (Exception e) {		
+		 } catch (EntityNotFoundException e) {		
 			 
-			 p = new Person("","",0);
+			 p = new Person("Persondoes","Notexist",0);
 			 p.setId(0);
 			 System.out.println("setting P to new person");
 			 return p;
@@ -90,8 +93,49 @@ public class PersonLogicImpl implements PersonLogic {
 	}
 
 	@Override
-	public void updatePerson(Person p) {
-		// this one?? 
+	public Person updatePerson(Person p, String firstname, String lastname, int role) {	
+		
+		if (!firstname.equals("")) {
+			
+			 System.out.println("changing first to " + firstname);
+			 p.setFirstName(firstname);
+			 
+		} else {
+			
+			System.out.println("no change to first " + p.getFirstName());
+			p.setFirstName(p.getFirstName());
+		}
+		
+		
+		
+		if (!lastname.equals("")) {
+			
+			 System.out.println("changing last to " + lastname);
+			 p.setLastName(lastname);
+			 
+		} else {
+			
+			System.out.println("no change to last " + p.getLastName());			
+			p.setLastName(p.getLastName());
+		}
+		
+		
+	   
+		if (role != 0) {
+			
+			System.out.println("changing role to " + role);
+			p.setPersonRole(role);
+			 
+		} else {
+			
+			System.out.println("no change to role " + p.getPersonRole());
+			p.setPersonRole(p.getPersonRole());
+			
+		}	    
+		
+		dao.save(p);
+		
+		return p;
 	}
 
 	@Override
