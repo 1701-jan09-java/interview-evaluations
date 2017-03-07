@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.domain.Person;
+import com.revature.log.IntEvalLogger;
 import com.revature.services.PersonLogic;
 
 @RestController
@@ -28,10 +29,10 @@ public class PersonController {
 		
 		 if((id==0)&&(role==0)){
 			 			 
-			 if(!firstname.equals("")){
+			 if(!"".equals(firstname)){
 				 return ResponseEntity.ok(personLogic.getPersonByFirstName(firstname));
 				 
-			 } else if (!lastname.equals("")){
+			 } else if (!"".equals(lastname)){
 				 return ResponseEntity.ok(personLogic.getPersonByLastName(lastname));
 				 
 			 } else{
@@ -84,7 +85,7 @@ public class PersonController {
 	
 			Person person = personLogic.getPersonById(id);
 			
-			System.out.println("first " + firstname + " last " + lastname + " role " + role);
+			IntEvalLogger.LOGGER.info("first " + firstname + " last " + lastname + " role " + role);
 			
 			person = personLogic.updatePerson(person, firstname, lastname, role);
 
@@ -94,10 +95,11 @@ public class PersonController {
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "persons")
 	public ResponseEntity<String> deletePerson(int pId){
-				Person pers = personLogic.getPersonById(pId);
-				String message = pers.getFirstName() + " " + pers.getLastName() + " was deleted.";
-				personLogic.deletePerson(pers);
-				return ResponseEntity.ok(message);
+		
+			Person pers = personLogic.getPersonById(pId);
+			String message = pers.getFirstName() + " " + pers.getLastName() + " was deleted.";
+			personLogic.deletePerson(pers);
+			return ResponseEntity.ok(message);
 	}
 	
 	

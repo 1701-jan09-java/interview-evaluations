@@ -1,19 +1,16 @@
 package com.revature.services;
 
-
-
-
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.domain.Person;
+import com.revature.log.IntEvalLogger;
 import com.revature.repositories.PersonRepository;
 
 
@@ -70,13 +67,13 @@ public class PersonLogicImpl implements PersonLogic {
 		try {
 			 
 			p = dao.getOne(id);
-			System.out.println("This is my P: "+p);
+			IntEvalLogger.LOGGER.info("This is my P: "+p);
 			 
 		 } catch (EntityNotFoundException e) {		
 			 
 			 p = new Person("Persondoes","Notexist",0);
 			 p.setId(0);
-			 System.out.println("setting P to new person");
+			 IntEvalLogger.LOGGER.info("setting P to new person");
 			 return p;
 		 }
 		 return p;
@@ -95,27 +92,27 @@ public class PersonLogicImpl implements PersonLogic {
 	@Override
 	public Person updatePerson(Person p, String firstname, String lastname, int role) {	
 		
-		if (!firstname.equals("")) {
+		if (!"".equals(firstname)) {
 			
-			 System.out.println("changing first to " + firstname);
+			 IntEvalLogger.LOGGER.info("changing first to " + firstname);
 			 p.setFirstName(firstname);
 			 
 		} else {
 			
-			System.out.println("no change to first " + p.getFirstName());
+			IntEvalLogger.LOGGER.info("no change to first " + p.getFirstName());
 			p.setFirstName(p.getFirstName());
 		}
 		
 		
 		
-		if (!lastname.equals("")) {
+		if (!"".equals(lastname)) {
 			
-			 System.out.println("changing last to " + lastname);
+			 IntEvalLogger.LOGGER.info("changing last to " + lastname);
 			 p.setLastName(lastname);
 			 
 		} else {
 			
-			System.out.println("no change to last " + p.getLastName());			
+			IntEvalLogger.LOGGER.info("no change to last " + p.getLastName());
 			p.setLastName(p.getLastName());
 		}
 		
@@ -123,12 +120,12 @@ public class PersonLogicImpl implements PersonLogic {
 	   
 		if (role != 0) {
 			
-			System.out.println("changing role to " + role);
+			IntEvalLogger.LOGGER.info("changing role to " + role);
 			p.setPersonRole(role);
 			 
 		} else {
 			
-			System.out.println("no change to role " + p.getPersonRole());
+			IntEvalLogger.LOGGER.info("no change to role " + p.getPersonRole());
 			p.setPersonRole(p.getPersonRole());
 			
 		}	    
