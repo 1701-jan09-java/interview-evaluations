@@ -21,7 +21,6 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Autowired
 	private PersonRepository dao;
-	
 
 	
 	@Override
@@ -84,5 +83,22 @@ public class PersonLogicImpl implements PersonLogic {
 	public List<Person> getAllPersons() {
 		return dao.findAll();
 	}
+
+	@Override
+	public void savePerson(Person p) {
+		dao.save(p);
+	}
+
+	@Override
+	public void updatePerson(Person p) {
+		// this one?? 
+	}
+
+	@Override
+	public void deletePerson(Person p) {
+		dao.delete(p);
+	}
+
+
 
 }

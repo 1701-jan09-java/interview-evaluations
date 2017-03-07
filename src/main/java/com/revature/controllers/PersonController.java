@@ -20,7 +20,7 @@ public class PersonController {
 	@Autowired
 	private PersonLogic personLogic;
 	
-	@RequestMapping(method = RequestMethod.GET, value = "person")
+	@RequestMapping(method = RequestMethod.GET, value = "persons")
 	public ResponseEntity<List<Person>> getPerson(@RequestParam(defaultValue="", required=false) String firstname,
 			@RequestParam(defaultValue="", required=false) String lastname, 
 			@RequestParam(defaultValue="0", required=false) Integer id,
@@ -63,6 +63,5 @@ public class PersonController {
 		 }
 	}	
 		
-	
-	
+
 }
