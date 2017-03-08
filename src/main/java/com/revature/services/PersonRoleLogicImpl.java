@@ -17,7 +17,7 @@ public class PersonRoleLogicImpl implements PersonRoleLogic {
 	
 	@Override
 	public PersonRole findRoleById(int id) {
-		return dao.getOne(id);
+		return dao.findOne(id);
 	}
 
 }
