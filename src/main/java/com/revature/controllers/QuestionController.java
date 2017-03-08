@@ -1,9 +1,13 @@
 package com.revature.controllers;
 
+import com.revature.domain.Eval;
+import com.revature.domain.EvalComment;
+import com.revature.domain.QuestionComment;
 import com.revature.domain.QuestionPool;
 import com.revature.services.QuestionLogic;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
@@ -40,4 +44,95 @@ public class QuestionController {
 		return ResponseEntity.ok(questionLogic.searchQuestions(pageable,searchText, subject));
 	}
 	
+//QUESTIONPOOL CUD------------------------------------
+	@RequestMapping(method = RequestMethod.POST, value="")
+	public ResponseEntity<QuestionPool> addQuestion(@RequestBody QuestionPool question){
+		
+		return ResponseEntity.ok(questionLogic.createQuestion(question));
+		
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "/update/{id}")
+	public ResponseEntity<QuestionPool> updateQuestion(@RequestBody QuestionPool question, @PathVariable ("id") Integer id){
+		
+		QuestionPool currQuestion = questionLogic.getQuestionById(id);
+		
+		if(currQuestion == null){
+			System.out.println("Question with id " + id + " not found");
+	        return new ResponseEntity<QuestionPool>(HttpStatus.NOT_FOUND);
+		}
+		
+		if(question.getQuestionText() != null){
+			currQuestion.setQuestionText(question.getQuestionText());
+		}
+		if(question.getMaxCommunicationScore() != null){
+			currQuestion.setMaxCommunicationScore(question.getMaxCommunicationScore());
+		}
+		if(question.getMaxKnowledgeScore() != null){
+			currQuestion.setMaxKnowledgeScore(question.getMaxKnowledgeScore());
+		}
+		if(question.getSubjectId() != null){
+			currQuestion.setSubjectId(question.getSubjectId());
+		}
+		if(question.getUseCount() != null){
+			currQuestion.setUseCount(question.getUseCount());
+		}
+		if(question.getDateLastUsed() != null){
+			currQuestion.setDateLastUsed(question.getDateLastUsed());
+		}
+		
+		return ResponseEntity.ok(questionLogic.updateQuestion(currQuestion));
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "/delete/{id}")
+public ResponseEntity<QuestionPool> deleteEval(@PathVariable ("id") int id){
+		QuestionPool currQuestion = questionLogic.getQuestionById(id);
+		
+		if(currQuestion == null){
+			System.out.println("Question with id " + id + " not found");
+	        return new ResponseEntity<QuestionPool>(HttpStatus.NOT_FOUND);
+		}
+		
+		return ResponseEntity.ok(questionLogic.deleteQuestion(id));
+	}
+	
+//QUESTIONCOMMENT CUD---------------------------------
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/comments")
+	public ResponseEntity<QuestionComment> addEvalComment(@RequestBody QuestionComment comment){
+		return ResponseEntity.ok(questionLogic.createComment(comment));
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "/comments/update/{id}")
+	public ResponseEntity<QuestionComment> updateEvalComments(@RequestBody QuestionComment comment, @PathVariable ("id") Integer id){
+		
+		QuestionComment currComment = questionLogic.getCommentById(id);
+		
+		if(currComment == null){
+			System.out.println("Comment with id " + id + " not found");
+	        return new ResponseEntity<QuestionComment>(HttpStatus.NOT_FOUND);
+		}
+		
+		if(comment.getCommentText() != null){
+			currComment.setCommentText(comment.getCommentText());
+		}
+		if(comment.getQuestionEval() != null){
+			currComment.setQuestionEval(comment.getQuestionEval());
+		}
+		
+		return ResponseEntity.ok(questionLogic.updateComment(currComment));
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "/comments/delete/{id}")
+	public ResponseEntity<QuestionComment> deleteQuestionComment(@PathVariable ("id") int id){
+		
+		QuestionComment currComment = questionLogic.getCommentById(id);
+		
+		if(currComment == null){
+			System.out.println("Comment with id " + id + " not found");
+	        return new ResponseEntity<QuestionComment>(HttpStatus.NOT_FOUND);
+		}
+		
+		return ResponseEntity.ok(questionLogic.deleteComment(id));
+	}
 }

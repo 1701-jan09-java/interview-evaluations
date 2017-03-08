@@ -2,6 +2,8 @@ package com.revature.services;
 
 import java.util.List;
 import com.revature.domain.Eval;
+import com.revature.domain.EvalComment;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -21,5 +23,13 @@ public interface EvalLogic {
 	
 	Eval updateEval(Eval eval);
 	
-	Eval deleteEval(Eval eval);
+	Eval deleteEval(int id);
+
+	EvalComment getCommentById(Integer id);
+
+	EvalComment createComment(EvalComment comment);
+
+	EvalComment updateComment(EvalComment comment);
+
+	EvalComment deleteComment(int id);
 }

@@ -1,7 +1,10 @@
 package com.revature.services;
 
 import com.revature.repositories.EvalRepository;
+import com.revature.repositories.EvalCommentRepository;
 import com.revature.domain.Eval;
+import com.revature.domain.EvalComment;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +19,9 @@ public class EvalLogicImpl implements EvalLogic {
 	@Autowired
 	private EvalRepository dao;
 	
+	@Autowired
+	private EvalCommentRepository commentDao;
+	
 
 //CREATE----------------------------
 	@Override
@@ -23,6 +29,13 @@ public class EvalLogicImpl implements EvalLogic {
 	public Eval createEval(Eval eval) {
 		dao.save(eval);
 		return eval;
+	}
+	
+	@Override
+	@Transactional
+	public EvalComment createComment(EvalComment comment) {
+		commentDao.save(comment);
+		return comment;
 	}
 
 //RETRIEVE--------------------------
@@ -81,21 +94,40 @@ public class EvalLogicImpl implements EvalLogic {
 		return evals;
 	}
 	
-//UPDATE-------------------------------
+	@Override
+	public EvalComment getCommentById(Integer id) {
+		return commentDao.findOne(id);
+	}
 	
+//UPDATE-------------------------------	
 	@Override
 	@Transactional
 	public Eval updateEval(Eval eval) {
-		dao.save(eval);
-		return eval;
+		
+		return dao.save(eval);
 	}
-	
-//DELETE-------------------------------
 	
 	@Override
 	@Transactional
-	public Eval deleteEval(Eval eval) {
+	public EvalComment updateComment(EvalComment comment) {
+		
+		return commentDao.save(comment);
+	}
+	
+//DELETE-------------------------------
+	@Override
+	@Transactional
+	public Eval deleteEval(int id) {
+		Eval eval = dao.findOne(id);
 		dao.delete(eval);
 		return eval;
+	}
+	
+	@Override
+	@Transactional
+	public EvalComment deleteComment(int id) {
+		EvalComment comment = commentDao.findOne(id);
+		commentDao.delete(comment);
+		return comment;
 	}
 }
