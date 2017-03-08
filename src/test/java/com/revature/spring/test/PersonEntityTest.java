@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import org.apache.log4j.BasicConfigurator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.revature.domain.Person;
 import com.revature.domain.PersonRole;
+import com.revature.log.IntEvalLogger;
 import com.revature.repositories.PersonRepository;
 
 /**
@@ -34,34 +36,46 @@ public class PersonEntityTest {
     
     @Before
     public void setUp() {
-    	PersonRole personRole = new PersonRole(1, "Trainee");
-    	System.out.println("begin");
+    	
+    	BasicConfigurator.configure();
+    	
+    	IntEvalLogger.LOGGER.info("begin testing");
+    	
+    	PersonRole personRole = new PersonRole(1, "Trainee");    	
+    	
+    	entityManager.persist(personRole);
 		entityManager.persist(new Person("Christ", "McFeeny", personRole));
     }
 	
 	@Test
 	public void testFindPersonByFirstName() {
 		
+		BasicConfigurator.configure();
+		
 		List<Person> person = personRepository.findAllByFirstName("Christ");
-		System.out.println(person.toString());
-		assertEquals("[Person [id=1, firstName=Christ, lastName=McFeeny, personRole=1]]", person.toString());
+		IntEvalLogger.LOGGER.info(person.toString());
+		assertEquals("[Person [id=1, firstName=Christ, lastName=McFeeny, personRole=PersonRole [id=1, title=Trainee]]]", person.toString());
 	}
 	
 	@Test
 	public void testFindPersonByLastName() {
 		
-		List<Person> person = personRepository.findAllByFirstName("McFeeny");
-		System.out.println(person.toString());
-		assertEquals("[Person [id=2, firstName=Christ, lastName=McFeeny, personRole=1]]", person.toString());
+		BasicConfigurator.configure();
+		
+		List<Person> person = personRepository.findAllByLastName("McFeeny");
+		IntEvalLogger.LOGGER.info(person.toString());
+		assertEquals("[Person [id=2, firstName=Christ, lastName=McFeeny, personRole=PersonRole [id=1, title=Trainee]]]", person.toString());
 	}
 	
 	@Test
 	public void testFindPersonByRole() {
 		
+		BasicConfigurator.configure();
+		
 		PersonRole personRole = new PersonRole(1, "Trainee");
 		List<Person> person = personRepository.findAllByPersonRole(personRole);
-		System.out.println(person.toString());
-		assertEquals("[Person [id=3, firstName=Christ, lastName=McFeeny, personRole=1]]", person.toString());
+		IntEvalLogger.LOGGER.info(person.toString());
+		assertEquals("[Person [id=3, firstName=Christ, lastName=McFeeny, personRole=PersonRole [id=1, title=Trainee]]]", person.toString());
 	}
 
 	

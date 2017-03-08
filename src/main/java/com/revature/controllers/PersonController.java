@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.domain.Batch;
 import com.revature.domain.Person;
 import com.revature.domain.PersonRole;
-import com.revature.log.IntEvalLogger;
 import com.revature.services.BatchLogic;
 import com.revature.services.PersonLogic;
 import com.revature.services.PersonRoleLogic;
@@ -102,7 +101,6 @@ public class PersonController {
 			
 			Person person = personLogic.getPersonById(id);
 			PersonRole pRole = personRoleLogic.findRoleById(role);
-			IntEvalLogger.LOGGER.info("first " + firstname + " last " + lastname + " role " + role);
 			
 			person = personLogic.updatePerson(person, firstname, lastname, pRole, batch);
 

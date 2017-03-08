@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.apache.log4j.BasicConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -21,7 +22,6 @@ import com.revature.repositories.PersonRepository;
 @Transactional(readOnly=false, isolation=Isolation.READ_COMMITTED)
 public class PersonLogicImpl implements PersonLogic {
 
-
 	@Autowired
 	private PersonRepository dao;
 	
@@ -32,14 +32,14 @@ public class PersonLogicImpl implements PersonLogic {
 	@Override
 	public List<Person> getPersonByFirstName(String firstName) {
 		
-		return  dao.findAllByFirstName(firstName);
+		return dao.findAllByFirstName(firstName);
 
 	}
 
 	@Override
 	public List<Person> getPersonByLastName(String lastName) {
 		
-		return dao.findAllByFirstName(lastName);
+		return dao.findAllByLastName(lastName);
 	}
 
 	@Override
@@ -58,6 +58,8 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Override
 	public Person getPersonById(int id)  {
+		
+		BasicConfigurator.configure();
 		
 		Person p = null;
 		
@@ -84,6 +86,7 @@ public class PersonLogicImpl implements PersonLogic {
 	@Override
 	public Person updatePerson(Person p, String firstname, String lastname, PersonRole personRole, Batch batch) {	
 		
+		BasicConfigurator.configure();
 		
 		if(batch != null){
 			PersonBatchJoin personBatchJoin = new PersonBatchJoin(p, batch);
