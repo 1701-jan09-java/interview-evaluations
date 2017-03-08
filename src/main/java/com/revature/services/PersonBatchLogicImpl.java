@@ -35,13 +35,19 @@ public class PersonBatchLogicImpl implements PersonBatchLogic{
 	}
 
 	@Override
-	public void createPersonBatchEntry(PersonBatchJoin newPBJ) {
+	public void createPersonBatch(PersonBatchJoin newPBJ) {
 		pBJ.save(newPBJ);
 	}
 
 	@Override
-	public void deletePersonBatchEntry(PersonBatchJoin oldPBJ) {
+	public void deletePersonBatch(PersonBatchJoin oldPBJ) {
 		pBJ.delete(oldPBJ);
+	}
+
+
+	@Override
+	public void updatePersonBatch(PersonBatchJoin newPBJ) {
+		pBJ.save(newPBJ);
 	}
 
 }

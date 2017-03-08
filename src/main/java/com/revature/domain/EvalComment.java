@@ -3,10 +3,11 @@ package com.revature.domain;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
 
 @Entity
 @Table(name="ie_eval_comment")
-public class EvalComment {
+public class EvalComment implements Serializable {
 	
 	@Id
 	@Column(name="ec_id")
@@ -14,7 +15,7 @@ public class EvalComment {
 	@SequenceGenerator(allocationSize=1, name="evalCommentSeq", sequenceName="eval_comment_seq")
 	private Integer id;
 	
-	@Column(name="ec_comment_text")
+	@Column(name="ec_text")
 	private String commentText;
 	
 	@ManyToOne(fetch=FetchType.EAGER)

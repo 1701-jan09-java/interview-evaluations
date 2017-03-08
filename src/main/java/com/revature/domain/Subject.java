@@ -1,10 +1,11 @@
 package com.revature.domain;
 
+import java.io.Serializable;
 import javax.persistence.*;
 
 @Entity
 @Table(name="ie_subject")
-public class Subject {
+public class Subject implements Serializable {
 	
 	@Id
 	@Column(name="s_id")

@@ -9,6 +9,7 @@ import com.revature.domain.PersonBatchJoin;
 public interface PersonBatchLogic {
 
 	Page<Person> getAllBatchMembers(Pageable pageable, Integer batchId);
-	void createPersonBatchEntry(PersonBatchJoin newPBJ);
-	void deletePersonBatchEntry(PersonBatchJoin oldPBJ);
+	void createPersonBatch(PersonBatchJoin newPBJ);
+	void updatePersonBatch(PersonBatchJoin newPBJ);
+	void deletePersonBatch(PersonBatchJoin oldPBJ);
 }

@@ -1,5 +1,7 @@
 package com.revature.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,9 +13,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="ie_person")
-public class Person {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Person implements Serializable {
 
 	@Id
 	@Column(name = "p_id")
@@ -31,7 +36,8 @@ public class Person {
 	@JoinColumn(name = "p_role", nullable = false)
 	private PersonRole personRole;
 	
-	public Person() {}
+	public Person() {/*empty constructor needed*/}
+
 
 	public Person(String firstName, String lastName, PersonRole personRole) {
 		super();
