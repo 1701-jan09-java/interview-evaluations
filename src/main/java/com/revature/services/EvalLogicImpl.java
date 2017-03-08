@@ -93,5 +93,19 @@ public class EvalLogicImpl implements EvalLogic {
 	
 //UPDATE-------------------------------
 	
+	@Override
+	@Transactional
+	public Eval updateEval(Eval eval) {
+		dao.save(eval);
+		return eval;
+	}
+	
 //DELETE-------------------------------
+	
+	@Override
+	@Transactional
+	public Eval deleteEval(Eval eval) {
+		dao.delete(eval);
+		return eval;
+	}
 }
