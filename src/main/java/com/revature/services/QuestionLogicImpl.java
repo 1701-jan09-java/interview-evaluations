@@ -66,8 +66,7 @@ public class QuestionLogicImpl implements QuestionLogic{
 	
 	@Override
 	public QuestionComment getCommentById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		return commentDao.findOne(id);
 	}
 
 //UPDATE-----------------------------------
