@@ -82,7 +82,13 @@ public class PersonLogicImpl implements PersonLogic {
 	}
 
 	@Override
-	public Person updatePerson(Person p, String firstname, String lastname, PersonRole personRole) {	
+	public Person updatePerson(Person p, String firstname, String lastname, PersonRole personRole, Batch batch) {	
+		
+		
+		if(batch != null){
+			PersonBatchJoin personBatchJoin = new PersonBatchJoin(p, batch);
+			personBatchLogic.updatePersonBatch(personBatchJoin);
+		}
 		
 		if (!"".equals(firstname)) {
 			
@@ -110,7 +116,7 @@ public class PersonLogicImpl implements PersonLogic {
 		
 		
 	   
-		if (personRole.getId() != 0) {
+		if (personRole != null) {
 			
 			IntEvalLogger.LOGGER.info("changing role to " + personRole.getId());
 			p.setPersonRole(personRole);
@@ -140,15 +146,10 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Override
 	public void createPerson(Person person, Batch batch) {
-		if(person.getPersonRole().getId() == 1){
+		if(batch != null){
 			PersonBatchJoin personBatchJoin = new PersonBatchJoin(person, batch);
 			personBatchLogic.createPersonBatch(personBatchJoin);
 		}
-		dao.save(person);
-	}
-
-	@Override
-	public void updatePerson(Person person) {
 		dao.save(person);
 	}
 
