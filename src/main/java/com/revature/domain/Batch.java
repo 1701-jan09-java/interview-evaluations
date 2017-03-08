@@ -27,7 +27,7 @@ public class Batch implements Serializable  {
 	@Column(name="b_name")
 	private String name;
 
-	public Batch() {/*empty constructor needed*/}
+	public Batch() {}
 		
 	public Batch(String name) {
 		super();

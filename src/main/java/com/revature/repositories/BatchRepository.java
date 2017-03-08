@@ -9,8 +9,6 @@ import com.revature.domain.Batch;
 
 @Repository
 public interface BatchRepository extends JpaRepository<Batch, Integer> {
-	 
-	Batch findBatchByName(String name);
 		
 	@Override
 	Page<Batch> findAll(Pageable pageable);
