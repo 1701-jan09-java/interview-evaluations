@@ -1,10 +1,11 @@
 package com.revature.domain;
 
+import java.io.Serializable;
 import javax.persistence.*;
 
 @Entity
 @Table(name="ie_subject")
-public class Subject {
+public class Subject implements Serializable {
 	
 	@Id
 	@Column(name="s_id")
@@ -17,9 +18,8 @@ public class Subject {
 	
 	public Subject(){}
 
-	public Subject(Integer id, String subject) {
+	public Subject(String subject) {
 		super();
-		this.id = id;
 		this.subject = subject;
 	}
 

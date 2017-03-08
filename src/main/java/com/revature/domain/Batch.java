@@ -1,5 +1,7 @@
 package com.revature.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,9 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="ie_batch")
-public class Batch {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Batch implements Serializable  {
+
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="batch_sequence")
@@ -21,7 +27,7 @@ public class Batch {
 	@Column(name="b_name")
 	private String name;
 
-	public Batch() {}
+	public Batch() {/*empty constructor needed*/}
 		
 	public Batch(int id, String name) {
 		super();

@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="ie_eval_type")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class EvalType implements Serializable {
 
 	@Id
@@ -15,7 +18,7 @@ public class EvalType implements Serializable {
 	@Column(name="et_description")
 	private String description;
 	
-	public EvalType() {}
+	public EvalType() {/*empty constructor needed*/}
 
 	public Integer getId() {
 		return id;

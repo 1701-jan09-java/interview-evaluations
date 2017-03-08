@@ -1,12 +1,13 @@
 package com.revature.domain;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name="ie_question_pool")
-public class QuestionPool {
+public class QuestionPool implements Serializable {
 
 	@Id
 	@Column(name="qp_id")
@@ -35,10 +36,9 @@ public class QuestionPool {
 	
 	public QuestionPool(){}
 
-	public QuestionPool(Integer id, String questionText, Integer maxCommunicationScore, Integer maxKnowledgeScore,
+	public QuestionPool(String questionText, Integer maxCommunicationScore, Integer maxKnowledgeScore,
 			Subject subject, Integer useCount, Date dateLastUsed) {
 		super();
-		this.id = id;
 		this.questionText = questionText;
 		this.maxCommunicationScore = maxCommunicationScore;
 		this.maxKnowledgeScore = maxKnowledgeScore;

@@ -38,11 +38,11 @@
                     key: password
             resources:
               requests:
-                cpu: 0.1
-                memory: 400M
+                cpu: 500m
+                memory: 800M
               limits:
-                cpu: 0.1
-                memory: 400M
+                cpu: 500m
+                memory: 800M
 #            livenessProbe:
 #              httpGet:
 #                path: /healthz

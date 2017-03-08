@@ -1,13 +1,13 @@
 package com.revature.domain;
 
 import javax.persistence.*;
-import org.springframework.data.annotation.Id;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
 
 @Entity
 @Table(name="ie_question_comment")
-public class QuestionComment {
+public class QuestionComment implements Serializable {
 
 	@Id
 	@Column(name="qc_id")
@@ -20,15 +20,14 @@ public class QuestionComment {
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="qc_eid")
-	private QuestionEval eval;
+	private QuestionEval questionEval;
 
 	public QuestionComment(){}
 
-	public QuestionComment(Integer id, String commentText, QuestionEval eval) {
+	public QuestionComment(String commentText, QuestionEval eval) {
 		super();
-		this.id = id;
 		this.commentText = commentText;
-		this.eval = eval;
+		this.questionEval = eval;
 	}
 
 	public Integer getId() {
@@ -48,12 +47,12 @@ public class QuestionComment {
 	}
 
 	@JsonIgnore
-	public QuestionEval getEval() {
-		return eval;
+	public QuestionEval getQuestionEval() {
+		return questionEval;
 	}
 
-	public void setEval(QuestionEval eval) {
-		this.eval = eval;
+	public void setQuestionEval(QuestionEval questionEval) {
+		this.questionEval = questionEval;
 	}
 
 	@Override
@@ -80,10 +79,10 @@ public class QuestionComment {
 				return false;
 		} else if (!commentText.equals(other.commentText))
 			return false;
-		if (eval == null) {
-			if (other.eval != null)
+		if (questionEval == null) {
+			if (other.questionEval != null)
 				return false;
-		} else if (!eval.equals(other.eval))
+		} else if (!questionEval.equals(other.questionEval))
 			return false;
 		if (id == null) {
 			if (other.id != null)
