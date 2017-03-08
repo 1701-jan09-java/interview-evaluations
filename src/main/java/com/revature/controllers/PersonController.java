@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +18,7 @@ import com.revature.services.BatchLogic;
 import com.revature.services.PersonLogic;
 import com.revature.services.PersonRoleLogic;
 
+@CrossOrigin(origins = "http://localhost:8080/api/v1/persons", maxAge = 3600)
 @RestController
 @RequestMapping(value = "/api/v1/")
 public class PersonController {
