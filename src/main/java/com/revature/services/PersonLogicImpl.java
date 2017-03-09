@@ -6,6 +6,8 @@ import javax.persistence.EntityNotFoundException;
 
 import org.apache.log4j.BasicConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,29 +32,29 @@ public class PersonLogicImpl implements PersonLogic {
 
 	
 	@Override
-	public List<Person> getPersonByFirstName(String firstName) {
+	public Page<Person> getPersonByFirstName(Pageable pageable, String firstName) {
 		
-		return dao.findAllByFirstName(firstName);
+		return dao.findAllByFirstName(pageable, firstName);
 
 	}
 
 	@Override
-	public List<Person> getPersonByLastName(String lastName) {
+	public Page<Person> getPersonByLastName(Pageable pageable, String lastName) {
 		
-		return dao.findAllByLastName(lastName);
+		return dao.findAllByLastName(pageable, lastName);
 	}
 
 	@Override
-	public List<Person> getAllTrainees() {
+	public Page<Person> getAllTrainees(Pageable pageable) {
 		PersonRole personRole = new PersonRole(1, "Trainee");
-		return dao.findAllByPersonRole(personRole);
+		return dao.findAllByPersonRole(pageable, personRole);
 
 	}
 
 	@Override
-	public List<Person> getAllTrainers() {
+	public Page<Person> getAllTrainers(Pageable pageable) {
 		PersonRole personRole = new PersonRole(2, "Trainer");
-		return dao.findAllByPersonRole(personRole);
+		return dao.findAllByPersonRole(pageable, personRole);
 
 	}
 
@@ -79,8 +81,8 @@ public class PersonLogicImpl implements PersonLogic {
 	}
 
 	@Override
-	public List<Person> getAllPersons() {
-		return dao.findAll();
+	public Page<Person> getAllPersons(Pageable pageable) {
+		return dao.findAll(pageable);
 	}
 
 	@Override
@@ -143,8 +145,8 @@ public class PersonLogicImpl implements PersonLogic {
 	}
 
 	@Override
-	public List<Person> getByFirstNameAndLastName(String firstName, String lastName) {
-		return dao.findAllByFirstNameAndLastName(firstName, lastName);
+	public Page<Person> getByFirstNameAndLastName(Pageable pageable, String firstName, String lastName) {
+		return dao.findAllByFirstNameAndLastName(pageable, firstName, lastName);
 	}
 
 	@Override
@@ -157,8 +159,8 @@ public class PersonLogicImpl implements PersonLogic {
 	}
 
 	@Override
-	public List<Person> getAllPersonsByPersonRole(PersonRole personRole) {
-		return dao.findAllByPersonRole(personRole);
+	public Page<Person> getAllPersonsByPersonRole(Pageable pageable, PersonRole personRole) {
+		return dao.findAllByPersonRole(pageable, personRole);
 	}
 
 
