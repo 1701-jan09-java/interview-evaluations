@@ -32,7 +32,7 @@ public class PersonController {
 	@Autowired
 	private BatchLogic batchLogic;
 		
-/*	@RequestMapping(method = RequestMethod.GET, value = "persons")
+	@RequestMapping(method = RequestMethod.GET, value = "persons")
 	public ResponseEntity<Page<Person>> getPerson(Pageable pageable, @RequestParam(defaultValue="", required=false) String firstname,
 			@RequestParam(defaultValue="", required=false) String lastname, 
 			@RequestParam(defaultValue="0", required=false) Integer id,
@@ -73,7 +73,7 @@ public class PersonController {
 			 return ResponseEntity.ok(singlePerson);
 			 
 		 }
-	}*/
+	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "persons")
 	public ResponseEntity<Person> createPerson(@RequestParam(required=true) String firstname,
