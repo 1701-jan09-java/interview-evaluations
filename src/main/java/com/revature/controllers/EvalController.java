@@ -11,7 +11,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -87,7 +86,7 @@ public class EvalController {
 		
 		if(currEval == null){
 			System.out.println("Eval with id " + id + " not found");
-	        return new ResponseEntity<Eval>(HttpStatus.NOT_FOUND);
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		if(eval.getBatch() != null){
@@ -116,7 +115,7 @@ public class EvalController {
 		
 		if(currEval == null){
 			System.out.println("Eval with id " + id + " not found");
-	        return new ResponseEntity<Eval>(HttpStatus.NOT_FOUND);
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		return ResponseEntity.ok(evalLogic.deleteEval(id));
@@ -136,7 +135,7 @@ public class EvalController {
 		
 		if(currComment == null){
 			System.out.println("Comment with id " + id + " not found");
-	        return new ResponseEntity<EvalComment>(HttpStatus.NOT_FOUND);
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		if(comment.getCommentText() != null){
@@ -156,7 +155,7 @@ public class EvalController {
 		
 		if(currComment == null){
 			System.out.println("Comment with id " + id + " not found");
-	        return new ResponseEntity<EvalComment>(HttpStatus.NOT_FOUND);
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		return ResponseEntity.ok(evalLogic.deleteComment(id));

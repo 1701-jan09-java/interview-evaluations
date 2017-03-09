@@ -1,6 +1,5 @@
 package com.revature.services;
 
-import java.util.List;
 import com.revature.domain.Eval;
 import com.revature.domain.EvalComment;
 

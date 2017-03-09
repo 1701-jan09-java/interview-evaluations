@@ -1,7 +1,5 @@
 package com.revature.controllers;
 
-import com.revature.domain.Eval;
-import com.revature.domain.EvalComment;
 import com.revature.domain.QuestionComment;
 import com.revature.domain.QuestionPool;
 import com.revature.services.QuestionLogic;
@@ -59,7 +57,7 @@ public class QuestionController {
 		
 		if(currQuestion == null){
 			System.out.println("Question with id " + id + " not found");
-	        return new ResponseEntity<QuestionPool>(HttpStatus.NOT_FOUND);
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		if(question.getQuestionText() != null){
@@ -85,12 +83,12 @@ public class QuestionController {
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/delete/{id}")
-public ResponseEntity<QuestionPool> deleteEval(@PathVariable ("id") int id){
+	public ResponseEntity<QuestionPool> deleteEval(@PathVariable ("id") int id){
 		QuestionPool currQuestion = questionLogic.getQuestionById(id);
 		
 		if(currQuestion == null){
 			System.out.println("Question with id " + id + " not found");
-	        return new ResponseEntity<QuestionPool>(HttpStatus.NOT_FOUND);
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		return ResponseEntity.ok(questionLogic.deleteQuestion(id));
@@ -110,7 +108,7 @@ public ResponseEntity<QuestionPool> deleteEval(@PathVariable ("id") int id){
 		
 		if(currComment == null){
 			System.out.println("Comment with id " + id + " not found");
-	        return new ResponseEntity<QuestionComment>(HttpStatus.NOT_FOUND);
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		if(comment.getCommentText() != null){
@@ -130,7 +128,7 @@ public ResponseEntity<QuestionPool> deleteEval(@PathVariable ("id") int id){
 		
 		if(currComment == null){
 			System.out.println("Comment with id " + id + " not found");
-	        return new ResponseEntity<QuestionComment>(HttpStatus.NOT_FOUND);
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		return ResponseEntity.ok(questionLogic.deleteComment(id));
