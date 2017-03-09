@@ -1,6 +1,5 @@
 package com.revature.services;
 
-import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -8,6 +7,8 @@ import com.revature.domain.QuestionComment;
 import com.revature.domain.QuestionPool;
 import com.revature.repositories.QuestionCommentRepository;
 import com.revature.repositories.QuestionRepository;
+import com.revature.repositories.SubjectRepository;
+import javax.validation.ConstraintViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,11 +25,35 @@ public class QuestionLogicImpl implements QuestionLogic{
 	@Autowired
 	private QuestionCommentRepository commentDao;
 	
+	@Autowired
+	private SubjectRepository subjectDao;
+	
 //CREATE-----------------------------------
 	@Override
 	@Transactional
 	public QuestionPool createQuestion(QuestionPool question) {
-		return dao.save(question);
+		
+		if (question.getMaxCommunicationScore() == null) {
+			throw new ConstraintViolationException("Missing required field maxCommunicationScore (Integer)", null);
+		}
+		
+		if (question.getMaxKnowledgeScore() == null) {
+			throw new ConstraintViolationException("Missing required field maxKnowledgeScore (Integer)", null);
+		}
+		
+		if (question.getQuestionText() == null) {
+			throw new ConstraintViolationException("Missing required field questionText (String)", null);
+		}
+		
+		if (question.getSubject() == null || question.getSubject().getId() == null) {
+			throw new ConstraintViolationException("Missing required field subject.id (Integer)", null);
+		}
+		
+		question.setUseCount(0);
+		question = dao.save(question);
+		// retrieve subject text - not auto filled
+		question.getSubject().setSubject(subjectDao.findOne(question.getSubject().getId()).getSubject());
+		return question;
 	}
 
 	@Override

@@ -22,6 +22,11 @@ public class QuestionController {
 	@Autowired
 	QuestionLogic questionLogic;
 	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}")
+	public ResponseEntity<QuestionPool> getQuestionById(@PathVariable("id") Integer id){
+		return ResponseEntity.ok(questionLogic.getQuestionById(id));
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value="")
 	public ResponseEntity<Page<QuestionPool>> getAllQuestions(
 			@RequestParam(defaultValue="all") String subject
@@ -48,6 +53,7 @@ public class QuestionController {
 	@RequestMapping(method = RequestMethod.POST, value="")
 	public ResponseEntity<QuestionPool> addQuestion(@RequestBody QuestionPool question){
 		
+		System.out.println(question);
 		return ResponseEntity.ok(questionLogic.createQuestion(question));
 		
 	}
@@ -59,7 +65,7 @@ public class QuestionController {
 		
 		if(currQuestion == null){
 			System.out.println("Question with id " + id + " not found");
-	        return new ResponseEntity<QuestionPool>(HttpStatus.NOT_FOUND);
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		if(question.getQuestionText() != null){
@@ -71,8 +77,8 @@ public class QuestionController {
 		if(question.getMaxKnowledgeScore() != null){
 			currQuestion.setMaxKnowledgeScore(question.getMaxKnowledgeScore());
 		}
-		if(question.getSubjectId() != null){
-			currQuestion.setSubjectId(question.getSubjectId());
+		if(question.getSubject() != null){
+			currQuestion.setSubject(question.getSubject());
 		}
 		if(question.getUseCount() != null){
 			currQuestion.setUseCount(question.getUseCount());
@@ -90,7 +96,7 @@ public ResponseEntity<QuestionPool> deleteEval(@PathVariable ("id") int id){
 		
 		if(currQuestion == null){
 			System.out.println("Question with id " + id + " not found");
-	        return new ResponseEntity<QuestionPool>(HttpStatus.NOT_FOUND);
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		return ResponseEntity.ok(questionLogic.deleteQuestion(id));
@@ -110,7 +116,7 @@ public ResponseEntity<QuestionPool> deleteEval(@PathVariable ("id") int id){
 		
 		if(currComment == null){
 			System.out.println("Comment with id " + id + " not found");
-	        return new ResponseEntity<QuestionComment>(HttpStatus.NOT_FOUND);
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		if(comment.getCommentText() != null){
@@ -130,7 +136,7 @@ public ResponseEntity<QuestionPool> deleteEval(@PathVariable ("id") int id){
 		
 		if(currComment == null){
 			System.out.println("Comment with id " + id + " not found");
-	        return new ResponseEntity<QuestionComment>(HttpStatus.NOT_FOUND);
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		return ResponseEntity.ok(questionLogic.deleteComment(id));
