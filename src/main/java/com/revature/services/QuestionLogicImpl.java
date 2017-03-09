@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.revature.domain.QuestionComment;
 import com.revature.domain.QuestionPool;
 import com.revature.repositories.QuestionCommentRepository;
+import com.revature.repositories.QuestionEvalRepository;
 import com.revature.repositories.QuestionRepository;
 import com.revature.repositories.SubjectRepository;
 import javax.validation.ConstraintViolationException;
@@ -20,6 +21,9 @@ public class QuestionLogicImpl implements QuestionLogic{
 	
 	@Autowired
 	private QuestionRepository dao;
+	
+	@Autowired
+	private QuestionEvalRepository qEvalDao;
 	
 	@Autowired
 	private QuestionCommentRepository commentDao;
@@ -58,6 +62,13 @@ public class QuestionLogicImpl implements QuestionLogic{
 	@Override
 	@Transactional
 	public QuestionComment createComment(QuestionComment comment) {
+		return commentDao.save(comment);
+	}
+	
+	@Override
+	@Transactional
+	public QuestionComment createComment(QuestionComment comment, Integer questionId) {
+		comment.setQuestionEval(qEvalDao.findOne(questionId));
 		return commentDao.save(comment);
 	}
 
@@ -118,6 +129,7 @@ public class QuestionLogicImpl implements QuestionLogic{
 	public QuestionComment deleteComment(int id) {
 		QuestionComment comment = commentDao.findOne(id);
 		commentDao.delete(comment);
+		System.out.println(comment);
 		return comment;
 	}
 

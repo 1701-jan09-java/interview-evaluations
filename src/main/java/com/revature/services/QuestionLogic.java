@@ -23,6 +23,8 @@ public interface QuestionLogic {
 	QuestionComment getCommentById(Integer id);
 
 	QuestionComment createComment(QuestionComment comment);
+	
+	QuestionComment createComment(QuestionComment comment, Integer questionId);
 
 	QuestionComment updateComment(QuestionComment comment);
 

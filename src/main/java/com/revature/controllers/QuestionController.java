@@ -89,7 +89,7 @@ public class QuestionController {
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/delete/{id}")
-	public ResponseEntity<QuestionPool> deleteEval(@PathVariable ("id") int id){
+	public ResponseEntity<QuestionPool> deleteQuestion(@PathVariable ("id") int id){
 		QuestionPool currQuestion = questionLogic.getQuestionById(id);
 		
 		if(currQuestion == null){
@@ -98,45 +98,5 @@ public class QuestionController {
 		}
 		
 		return ResponseEntity.ok(questionLogic.deleteQuestion(id));
-	}
-	
-//QUESTIONCOMMENT CUD---------------------------------
-	
-	@RequestMapping(method = RequestMethod.POST, value = "/comments")
-	public ResponseEntity<QuestionComment> addEvalComment(@RequestBody QuestionComment comment){
-		return ResponseEntity.ok(questionLogic.createComment(comment));
-	}
-	
-	@RequestMapping(method = RequestMethod.PUT, value = "/comments/update/{id}")
-	public ResponseEntity<QuestionComment> updateEvalComments(@RequestBody QuestionComment comment, @PathVariable ("id") Integer id){
-		
-		QuestionComment currComment = questionLogic.getCommentById(id);
-		
-		if(currComment == null){
-			System.out.println("Comment with id " + id + " not found");
-	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		
-		if(comment.getCommentText() != null){
-			currComment.setCommentText(comment.getCommentText());
-		}
-		if(comment.getQuestionEval() != null){
-			currComment.setQuestionEval(comment.getQuestionEval());
-		}
-		
-		return ResponseEntity.ok(questionLogic.updateComment(currComment));
-	}
-	
-	@RequestMapping(method = RequestMethod.DELETE, value = "/comments/delete/{id}")
-	public ResponseEntity<QuestionComment> deleteQuestionComment(@PathVariable ("id") int id){
-		
-		QuestionComment currComment = questionLogic.getCommentById(id);
-		
-		if(currComment == null){
-			System.out.println("Comment with id " + id + " not found");
-	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		
-		return ResponseEntity.ok(questionLogic.deleteComment(id));
 	}
 }
