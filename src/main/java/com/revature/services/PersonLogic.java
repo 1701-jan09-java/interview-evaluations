@@ -1,6 +1,7 @@
 package com.revature.services;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.revature.domain.Batch;
 import com.revature.domain.Person;
@@ -8,16 +9,16 @@ import com.revature.domain.PersonRole;
 
 public interface PersonLogic {
 
-	List<Person> getByFirstNameAndLastName(String firstName, String lastName);
+	Page<Person> getByFirstNameAndLastName(Pageable pageable, String firstName, String lastName);
 	void createPerson(Person person, Batch batch);
 	void deletePerson(Person person);
-	List<Person> getAllPersons();
-	List<Person> getPersonByFirstName(String firstName);
-	List<Person> getPersonByLastName(String lastName);
+	Page<Person> getAllPersons(Pageable pageable);
+	Page<Person> getPersonByFirstName(Pageable pageable, String firstName);
+	Page<Person> getPersonByLastName(Pageable pageable, String lastName);
 	Person getPersonById(int id);
 	Person updatePerson(Person p, String firstname, String lastname, PersonRole personRole, Batch batch);
-	List<Person> getAllPersonsByPersonRole(PersonRole personRole);
-	List<Person> getAllTrainees();
-	List<Person> getAllTrainers();
+	Page<Person> getAllPersonsByPersonRole(Pageable pageable, PersonRole personRole);
+	Page<Person> getAllTrainees(Pageable pageable);
+	Page<Person> getAllTrainers(Pageable pageable);
 
 }
