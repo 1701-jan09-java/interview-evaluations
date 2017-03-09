@@ -1,6 +1,5 @@
 package com.revature.services;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.revature.domain.QuestionComment;
@@ -66,7 +65,7 @@ public class QuestionLogicImpl implements QuestionLogic{
 	@Override
 	public Page<QuestionPool> getAllQuestions(Pageable pageable, String subject) {
 		
-		if(subject.equalsIgnoreCase("all")){
+		if("all".equalsIgnoreCase(subject)){
 			return dao.findAll(pageable);
 		} else {
 			return dao.findAllBySubjectSubjectIgnoreCase(pageable, subject);
@@ -76,7 +75,7 @@ public class QuestionLogicImpl implements QuestionLogic{
 	@Override
 	public Page<QuestionPool> searchQuestions(Pageable pageable, String text, String subject) {
 		
-		if(subject.equalsIgnoreCase("all")){
+		if("all".equalsIgnoreCase(subject)){
 			return dao.findBySearchTerm(pageable, text);
 		} else {
 			return dao.findBySearchTerm(pageable, text, subject);
@@ -91,8 +90,7 @@ public class QuestionLogicImpl implements QuestionLogic{
 	
 	@Override
 	public QuestionComment getCommentById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		return commentDao.findOne(id);
 	}
 
 //UPDATE-----------------------------------

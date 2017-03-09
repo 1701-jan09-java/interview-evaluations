@@ -48,33 +48,29 @@ public class EvalLogicImpl implements EvalLogic {
 	@Override
 	public Page<Eval> getEvalsByBatch(Pageable pageable, int id, String evalParam){
 		Page<Eval> evals;
-		if (evalParam.equalsIgnoreCase("both")) {
+		if ("both".equalsIgnoreCase(evalParam)) {
 			evals = dao.findAllByBatchId(pageable, id);
-			System.out.println(evals);
 		} else {
 			evals = dao.findAllByBatchIdAndEvalTypeDescriptionIgnoreCase(pageable, id, evalParam);
-			System.out.println(evals);
 		}
-		System.out.println(evals);
 		return evals;
 	}
 	
 	@Override
 	public Page<Eval> getEvalsByWeek(Pageable pageable, int id, int num, String evalParam){
 		Page<Eval> evals;
-		if (evalParam.equalsIgnoreCase("both")) {
+		if ("both".equalsIgnoreCase(evalParam)) {
 			evals = dao.findAllByBatchIdAndWeek(pageable, id, num);
 		} else {
 			evals = dao.findAllByBatchIdAndWeekAndEvalTypeDescriptionIgnoreCase(pageable, id, num, evalParam);
 		}
-		System.out.println(evals);
 		return evals;
 	}
 	
 	@Override
 	public Page<Eval> getEvalsByPerson(Pageable pageable, int id, String evalParam) {
 		Page<Eval> evals;
-		if (evalParam.equalsIgnoreCase("both")) {
+		if ("both".equalsIgnoreCase(evalParam)) {
 			evals = dao.findAllByTraineeId(pageable, id);
 		} else {
 			evals = dao.findAllByTraineeIdAndEvalTypeDescriptionIgnoreCase(pageable, id, evalParam);
@@ -85,7 +81,7 @@ public class EvalLogicImpl implements EvalLogic {
 	@Override
 	public Page<Eval> getPersonEvalsByWeek(Pageable pageable, int id, int num, String evalParam) {
 		Page<Eval> evals;
-		if (evalParam.equalsIgnoreCase("both")) {
+		if ("both".equalsIgnoreCase(evalParam)) {
 			evals = dao.findAllByTraineeIdAndWeek(pageable, id, num);
 		} else {
 			evals = dao.findAllByTraineeIdAndWeekAndEvalTypeDescriptionIgnoreCase(pageable, id, num, evalParam);
