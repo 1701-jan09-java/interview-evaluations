@@ -39,7 +39,20 @@ public class PersonController {
 	@RequestMapping(method = RequestMethod.GET, value = "persons/{id}")
 		public ResponseEntity<Person> getPersonById(@PathVariable("id") Integer id ){
 
-			return ResponseEntity.ok(personLogic.getPersonById(id));
+			Person person = personLogic.getPersonById(id);
+		
+			
+			if (person != null) {
+				
+				return ResponseEntity.ok(person);
+				
+			} else {
+				
+				System.out.println("ERROR!");
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+			
+			
 	}
 		
 	

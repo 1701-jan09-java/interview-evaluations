@@ -56,23 +56,18 @@ public class PersonLogicImpl implements PersonLogic {
 	@Override
 	public Person getPersonById(int id)  {
 		
-		BasicConfigurator.configure();
-		
 		Person p = null;
 		
 		try {
-			 
-			p = dao.getOne(id);
-			IntEvalLogger.LOGGER.info("This is my P: "+p);
-			 
-		 } catch (EntityNotFoundException e) {		
-			 PersonRole newPersonRole = new PersonRole(0, "Not a role");
-			 p = new Person("Persondoes","Notexist", newPersonRole);
-			 p.setId(0);
-			 IntEvalLogger.LOGGER.info("setting P to new person");
-			 return p;
-		 }
-		 return p;
+			
+			p = dao.findOne(id);
+			
+		} catch (EntityNotFoundException e) {
+			
+			return p;
+		}
+		
+		return p;
 	}
 
 	@Override
