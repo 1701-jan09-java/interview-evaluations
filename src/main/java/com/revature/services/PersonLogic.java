@@ -10,7 +10,7 @@ import com.revature.domain.PersonRole;
 public interface PersonLogic {
 
 	Page<Person> getByFirstNameAndLastName(Pageable pageable, String firstName, String lastName);
-	void createPerson(Person person, Batch batch);
+	void createPerson(Person person);
 	void deletePerson(Person person);
 	Page<Person> getAllPersons(Pageable pageable);
 	Page<Person> getPersonByFirstName(Pageable pageable, String firstName);

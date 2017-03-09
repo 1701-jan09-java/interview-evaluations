@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.domain.Batch;
 import com.revature.domain.Person;
-import com.revature.domain.PersonBatchJoin;
 import com.revature.domain.PersonRole;
 import com.revature.log.IntEvalLogger;
 import com.revature.repositories.PersonRepository;
@@ -26,10 +25,6 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Autowired
 	private PersonRepository dao;
-	
-	@Autowired
-	private PersonBatchLogic personBatchLogic;
-
 	
 	@Override
 	public Page<Person> getPersonByFirstName(Pageable pageable, String firstName) {
@@ -90,11 +85,6 @@ public class PersonLogicImpl implements PersonLogic {
 		
 		BasicConfigurator.configure();
 		
-		if(batch != null){
-			PersonBatchJoin personBatchJoin = new PersonBatchJoin(p, batch);
-			personBatchLogic.updatePersonBatch(personBatchJoin);
-		}
-		
 		if (!"".equals(firstname)) {
 			
 			 IntEvalLogger.LOGGER.info("changing first to " + firstname);
@@ -140,7 +130,6 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Override
 	public void deletePerson(Person p) {
-		personBatchLogic.deletePersonBatchByPerson(p);
 		dao.delete(p.getId());
 	}
 
@@ -150,11 +139,7 @@ public class PersonLogicImpl implements PersonLogic {
 	}
 
 	@Override
-	public void createPerson(Person person, Batch batch) {
-		if(batch != null){
-			PersonBatchJoin personBatchJoin = new PersonBatchJoin(person, batch);
-			personBatchLogic.createPersonBatch(personBatchJoin);
-		}
+	public void createPerson(Person person) {
 		dao.save(person);
 	}
 
