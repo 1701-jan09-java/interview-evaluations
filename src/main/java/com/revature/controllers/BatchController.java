@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.domain.Batch;
 import com.revature.domain.Person;
 import com.revature.services.BatchLogic;
-import com.revature.services.PersonBatchLogic;
+import com.revature.services.PersonLogic;
 
 @RestController
 @RequestMapping(value = "/api/v1/")
@@ -27,7 +27,7 @@ public class BatchController {
 	private BatchLogic batchLogic;
 	
 	@Autowired
-	private PersonBatchLogic personBatchLogic;
+	private PersonLogic personLogic;
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/batches/{id}")
 	public ResponseEntity<Batch> getBatch(@PathVariable("id") String id){
@@ -88,8 +88,7 @@ public class BatchController {
 	public ResponseEntity<Page<Person>> getAllBatchMembers(@PageableDefault(size=10) 
 		@SortDefaults({@SortDefault(sort="lastName"), @SortDefault(sort="firstName")}) 
 		Pageable pageable, @PathVariable("id") int id){
-	
-		return ResponseEntity.ok(personBatchLogic.getAllBatchMembers(pageable, id));
+		return ResponseEntity.ok(batchLogic.getAllPeopleByBatchId(pageable, id));
 	}
 		
 	
