@@ -74,82 +74,14 @@ public class PersonController {
 	}
 	
 	
-
-	
-	
-	
-//	@RequestMapping(method = RequestMethod.POST, value = "/batches")
-//	public ResponseEntity<Batch> createBatch(@RequestBody Batch newBatch){
-//		Batch batch = batchLogic.getBatchByName(newBatch.getName());
-//		if(batch != null){
-//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//		} else{
-//			batchLogic.createBatch(newBatch);
-//			return new ResponseEntity<>(HttpStatus.ACCEPTED);
-//		}
-//		
-//	}
-	
 	@RequestMapping(method = RequestMethod.POST, value = "persons")
 	public ResponseEntity<Person> createPerson(@RequestBody Person newPerson){
 		System.out.println(newPerson);	
-		personLogic.createPerson(newPerson, null);
+		personLogic.createPerson(newPerson);
 		return ResponseEntity.ok(newPerson);
 	}
 	
-//	@RequestMapping(method = RequestMethod.POST, value = "persons")
-//	public ResponseEntity<Person> createPerson(@RequestBody (required=true) Person newPerson, @RequestBody(required=false) Batch newBatch){
-//		System.out.println(newPerson);	
-//		System.out.println(newBatch);	
-//		if (newBatch == null){
-//			personLogic.createPerson(newPerson, null);
-//		} else {
 
-//			
-//		}
-//		personLogic.createPerson(newPerson, newBatch);
-//		return ResponseEntity.ok(newPerson);
-//			Batch batch = batchLogic.getBatchById(batchId);
-////			
-////			PersonRole pRole = personRoleLogic.findRoleById(role);
-////			Person person = new Person(firstname, lastname, pRole);
-////			
-//			personLogic.createPerson(newPerson, batch);
-//
-//			return ResponseEntity.ok(person);
-
-	
-	
-	
-//	@RequestMapping(method = RequestMethod.PUT, value = "/batches")
-//	public ResponseEntity<Batch> updateBatch(@RequestBody Batch newBatch){
-//		Batch batch = batchLogic.getBatchById(newBatch.getId());
-//		if(batch != null){
-//			batchLogic.updateBatch(newBatch);
-//			return new ResponseEntity<>(HttpStatus.ACCEPTED);
-//		} else{
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		}
-//	}
-	
-	
-//	@RequestMapping(method = RequestMethod.PUT, value = "persons")
-//	public ResponseEntity<Person> modifyPerson(@RequestParam(required=true) Integer id,
-//			@RequestParam(defaultValue="", required=false) String firstname,
-//			@RequestParam(defaultValue="", required=false) String lastname, 
-//			@RequestParam(defaultValue="0", required=false) Integer role,
-//			@RequestParam(defaultValue="0", required=false) Integer batchId){
-//			
-//			Batch batch = batchLogic.getBatchById(batchId);
-//			
-//			Person person = personLogic.getPersonById(id);
-//			PersonRole pRole = personRoleLogic.findRoleById(role);
-//			
-//			person = personLogic.updatePerson(person, firstname, lastname, pRole, batch);
-//
-//			return ResponseEntity.ok(person);
-//		
-//	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "persons")
 	public ResponseEntity<Person> modifyPerson(@RequestBody Person p){
