@@ -34,14 +34,14 @@ public class PersonLogicImpl implements PersonLogic {
 	@Override
 	public Page<Person> getPersonByFirstName(Pageable pageable, String firstName) {
 		
-		return dao.findAllByFirstName(pageable, firstName);
+		return dao.findAllByFirstNameIgnoreCase(pageable, firstName);
 
 	}
 
 	@Override
 	public Page<Person> getPersonByLastName(Pageable pageable, String lastName) {
 		
-		return dao.findAllByLastName(pageable, lastName);
+		return dao.findAllByLastNameIgnoreCase(pageable, lastName);
 	}
 
 	@Override
@@ -86,57 +86,63 @@ public class PersonLogicImpl implements PersonLogic {
 	}
 
 	@Override
-	public Person updatePerson(Person p, String firstname, String lastname, PersonRole personRole, Batch batch) {	
-		
-		BasicConfigurator.configure();
-		
-		if(batch != null){
-			PersonBatchJoin personBatchJoin = new PersonBatchJoin(p, batch);
-			personBatchLogic.updatePersonBatch(personBatchJoin);
-		}
-		
-		if (!"".equals(firstname)) {
-			
-			 IntEvalLogger.LOGGER.info("changing first to " + firstname);
-			 p.setFirstName(firstname);
-			 
-		} else {
-			
-			IntEvalLogger.LOGGER.info("no change to first " + p.getFirstName());
-			p.setFirstName(p.getFirstName());
-		}
-		
-		
-		
-		if (!"".equals(lastname)) {
-			
-			 IntEvalLogger.LOGGER.info("changing last to " + lastname);
-			 p.setLastName(lastname);
-			 
-		} else {
-			
-			IntEvalLogger.LOGGER.info("no change to last " + p.getLastName());
-			p.setLastName(p.getLastName());
-		}
-		
-		
-	   
-		if (personRole != null) {
-			
-			IntEvalLogger.LOGGER.info("changing role to " + personRole.getId());
-			p.setPersonRole(personRole);
-			 
-		} else {
-			
-			IntEvalLogger.LOGGER.info("no change to role " + p.getPersonRole());
-			p.setPersonRole(p.getPersonRole());
-			
-		}	    
-		
+	public Person updatePerson(Person p) {
 		dao.save(p);
-		
 		return p;
 	}
+	
+//	@Override
+//	public Person updatePerson(Person p, String firstname, String lastname, PersonRole personRole, Batch batch) {	
+//		
+//		BasicConfigurator.configure();
+//		
+//		if(batch != null){
+//			PersonBatchJoin personBatchJoin = new PersonBatchJoin(p, batch);
+//			personBatchLogic.updatePersonBatch(personBatchJoin);
+//		}
+//		
+//		if (!"".equals(firstname)) {
+//			
+//			 IntEvalLogger.LOGGER.info("changing first to " + firstname);
+//			 p.setFirstName(firstname);
+//			 
+//		} else {
+//			
+//			IntEvalLogger.LOGGER.info("no change to first " + p.getFirstName());
+//			p.setFirstName(p.getFirstName());
+//		}
+//		
+//		
+//		
+//		if (!"".equals(lastname)) {
+//			
+//			 IntEvalLogger.LOGGER.info("changing last to " + lastname);
+//			 p.setLastName(lastname);
+//			 
+//		} else {
+//			
+//			IntEvalLogger.LOGGER.info("no change to last " + p.getLastName());
+//			p.setLastName(p.getLastName());
+//		}
+//		
+//		
+//	   
+//		if (personRole != null) {
+//			
+//			IntEvalLogger.LOGGER.info("changing role to " + personRole.getId());
+//			p.setPersonRole(personRole);
+//			 
+//		} else {
+//			
+//			IntEvalLogger.LOGGER.info("no change to role " + p.getPersonRole());
+//			p.setPersonRole(p.getPersonRole());
+//			
+//		}	    
+//		
+//		dao.save(p);
+//		
+//		return p;
+//	}
 
 	@Override
 	public void deletePerson(Person p) {
@@ -146,22 +152,26 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Override
 	public Page<Person> getByFirstNameAndLastName(Pageable pageable, String firstName, String lastName) {
-		return dao.findAllByFirstNameAndLastName(pageable, firstName, lastName);
+		return dao.findAllByFirstNameAndLastNameIgnoreCase(pageable, firstName, lastName);
 	}
 
 	@Override
-	public void createPerson(Person person, Batch batch) {
+	public Person createPerson(Person person, Batch batch) {
 		if(batch != null){
 			PersonBatchJoin personBatchJoin = new PersonBatchJoin(person, batch);
 			personBatchLogic.createPersonBatch(personBatchJoin);
 		}
 		dao.save(person);
+		return person;
 	}
 
 	@Override
 	public Page<Person> getAllPersonsByPersonRole(Pageable pageable, PersonRole personRole) {
 		return dao.findAllByPersonRole(pageable, personRole);
 	}
+
+
+	
 
 
 

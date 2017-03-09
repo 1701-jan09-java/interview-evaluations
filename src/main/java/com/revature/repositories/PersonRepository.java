@@ -12,8 +12,8 @@ import com.revature.domain.PersonRole;
 public interface PersonRepository extends JpaRepository<Person,Integer> {
 
 	Page<Person> findAllByPersonRole(Pageable pageable, PersonRole personrole);
-	Page<Person> findAllByLastName(Pageable pageable, String lastName);
-	Page<Person> findAllByFirstName(Pageable pageable, String firstName);
-	Page<Person> findAllByFirstNameAndLastName(Pageable pageable, String firstName, String lastName);	
+	Page<Person> findAllByLastNameIgnoreCase(Pageable pageable, String lastName);
+	Page<Person> findAllByFirstNameIgnoreCase(Pageable pageable, String firstName);
+	Page<Person> findAllByFirstNameAndLastNameIgnoreCase(Pageable pageable, String firstName, String lastName);	
 
 }
