@@ -140,7 +140,7 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Override
 	public void deletePerson(Person p) {
-		
+		personBatchLogic.deletePersonBatchByPerson(p);
 		dao.delete(p.getId());
 	}
 

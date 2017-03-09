@@ -62,7 +62,7 @@ public class BatchController {
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/batches/{id}")
-	public ResponseEntity<Batch> updateBatch(@PathVariable("id") int id){
+	public ResponseEntity<Batch> deleteBatch(@PathVariable("id") int id){
 		Batch batch = batchLogic.getBatchById(id);
 		if(batch != null){
 			batchLogic.deleteBatch(batch);

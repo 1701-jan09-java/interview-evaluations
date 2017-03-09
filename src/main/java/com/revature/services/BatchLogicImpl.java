@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.domain.Batch;
 import com.revature.repositories.BatchRepository;
+import com.revature.repositories.PersonBatchRepository;
 
 @Service
 @Transactional(readOnly=false, isolation=Isolation.READ_COMMITTED)
@@ -16,6 +17,9 @@ public class BatchLogicImpl implements BatchLogic {
 
 	@Autowired
 	private BatchRepository dao;
+	
+	@Autowired
+	private PersonBatchRepository repository;
 	
 	@Override
 	public Batch getBatchByName(String batchName) {
@@ -31,6 +35,7 @@ public class BatchLogicImpl implements BatchLogic {
 
 	@Override
 	public void deleteBatch(Batch batchName) {
+		repository.deletePersonBatchByBatch(batchName);
 		dao.delete(batchName);	
 	}
 	
