@@ -8,6 +8,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="ie_eval")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -36,6 +37,7 @@ public class Eval implements Serializable{
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="e_batch")
 	private Batch batch;
+	
 	@OneToMany(mappedBy="eval")
 	private List<QuestionEval> questions;
 	

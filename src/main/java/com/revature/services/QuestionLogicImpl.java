@@ -1,7 +1,5 @@
 package com.revature.services;
 
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.revature.domain.QuestionPool;
