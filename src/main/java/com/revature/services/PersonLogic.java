@@ -22,5 +22,7 @@ public interface PersonLogic {
 	Page<Person> getAllPersonsByPersonRole(Pageable pageable, PersonRole personRole);
 	Page<Person> getAllTrainees(Pageable pageable);
 	Page<Person> getAllTrainers(Pageable pageable);
-
+	Page<Person> getPersonsByFirstnameAndPersonRole(Pageable pageable, String firstname, PersonRole personRole);
+	Page<Person> getPersonsByLastnameAndPersonRole(Pageable pageable, String firstname, PersonRole personRole);
+	Page<Person> getPersonsByFirstnameAndLastnameAndPersonRole(Pageable pageable, String firstname, String lastname, PersonRole personRole);
 }

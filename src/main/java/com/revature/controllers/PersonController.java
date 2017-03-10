@@ -12,12 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitterReturnValueHandler;
 
-import com.revature.domain.Batch;
 import com.revature.domain.Person;
-import com.revature.domain.PersonRole;
-import com.revature.services.BatchLogic;
 import com.revature.services.PersonLogic;
 import com.revature.services.PersonRoleLogic;
 
@@ -27,7 +23,10 @@ import com.revature.services.PersonRoleLogic;
 public class PersonController {
 	
 	@Autowired
-	private PersonLogic personLogic;	
+	private PersonLogic personLogic;
+	
+	@Autowired
+	private PersonRoleLogic pRLogic;
 	
 	@RequestMapping(method = RequestMethod.GET, value = "persons/{id}")
 		public ResponseEntity<Person> getPersonById(@PathVariable("id") Integer id ){
@@ -56,27 +55,25 @@ public class PersonController {
 		
 		 if(role==0){
 			 			 
-			 if(!"".equals(firstname)){
+			 if(!"".equals(firstname) && "".equals(lastname)){
 				 return ResponseEntity.ok(personLogic.getPersonByFirstName(pageable, firstname));
 				 
-			 } else if (!("".equals(lastname))){
+			 } else if ("".equals(firstname) && !("".equals(lastname))){
 				 return ResponseEntity.ok(personLogic.getPersonByLastName(pageable, lastname));
 				 
-			 } else{
+			 } else if((!"".equals(firstname)) && !("".equals(lastname))) {
+				 return ResponseEntity.ok(personLogic.getByFirstNameAndLastName(pageable, firstname, lastname));
+			 }
+			 else{
 				 return  ResponseEntity.ok(personLogic.getAllPersons(pageable));
 			 }
 			 
-		 } else {
-			 if(role==1){
+		 } else if(role!=0 && !"".equals(firstname) ) {
+			 return ResponseEntity.ok(personLogic.getPersonsByFirstnameAndPersonRole(pageable, firstname,  pRLogic.findRoleById(role)));
+		 }
+		 else{
 				
-					return ResponseEntity.ok(personLogic.getAllTrainees(pageable));
-					
-					} else if (role == 2) {
-						return ResponseEntity.ok(personLogic.getAllTrainers(pageable));
-						
-					} else {
-						return ResponseEntity.ok(null);
-					}
+				return ResponseEntity.ok(personLogic.getAllPersonsByPersonRole(pageable, pRLogic.findRoleById(role)));
 		 }
 		 
 	}

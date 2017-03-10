@@ -94,7 +94,7 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Override
 	public Page<Person> getByFirstNameAndLastName(Pageable pageable, String firstName, String lastName) {
-		return dao.findAllByFirstNameAndLastNameIgnoreCase(pageable, firstName, lastName);
+		return dao.findAllByFirstNameAndLastNameAllIgnoreCase(pageable, firstName, lastName);
 	}
 
 	@Override
@@ -148,7 +148,28 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Override
 	public Page<Person> getAllPersonsByPersonRole(Pageable pageable, PersonRole personRole) {
+		
+		if(personRole == null){
+			throw new ConstraintViolationException("Invalid PersonRole Field", null);
+		}
+		
 		return dao.findAllByPersonRole(pageable, personRole);
+	}
+
+	@Override
+	public Page<Person> getPersonsByFirstnameAndPersonRole(Pageable pageable, String firstname, PersonRole personRole) {
+		return dao.findAllByFirstNameIgnoreCaseAndPersonRole(pageable, firstname, personRole);
+	}
+
+	@Override
+	public Page<Person> getPersonsByLastnameAndPersonRole(Pageable pageable, String lastname, PersonRole personRole) {
+		return dao.findAllByLastNameIgnoreCaseAndPersonRole(pageable, lastname, personRole);
+	}
+
+	@Override
+	public Page<Person> getPersonsByFirstnameAndLastnameAndPersonRole(Pageable pageable, String firstname,
+			String lastname, PersonRole personRole) {
+		return dao.findAllByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndPersonRole(pageable, firstname, lastname, personRole);
 	}
 
 }
