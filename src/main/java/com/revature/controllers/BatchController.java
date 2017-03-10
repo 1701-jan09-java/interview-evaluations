@@ -61,17 +61,6 @@ public class BatchController {
 		}
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE, value = "/batches/{id}")
-	public ResponseEntity<Batch> deleteBatch(@PathVariable("id") int id){
-		Batch batch = batchLogic.getBatchById(id);
-		if(batch != null){
-			batchLogic.deleteBatch(batch);
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
-		} else{
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
 	@RequestMapping(method = RequestMethod.POST, value = "/batches")
 	public ResponseEntity<Batch> createBatch(@RequestBody Batch newBatch){
 		Batch batch = batchLogic.getBatchByName(newBatch.getName());
