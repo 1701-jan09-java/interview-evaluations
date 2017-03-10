@@ -1,17 +1,13 @@
 package com.revature.controllers;
 
 import com.revature.domain.QuestionComment;
-import com.revature.domain.QuestionPool;
+import com.revature.domain.QuestionEval;
 import com.revature.services.QuestionLogic;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.*;
-import org.springframework.data.web.SortDefault.SortDefaults;
 
 @RestController
 @RequestMapping(value="/api/v1/evaluations/{evalId}/questions")
@@ -58,5 +54,45 @@ public class QuestionEvalController {
 		}
 		
 		return ResponseEntity.ok(questionLogic.deleteComment(id));
+	}
+	
+//QUESTIONEVAL CUD-------------------------------------
+	
+	@RequestMapping(method = RequestMethod.POST, value = "")
+	public ResponseEntity<QuestionEval> addQuestionEval(@RequestBody QuestionEval qEval, @PathVariable ("evalId") Integer evalId){
+		return ResponseEntity.ok(questionLogic.createQuestionEval(qEval,evalId));
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "update/{id}")
+	public ResponseEntity<QuestionEval> updateQuestionEval(@RequestBody QuestionEval qEval, @PathVariable ("id") Integer id){
+		
+		QuestionEval currQEval = questionLogic.getQuestionEvalById(id);
+		
+		if(currQEval == null){
+			System.out.println("QuestionEval with id " + id + " not found");
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		if(qEval.getCommunicationScore() != null){
+			currQEval.setCommunicationScore(qEval.getCommunicationScore());
+		}
+		if(qEval.getKnowledgeScore() != null){
+			currQEval.setKnowledgeScore(qEval.getKnowledgeScore());
+		}
+		
+		return ResponseEntity.ok(questionLogic.updateQuestionEval(currQEval));
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "delete/{id}")
+	public ResponseEntity<String> deleteQuestionEval(@PathVariable ("id") int id){
+		
+		QuestionEval currQEval = questionLogic.getQuestionEvalById(id);
+		
+		if(currQEval == null){
+			System.out.println("QuestionEval with id " + id + " not found");
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		return ResponseEntity.ok(questionLogic.deleteQuestionEval(id));
 	}
 }
