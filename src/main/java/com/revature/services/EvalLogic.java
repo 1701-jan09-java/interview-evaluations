@@ -26,9 +26,9 @@ public interface EvalLogic {
 
 	EvalComment getCommentById(Integer id);
 
-	EvalComment createComment(EvalComment comment);
+	EvalComment createComment(EvalComment comment, Integer evalId);
 
-	EvalComment updateComment(EvalComment comment);
+	EvalComment updateComment(EvalComment comment, Integer commentId);
 
 	EvalComment deleteComment(int id);
 }

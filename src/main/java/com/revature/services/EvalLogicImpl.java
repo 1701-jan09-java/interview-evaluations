@@ -4,10 +4,13 @@ import com.revature.repositories.EvalRepository;
 import com.revature.repositories.EvalCommentRepository;
 import com.revature.domain.Eval;
 import com.revature.domain.EvalComment;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +36,18 @@ public class EvalLogicImpl implements EvalLogic {
 	
 	@Override
 	@Transactional
-	public EvalComment createComment(EvalComment comment) {
+	public EvalComment createComment(EvalComment comment, Integer evalId) {
+		
+		if (comment.getCommentText() == null) {
+			throw new ConstraintViolationException("Missing required field commentText (String)", null);
+		}
+		
+		comment.setEval(dao.findOne(evalId));
+		System.out.println(comment.getEval());
+		if (comment.getEval() == null) {
+			throw new ConstraintViolationException("Evaluation " + evalId + " does not exist", null);
+		}
+		
 		commentDao.save(comment);
 		return comment;
 	}
@@ -105,9 +119,25 @@ public class EvalLogicImpl implements EvalLogic {
 	
 	@Override
 	@Transactional
-	public EvalComment updateComment(EvalComment comment) {
+	public EvalComment updateComment(EvalComment comment, Integer id) {
 		
-		return commentDao.save(comment);
+		EvalComment currComment = getCommentById(id);
+		
+		if(currComment == null){
+	        throw new ConstraintViolationException("Evaluation " + id + " does not exist", null);
+		}
+		
+		if(comment.getCommentText() != null){
+			currComment.setCommentText(comment.getCommentText());
+		}
+		if(comment.getEval() != null){
+			currComment.setEval(comment.getEval());
+		}
+		if (comment.getCommentText() == null) {
+			throw new ConstraintViolationException("Missing required field commentText (String)", null);
+		}
+		
+		return commentDao.save(currComment);
 	}
 	
 //DELETE-------------------------------
@@ -122,8 +152,14 @@ public class EvalLogicImpl implements EvalLogic {
 	@Override
 	@Transactional
 	public EvalComment deleteComment(int id) {
-		EvalComment comment = commentDao.findOne(id);
+		EvalComment comment = getCommentById(id);
+		
+		if(comment == null){
+	        throw new ConstraintViolationException("Comment with id " + id + " not found", null);
+		}
+		
 		commentDao.delete(comment);
 		return comment;
 	}
+	
 }

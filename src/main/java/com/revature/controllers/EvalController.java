@@ -123,41 +123,18 @@ public class EvalController {
 	
 	
 //COMMENT CUD------------------------------------------
-	@RequestMapping(method = RequestMethod.POST, value = "/comments")
-	public ResponseEntity<EvalComment> addEvalComment(@RequestBody EvalComment comment){
-		return ResponseEntity.ok(evalLogic.createComment(comment));
+	@RequestMapping(method = RequestMethod.POST, value = "{evalId}/comments")
+	public ResponseEntity<EvalComment> addEvalComment(@RequestBody EvalComment comment, @PathVariable Integer evalId){
+		return ResponseEntity.ok(evalLogic.createComment(comment, evalId));
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value = "/comments/update/{id}")
-	public ResponseEntity<EvalComment> updateEvalComments(@RequestBody EvalComment comment, @PathVariable ("id") Integer id){
-		
-		EvalComment currComment = evalLogic.getCommentById(id);
-		
-		if(currComment == null){
-			System.out.println("Comment with id " + id + " not found");
-	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		
-		if(comment.getCommentText() != null){
-			currComment.setCommentText(comment.getCommentText());
-		}
-		if(comment.getEval() != null){
-			currComment.setEval(comment.getEval());
-		}
-		
-		return ResponseEntity.ok(evalLogic.updateComment(currComment));
+	@RequestMapping(method = RequestMethod.PUT, value = "{evalId}/comments/{commentId}")
+	public ResponseEntity<EvalComment> updateEvalComments(@RequestBody EvalComment comment, @PathVariable ("commentId") Integer id){
+		return ResponseEntity.ok(evalLogic.updateComment(comment, id));
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE, value = "/comments/delete/{id}")
-	public ResponseEntity<EvalComment> deleteEvalComment(@PathVariable ("id") int id){
-		
-		EvalComment currComment = evalLogic.getCommentById(id);
-		
-		if(currComment == null){
-			System.out.println("Comment with id " + id + " not found");
-	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		
+	@RequestMapping(method = RequestMethod.DELETE, value = "{evalId}/comments/{commentId}")
+	public ResponseEntity<EvalComment> deleteEvalComment(@PathVariable ("commentId") int id){
 		return ResponseEntity.ok(evalLogic.deleteComment(id));
 	}
 }
