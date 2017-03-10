@@ -121,6 +121,9 @@ public class PersonLogicImpl implements PersonLogic {
 		if (person.getLastName() == null) {
 			throw new ConstraintViolationException("Missing required field lastName (String)", null);
 		}
+		if (person.getPersonRole() == null) {
+			throw new ConstraintViolationException("Missing required field PersonRole (PersonRole)", null);
+		}
 		
 		boolean isValid = false;
 		
