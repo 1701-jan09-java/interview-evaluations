@@ -2,12 +2,15 @@ package com.revature.domain;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="ie_eval")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -36,6 +39,7 @@ public class Eval implements Serializable{
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="e_batch")
 	private Batch batch;
+	
 	@OneToMany(mappedBy="eval")
 	private List<QuestionEval> questions;
 	
@@ -119,7 +123,7 @@ public class Eval implements Serializable{
 	public void setComments(List<EvalComment> comments) {
 		this.comments = comments;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

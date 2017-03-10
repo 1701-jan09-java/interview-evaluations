@@ -3,7 +3,9 @@ package com.revature.services;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.revature.domain.QuestionComment;
+import com.revature.domain.QuestionEval;
 import com.revature.domain.QuestionPool;
+import com.revature.repositories.EvalRepository;
 import com.revature.repositories.QuestionCommentRepository;
 import com.revature.repositories.QuestionEvalRepository;
 import com.revature.repositories.QuestionRepository;
@@ -30,6 +32,9 @@ public class QuestionLogicImpl implements QuestionLogic{
 	
 	@Autowired
 	private SubjectRepository subjectDao;
+	
+	@Autowired
+	private EvalRepository evalDao;
 	
 //CREATE-----------------------------------
 	@Override
@@ -71,6 +76,24 @@ public class QuestionLogicImpl implements QuestionLogic{
 		comment.setQuestionEval(qEvalDao.findOne(questionId));
 		return commentDao.save(comment);
 	}
+	
+	@Override
+	@Transactional
+	public QuestionEval createQuestionEval(QuestionEval qEval, Integer evalId) {
+		
+		if(qEval.getCommunicationScore() == null){
+			throw new ConstraintViolationException("Missing required field communicationScore (Integer)", null);
+		}
+		if(qEval.getKnowledgeScore() == null){
+			throw new ConstraintViolationException("Missing required field knowledgeScore (Integer)", null);
+		}
+		if(qEval.getQuestionPool() == null){
+			throw new ConstraintViolationException("Missing required field questionPool (QuestionPool)", null);
+		}
+		
+		qEval.setEval(evalDao.findOne(evalId));
+		return qEvalDao.save(qEval);
+	}
 
 //RETRIEVE---------------------------------
 	@Override
@@ -103,6 +126,11 @@ public class QuestionLogicImpl implements QuestionLogic{
 	public QuestionComment getCommentById(Integer id) {
 		return commentDao.findOne(id);
 	}
+	
+	@Override
+	public QuestionEval getQuestionEvalById(Integer id) {
+		return qEvalDao.findOne(id);
+	}
 
 //UPDATE-----------------------------------
 	@Override
@@ -114,6 +142,11 @@ public class QuestionLogicImpl implements QuestionLogic{
 	@Override
 	public QuestionComment updateComment(QuestionComment comment) {
 		return commentDao.save(comment);
+	}
+
+	@Override
+	public QuestionEval updateQuestionEval(QuestionEval qEval) {
+		return qEvalDao.save(qEval);
 	}
 
 //DELETE-----------------------------------
@@ -129,8 +162,14 @@ public class QuestionLogicImpl implements QuestionLogic{
 	public QuestionComment deleteComment(int id) {
 		QuestionComment comment = commentDao.findOne(id);
 		commentDao.delete(comment);
-		System.out.println(comment);
 		return comment;
+	}
+
+	@Override
+	public String deleteQuestionEval(int id) {
+		QuestionEval qEval = qEvalDao.findOne(id);
+		qEvalDao.delete(qEval);
+		return "Question Eval: " + qEval.getId() + " - DELETED";
 	}
 
 }

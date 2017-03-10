@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="ie_question_eval")
 public class QuestionEval implements Serializable {
@@ -30,7 +31,7 @@ public class QuestionEval implements Serializable {
 	@JoinColumn(name="qe_qpid")
 	private QuestionPool questionPool;
 	
-	@OneToMany(mappedBy="questionEval")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="questionEval")
 	private List<QuestionComment> comments;
 	
 	public QuestionEval(){}
