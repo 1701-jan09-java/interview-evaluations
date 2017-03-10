@@ -3,8 +3,8 @@ package com.revature.services;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolationException;
 
-import org.apache.log4j.BasicConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,11 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.revature.domain.Batch;
 import com.revature.domain.Person;
 import com.revature.domain.PersonRole;
-import com.revature.log.IntEvalLogger;
 import com.revature.repositories.PersonRepository;
+import com.revature.repositories.PersonRoleRepository;
 
 
 @Service
@@ -25,6 +24,9 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Autowired
 	private PersonRepository dao;
+	
+	@Autowired
+	private PersonRoleRepository daoRole;
 	
 	@Override
 	public Page<Person> getPersonByFirstName(Pageable pageable, String firstName) {
@@ -94,9 +96,25 @@ public class PersonLogicImpl implements PersonLogic {
 	}
 
 	@Override
-
 	public Person createPerson(Person person) {
+		
+		List<PersonRole> roleList = daoRole.findAll();
+		System.out.println(roleList);
 
+		if (person.getFirstName() == null) {
+			throw new ConstraintViolationException("Missing required field firstName (String)", null);
+		}
+		
+		if (person.getLastName() == null) {
+			throw new ConstraintViolationException("Missing required field lastName (String)", null);
+		}
+		
+		if (person.getPersonRole() == null) {
+			throw new ConstraintViolationException("Missing required field personRole (PersonRole)", null);
+		}
+			
+		
+				
 		dao.save(person);
 		return person;
 	}
