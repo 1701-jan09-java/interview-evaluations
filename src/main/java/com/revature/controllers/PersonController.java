@@ -5,15 +5,20 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.domain.Batch;
 import com.revature.domain.Person;
-import com.revature.log.IntEvalLogger;
+import com.revature.domain.PersonRole;
+import com.revature.services.BatchLogic;
 import com.revature.services.PersonLogic;
+import com.revature.services.PersonRoleLogic;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping(value = "/api/v1/")
 public class PersonController {
@@ -21,6 +26,12 @@ public class PersonController {
 	@Autowired
 	private PersonLogic personLogic;
 	
+	@Autowired
+	private PersonRoleLogic personRoleLogic;
+	
+	@Autowired
+	private BatchLogic batchLogic;
+		
 	@RequestMapping(method = RequestMethod.GET, value = "persons")
 	public ResponseEntity<List<Person>> getPerson(@RequestParam(defaultValue="", required=false) String firstname,
 			@RequestParam(defaultValue="", required=false) String lastname, 
@@ -67,11 +78,15 @@ public class PersonController {
 	@RequestMapping(method = RequestMethod.POST, value = "persons")
 	public ResponseEntity<Person> createPerson(@RequestParam(required=true) String firstname,
 			@RequestParam(required=true) String lastname, 
-			@RequestParam(required=true) Integer role){
-		
-			Person person = new Person(firstname, lastname, role);
+			@RequestParam(required=true) Integer role,
+			@RequestParam(defaultValue="0", required=false) Integer batchId){
 			
-			personLogic.savePerson(person);
+			Batch batch = batchLogic.getBatchById(batchId);
+			
+			PersonRole pRole = personRoleLogic.findRoleById(role);
+			Person person = new Person(firstname, lastname, pRole);
+			
+			personLogic.createPerson(person, batch);
 
 			return ResponseEntity.ok(person);
 		
@@ -81,13 +96,15 @@ public class PersonController {
 	public ResponseEntity<Person> modifyPerson(@RequestParam(required=true) Integer id,
 			@RequestParam(defaultValue="", required=false) String firstname,
 			@RequestParam(defaultValue="", required=false) String lastname, 
-			@RequestParam(defaultValue="0", required=false) Integer role){
-	
+			@RequestParam(defaultValue="0", required=false) Integer role,
+			@RequestParam(defaultValue="0", required=false) Integer batchId){
+			
+			Batch batch = batchLogic.getBatchById(batchId);
+			
 			Person person = personLogic.getPersonById(id);
+			PersonRole pRole = personRoleLogic.findRoleById(role);
 			
-			IntEvalLogger.LOGGER.info("first " + firstname + " last " + lastname + " role " + role);
-			
-			person = personLogic.updatePerson(person, firstname, lastname, role);
+			person = personLogic.updatePerson(person, firstname, lastname, pRole, batch);
 
 			return ResponseEntity.ok(person);
 		

@@ -4,12 +4,16 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.apache.log4j.BasicConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.revature.domain.Batch;
 import com.revature.domain.Person;
+import com.revature.domain.PersonBatchJoin;
+import com.revature.domain.PersonRole;
 import com.revature.log.IntEvalLogger;
 import com.revature.repositories.PersonRepository;
 
@@ -18,49 +22,44 @@ import com.revature.repositories.PersonRepository;
 @Transactional(readOnly=false, isolation=Isolation.READ_COMMITTED)
 public class PersonLogicImpl implements PersonLogic {
 
-
 	@Autowired
 	private PersonRepository dao;
+	
+	@Autowired
+	private PersonBatchLogic personBatchLogic;
 
 	
 	@Override
 	public List<Person> getPersonByFirstName(String firstName) {
 		
-		return  dao.findByFirstName(firstName);
+		return dao.findAllByFirstName(firstName);
 
 	}
 
 	@Override
 	public List<Person> getPersonByLastName(String lastName) {
 		
-		return dao.findByLastName(lastName);
-	}
-	
-
-
-	@Override
-	public List<Person> getPersonsByPersonRole(int personRole) {
-		
-		return dao.findByPersonRole(personRole);
-	
+		return dao.findAllByLastName(lastName);
 	}
 
 	@Override
 	public List<Person> getAllTrainees() {
-		
-		return dao.findByPersonRole(1);
+		PersonRole personRole = new PersonRole(1, "Trainee");
+		return dao.findAllByPersonRole(personRole);
 
 	}
 
 	@Override
 	public List<Person> getAllTrainers() {
-		
-		return dao.findByPersonRole(2);
+		PersonRole personRole = new PersonRole(2, "Trainer");
+		return dao.findAllByPersonRole(personRole);
 
 	}
 
 	@Override
 	public Person getPersonById(int id)  {
+		
+		BasicConfigurator.configure();
 		
 		Person p = null;
 		
@@ -70,8 +69,8 @@ public class PersonLogicImpl implements PersonLogic {
 			IntEvalLogger.LOGGER.info("This is my P: "+p);
 			 
 		 } catch (EntityNotFoundException e) {		
-			 
-			 p = new Person("Persondoes","Notexist",0);
+			 PersonRole newPersonRole = new PersonRole(0, "Not a role");
+			 p = new Person("Persondoes","Notexist", newPersonRole);
 			 p.setId(0);
 			 IntEvalLogger.LOGGER.info("setting P to new person");
 			 return p;
@@ -85,12 +84,14 @@ public class PersonLogicImpl implements PersonLogic {
 	}
 
 	@Override
-	public void savePerson(Person p) {
-		dao.save(p);
-	}
-
-	@Override
-	public Person updatePerson(Person p, String firstname, String lastname, int role) {	
+	public Person updatePerson(Person p, String firstname, String lastname, PersonRole personRole, Batch batch) {	
+		
+		BasicConfigurator.configure();
+		
+		if(batch != null){
+			PersonBatchJoin personBatchJoin = new PersonBatchJoin(p, batch);
+			personBatchLogic.updatePersonBatch(personBatchJoin);
+		}
 		
 		if (!"".equals(firstname)) {
 			
@@ -118,10 +119,10 @@ public class PersonLogicImpl implements PersonLogic {
 		
 		
 	   
-		if (role != 0) {
+		if (personRole != null) {
 			
-			IntEvalLogger.LOGGER.info("changing role to " + role);
-			p.setPersonRole(role);
+			IntEvalLogger.LOGGER.info("changing role to " + personRole.getId());
+			p.setPersonRole(personRole);
 			 
 		} else {
 			
@@ -139,6 +140,25 @@ public class PersonLogicImpl implements PersonLogic {
 	public void deletePerson(Person p) {
 		
 		dao.delete(p.getId());
+	}
+
+	@Override
+	public List<Person> getByFirstNameAndLastName(String firstName, String lastName) {
+		return dao.findAllByFirstNameAndLastName(firstName, lastName);
+	}
+
+	@Override
+	public void createPerson(Person person, Batch batch) {
+		if(batch != null){
+			PersonBatchJoin personBatchJoin = new PersonBatchJoin(person, batch);
+			personBatchLogic.createPersonBatch(personBatchJoin);
+		}
+		dao.save(person);
+	}
+
+	@Override
+	public List<Person> getAllPersonsByPersonRole(PersonRole personRole) {
+		return dao.findAllByPersonRole(personRole);
 	}
 
 
