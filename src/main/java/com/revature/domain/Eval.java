@@ -8,6 +8,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="ie_eval")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
