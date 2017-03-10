@@ -27,14 +27,7 @@ import com.revature.services.PersonRoleLogic;
 public class PersonController {
 	
 	@Autowired
-	private PersonLogic personLogic;
-	
-	@Autowired
-	private PersonRoleLogic personRoleLogic;
-	
-	@Autowired
-	private BatchLogic batchLogic;
-	
+	private PersonLogic personLogic;	
 	
 	@RequestMapping(method = RequestMethod.GET, value = "persons/{id}")
 		public ResponseEntity<Person> getPersonById(@PathVariable("id") Integer id ){
@@ -48,7 +41,7 @@ public class PersonController {
 				
 			} else {
 				
-				System.out.println("ERROR!");
+				System.out.println("ERROR!");				
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 			
@@ -99,21 +92,37 @@ public class PersonController {
 
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "persons")
-	public ResponseEntity<Person> modifyPerson(@RequestBody Person p){
+	public ResponseEntity<Person> modifyPerson(@RequestBody Person updatedPerson){
 	
-		Person person = personLogic.updatePerson(p);
-		return ResponseEntity.ok(person);
+		Person person = personLogic.getPersonById(updatedPerson.getId());
+		
+		if(person != null) {			
+			personLogic.updatePerson(updatedPerson);
+			return ResponseEntity.ok(updatedPerson);			
+		} else {			
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+				
+		
 
 		
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "persons")
 	public ResponseEntity<String> deletePerson(int pId){
-		
+	
 			Person pers = personLogic.getPersonById(pId);
-			String message = pers.getFirstName() + " " + pers.getLastName() + " was deleted.";
-			personLogic.deletePerson(pers);
-			return ResponseEntity.ok(message);
+			
+			if (pers != null) {
+				personLogic.deletePerson(pers);
+				String message = pers.getFirstName() + " " + pers.getLastName() + " was deleted.";
+				return ResponseEntity.ok(message);
+			} else {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+			
+			
+			
 	}
 	
 	
