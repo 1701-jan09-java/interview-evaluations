@@ -1,6 +1,5 @@
 package com.revature.controllers;
 
-import com.revature.domain.QuestionComment;
 import com.revature.domain.QuestionPool;
 import com.revature.services.QuestionLogic;
 
