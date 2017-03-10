@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.revature.domain.PersonRole;
 
 public interface PersonRoleRepository extends JpaRepository<PersonRole,Integer> {
+	
+	PersonRole findAllByTitleIgnoreCase(String title);
 
-	// this is a marker interface 
 }
