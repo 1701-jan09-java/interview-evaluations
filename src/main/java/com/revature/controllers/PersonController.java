@@ -84,16 +84,17 @@ public class PersonController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "persons")
 	public ResponseEntity<Person> createPerson(@RequestBody Person newPerson){
-		if (newPerson.getClass() != Person.class){
+		
+		Person checker = personLogic.getPersonById(newPerson.getId());
+		if (checker != null){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		} else{
-			
-		System.out.println(newPerson);	
-		personLogic.createPerson(newPerson);
-		return ResponseEntity.ok(newPerson);
+		} else {
+			System.out.println(newPerson);	
+			personLogic.createPerson(newPerson);
+			return ResponseEntity.ok(newPerson);
 		}
-//		return new ResponseEntity<>(HttpStatus.CREATED)
 	}
+	
 	
 
 	
