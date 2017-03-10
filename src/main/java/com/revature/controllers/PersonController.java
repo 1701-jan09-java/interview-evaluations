@@ -21,7 +21,7 @@ import com.revature.services.BatchLogic;
 import com.revature.services.PersonLogic;
 import com.revature.services.PersonRoleLogic;
 
-@CrossOrigin(origins = "http://localhost:8080/api/v1/persons", maxAge = 3600)
+@CrossOrigin
 @RestController
 @RequestMapping(value = "/api/v1/")
 public class PersonController {
