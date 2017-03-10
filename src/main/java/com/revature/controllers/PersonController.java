@@ -51,9 +51,11 @@ public class PersonController {
 	@RequestMapping(method = RequestMethod.GET, value = "persons")
 	public ResponseEntity<Page<Person>> getPerson(Pageable pageable, @RequestParam(defaultValue="", required=false) String firstname,
 			@RequestParam(defaultValue="", required=false) String lastname,
-			@RequestParam(defaultValue="0", required=false) Integer role){
+			@RequestParam(defaultValue="0", required=false) Integer role,
+			@RequestParam(defaultValue="", required=false) String roleName){
 		
-		 if(role==0){
+		// both role and roleName are blank -> find by names only
+		 if(role==0 && "".equals(roleName)){
 			 			 
 			 if(!"".equals(firstname) && "".equals(lastname)){
 				 return ResponseEntity.ok(personLogic.getPersonByFirstName(pageable, firstname));
@@ -63,18 +65,58 @@ public class PersonController {
 				 
 			 } else if((!"".equals(firstname)) && !("".equals(lastname))) {
 				 return ResponseEntity.ok(personLogic.getByFirstNameAndLastName(pageable, firstname, lastname));
-			 }
-			 else{
+			 } else{
 				 return  ResponseEntity.ok(personLogic.getAllPersons(pageable));
-			 }
+			 } 
+		 } 
+		 
+		 // role is left blank but roleName input is exists -> find by names and roleName
+		 else if(role==0 && !"".equals(roleName)){
 			 
-		 } else if(role!=0 && !"".equals(firstname) ) {
-			 return ResponseEntity.ok(personLogic.getPersonsByFirstnameAndPersonRole(pageable, firstname,  pRLogic.findRoleById(role)));
-		 }
+ 			 
+			 if(!"".equals(firstname) && "".equals(lastname)){
+				 return ResponseEntity.ok(personLogic.getPersonsByFirstnameAndPersonRole(pageable, firstname, pRLogic.getRoleByTitle(roleName)));
+				 
+			 } else if ("".equals(firstname) && !("".equals(lastname))){
+				 return ResponseEntity.ok(personLogic.getPersonsByLastnameAndPersonRole(pageable, lastname, pRLogic.getRoleByTitle(roleName)));
+				 
+			 } else if((!"".equals(firstname)) && !("".equals(lastname))) {
+				 return ResponseEntity.ok(personLogic.getPersonsByFirstnameAndLastnameAndPersonRole(pageable, firstname, lastname, pRLogic.getRoleByTitle(roleName)));
+			 } else{
+				 return  ResponseEntity.ok(personLogic.getAllPersonsByPersonRole(pageable, pRLogic.getRoleByTitle(roleName)));
+			 } 
+		 } 
+		 
+		// roleName is left blank but role input is exists -> find by names and role
+		 else if(role!=0 && "".equals(roleName)){
+			 
+ 			 
+			 if(!"".equals(firstname) && "".equals(lastname)){
+				 return ResponseEntity.ok(personLogic.getPersonsByFirstnameAndPersonRole(pageable, firstname, pRLogic.findRoleById(role)));
+				 
+			 } else if ("".equals(firstname) && !("".equals(lastname))){
+				 return ResponseEntity.ok(personLogic.getPersonsByLastnameAndPersonRole(pageable, lastname, pRLogic.findRoleById(role)));
+				 
+			 } else if((!"".equals(firstname)) && !("".equals(lastname))) {
+				 return ResponseEntity.ok(personLogic.getPersonsByFirstnameAndLastnameAndPersonRole(pageable, firstname, lastname, pRLogic.findRoleById(role)));
+			 } else{
+				 return  ResponseEntity.ok(personLogic.getAllPersonsByPersonRole(pageable, pRLogic.findRoleById(role)));
+			 } 
+		 } 
+		 
+		 // else-block will use role id if both inputted role and roleName correspond to each other
 		 else{
-				
-				return ResponseEntity.ok(personLogic.getAllPersonsByPersonRole(pageable, pRLogic.findRoleById(role)));
-		 }
+			 
+			  if ("".equals(firstname) && !("".equals(lastname))){
+				 return ResponseEntity.ok(personLogic.getPersonsByLastnameAndPersonRole(pageable, lastname,  pRLogic.getRoleByTitleAndId(roleName, role)));
+				 
+			 } else if((!"".equals(firstname)) && !("".equals(lastname))) {
+				 return ResponseEntity.ok(personLogic.getPersonsByFirstnameAndLastnameAndPersonRole(pageable, firstname, lastname, pRLogic.getRoleByTitleAndId(roleName, role)));
+			 } else{
+				 return  ResponseEntity.ok(personLogic.getAllPersonsByPersonRole(pageable, pRLogic.getRoleByTitleAndId(roleName, role)));
+			 } 
+			 
+		 }	 
 		 
 	}
 	

@@ -6,6 +6,6 @@ import com.revature.domain.PersonRole;
 
 public interface PersonRoleRepository extends JpaRepository<PersonRole,Integer> {
 	
-	PersonRole findAllByTitle(String title);
+	PersonRole findAllByTitleIgnoreCase(String title);
 
 }
