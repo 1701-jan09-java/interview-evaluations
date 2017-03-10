@@ -1,16 +1,16 @@
 package com.revature.services;
 
-import com.revature.repositories.EvalRepository;
-import com.revature.repositories.EvalCommentRepository;
 import com.revature.domain.Eval;
 import com.revature.domain.EvalComment;
+import com.revature.repositories.EvalCommentRepository;
+import com.revature.repositories.EvalRepository;
+import java.util.Date;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolationException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,18 +25,76 @@ public class EvalLogicImpl implements EvalLogic {
 	@Autowired
 	private EvalCommentRepository commentDao;
 	
+	@PersistenceContext
+    private EntityManager entityManager;
+	
 
 //CREATE----------------------------
 	@Override
 	@Transactional
 	public Eval createEval(Eval eval) {
+		
+		System.out.println(eval);
+		
+		if(eval.getId() != null || eval.getId() != 0) {
+			throw new ConstraintViolationException("Id is automatically generated - do not include in post request", null);
+		}
+		
+		if(eval.getTrainee() == null || eval.getTrainee().getId() == 0){
+			throw new ConstraintViolationException("Missing required field trainee.id (Integer)", null);
+		}
+		
+		if(eval.getWeek() == null || eval.getWeek() == 0){
+			throw new ConstraintViolationException("Missing required field week (Integer)", null);
+		}
+		
+		if(eval.getEvalType() == null || eval.getEvalType().getId() == 0){
+			throw new ConstraintViolationException("Missing required field evalType.id (Integer)", null);
+		}
+		
+		if(eval.getBatch() == null || eval.getBatch().getId() == 0){
+			throw new ConstraintViolationException("Missing required field batch.id (Integer)", null);
+		}
+		
+		eval.setDate(new java.sql.Date((new Date()).getTime()));
+		
+		// Set eval property of questions and qEval property of question comments
+		// This is required because these fields are not auto-generated in json mapping
+		if (eval.getQuestions() != null) {
+			eval.getQuestions().forEach((question) -> {
+				question.setEval(eval);
+				// also set qEval of question comments
+				if (question.getComments() != null) {
+					question.getComments().forEach((comment) -> {
+						comment.setQuestionEval(question);
+					});
+				}
+			});
+		}
+		
+		// Set eval property of comments so cascade works
+		if (eval.getComments() != null) {
+			eval.getComments().forEach((comment) -> {
+				comment.setEval(eval);
+			});
+		}
+		
 		dao.save(eval);
+		System.out.println(eval);
+		
+		// Bypass cache for fresh version with all fields filled in
+		entityManager.flush();
+		entityManager.refresh(eval);
 		return eval;
 	}
 	
 	@Override
 	@Transactional
 	public EvalComment createComment(EvalComment comment, Integer evalId) {
+		
+		if(comment.getId() != null || comment.getId() != 0) {
+			throw new ConstraintViolationException("Id is automatically generated - do not include in post request", null);
+		}
 		
 		if (comment.getCommentText() == null) {
 			throw new ConstraintViolationException("Missing required field commentText (String)", null);

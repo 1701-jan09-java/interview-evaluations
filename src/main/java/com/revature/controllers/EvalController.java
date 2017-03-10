@@ -3,7 +3,6 @@ package com.revature.controllers;
 import com.revature.domain.Eval;
 import com.revature.domain.EvalComment;
 import com.revature.services.EvalLogic;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -73,13 +72,12 @@ public class EvalController {
 	}
 	
 //EVAL CUD---------------------------------------------
-	@RequestMapping(method = RequestMethod.POST, value = "/add")
+	@RequestMapping(method = RequestMethod.POST, value = "")
 	public ResponseEntity<Eval> addEval(@RequestBody Eval eval){
-		
 		return ResponseEntity.ok(evalLogic.createEval(eval));
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value = "/update/{id}")
+	@RequestMapping(method = RequestMethod.PUT, value = "{id}")
 	public ResponseEntity<Eval> updateEval(@RequestBody Eval eval, @PathVariable ("id") Integer id){
 		
 		Eval currEval = evalLogic.getEvalById(id);
@@ -108,7 +106,7 @@ public class EvalController {
 		return ResponseEntity.ok(evalLogic.updateEval(currEval));
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE, value = "/delete/{id}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "{id}")
 	public ResponseEntity<Eval> deleteEval(@PathVariable ("id") int id){
 		
 		Eval currEval = evalLogic.getEvalById(id);

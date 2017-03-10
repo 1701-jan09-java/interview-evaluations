@@ -31,7 +31,7 @@ public class QuestionEval implements Serializable {
 	@JoinColumn(name="qe_qpid")
 	private QuestionPool questionPool;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy="questionEval")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="questionEval", cascade = CascadeType.ALL)
 	private List<QuestionComment> comments;
 	
 	public QuestionEval(){}
@@ -141,7 +141,7 @@ public class QuestionEval implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "QuestionEval{" + "id=" + id + ", communicationScore=" + communicationScore + ", knowledgeScore=" + knowledgeScore + ", eval.id=" + eval.getId() + ", questionPool=" + questionPool + ", comments=" + comments + '}';
+		return "QuestionEval{" + "id=" + id + ", communicationScore=" + communicationScore + ", knowledgeScore=" + knowledgeScore + ", questionPool=" + questionPool + ", comments=" + comments + '}';
 	}	
 	
 }

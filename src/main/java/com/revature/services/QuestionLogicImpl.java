@@ -1,7 +1,5 @@
 package com.revature.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.revature.domain.QuestionComment;
 import com.revature.domain.QuestionEval;
 import com.revature.domain.QuestionPool;
@@ -10,7 +8,10 @@ import com.revature.repositories.QuestionCommentRepository;
 import com.revature.repositories.QuestionEvalRepository;
 import com.revature.repositories.QuestionRepository;
 import com.revature.repositories.SubjectRepository;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,9 @@ public class QuestionLogicImpl implements QuestionLogic{
 	
 	@Autowired
 	private EvalRepository evalDao;
+	
+	@PersistenceContext
+    private EntityManager entityManager;
 	
 //CREATE-----------------------------------
 	@Override
@@ -81,6 +85,8 @@ public class QuestionLogicImpl implements QuestionLogic{
 	@Transactional
 	public QuestionEval createQuestionEval(QuestionEval qEval, Integer evalId) {
 		
+		System.out.println(qEval);
+		
 		if(qEval.getCommunicationScore() == null){
 			throw new ConstraintViolationException("Missing required field communicationScore (Integer)", null);
 		}
@@ -92,7 +98,19 @@ public class QuestionLogicImpl implements QuestionLogic{
 		}
 		
 		qEval.setEval(evalDao.findOne(evalId));
-		return qEvalDao.save(qEval);
+		qEvalDao.save(qEval);
+		
+		// Set eval property of comments so cascade works
+		if (qEval.getComments() != null) {
+			qEval.getComments().forEach((comment) -> {
+				comment.setQuestionEval(qEval);
+			});
+		}
+		
+		entityManager.flush();
+		entityManager.refresh(qEval);
+		
+		return qEval;
 	}
 
 //RETRIEVE---------------------------------
