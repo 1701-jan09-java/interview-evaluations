@@ -1,5 +1,7 @@
 package com.revature.services;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -98,9 +100,20 @@ public class PersonLogicImpl implements PersonLogic {
 	@Override
 	public Person createPerson(Person person) {
 		
+		List<Integer> roleIds = new ArrayList<>();
 		List<PersonRole> roleList = daoRole.findAll();
 		System.out.println(roleList);
-
+				
+		Iterator<PersonRole> iterator = roleList.iterator();
+		
+		while(iterator.hasNext()) {
+			PersonRole role = iterator.next();
+			roleIds.add(role.getId());
+		}
+		
+		System.out.println(roleIds);
+		
+		
 		if (person.getFirstName() == null) {
 			throw new ConstraintViolationException("Missing required field firstName (String)", null);
 		}
@@ -109,11 +122,22 @@ public class PersonLogicImpl implements PersonLogic {
 			throw new ConstraintViolationException("Missing required field lastName (String)", null);
 		}
 		
-		if (person.getPersonRole() == null) {
-			throw new ConstraintViolationException("Missing required field personRole (PersonRole)", null);
-		}
-			
+		boolean isValid = false;
 		
+
+		for (Integer roll : roleIds) {
+				
+			if (person.getPersonRole().getId() == roll) {
+					
+				isValid = true;
+			} 
+				
+		}	
+		
+		if (!isValid) {
+			
+			throw new ConstraintViolationException("Invalid field personRole (PersonRole)", null);
+		}		
 				
 		dao.save(person);
 		return person;
