@@ -1,13 +1,17 @@
 package com.revature.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.domain.Batch;
+import com.revature.domain.Person;
 import com.revature.repositories.BatchRepository;
 
 @Service
@@ -50,6 +54,14 @@ public class BatchLogicImpl implements BatchLogic {
 	public void updateBatch(Batch batchName) {
 		dao.save(batchName);
 		
+	}
+
+	@Override
+	public Page<Person> getAllPeopleByBatchId(Pageable pageable, Integer id) {
+		 Batch batch = dao.findOne(id);
+		 List<Person> personList = batch.getPersons();
+		Page<Person> personPage = new PageImpl<Person>(personList, pageable, personList.size());
+		return personPage;
 	}
 
 }

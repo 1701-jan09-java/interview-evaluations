@@ -1,7 +1,8 @@
 package com.revature.domain;
 
-import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,10 +10,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -36,8 +39,11 @@ public class Person  {
 	@JoinColumn(name = "p_role", nullable = false)
 	private PersonRole personRole;
 	
+	@JsonIgnore
+	@ManyToMany(cascade=CascadeType.ALL, mappedBy="persons")
+	private List<Batch> batches;
+	
 	public Person() {/*empty constructor needed*/}
-
 
 	public Person(String firstName, String lastName, PersonRole personRole) {
 		super();
@@ -45,10 +51,13 @@ public class Person  {
 		this.lastName = lastName;
 		this.personRole = personRole;
 	}
-
-	@Override
-	public String toString() {
-		return "Person [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", personRole=" + personRole + "]";
+	
+	public List<Batch> getBatches(){
+		return batches;
+	}
+	
+	public void setBatches(List<Batch> batches){
+		this.batches = batches;
 	}
 
 	public int getId() {
@@ -83,6 +92,7 @@ public class Person  {
 		this.personRole = personRole;
 	}
 
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -93,6 +103,7 @@ public class Person  {
 		result = prime * result + ((personRole == null) ? 0 : personRole.hashCode());
 		return result;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -123,7 +134,12 @@ public class Person  {
 		return true;
 	}
 
-	
+
+	@Override
+	public String toString() {
+		return "Person [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", personRole=" + personRole + "]";
+	}
+
 
 	
 		

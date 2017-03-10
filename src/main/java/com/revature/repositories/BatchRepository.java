@@ -14,4 +14,5 @@ public interface BatchRepository extends JpaRepository<Batch, Integer> {
 	Page<Batch> findAll(Pageable pageable);
 
 	Batch findByNameIgnoreCase(String batchName);
+	
 }
