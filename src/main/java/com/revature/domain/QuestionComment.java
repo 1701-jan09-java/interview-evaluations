@@ -5,6 +5,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="ie_question_comment")
 public class QuestionComment implements Serializable {
