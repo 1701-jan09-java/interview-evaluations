@@ -10,10 +10,10 @@ public interface BatchLogic {
 	
 	Batch getBatchByName(String batchName);
 	Batch getBatchById(int batchId);
-	void deleteBatch(Batch batchName);
+	String deleteBatch(Integer id);
 	Page<Batch> getAllBatches(Pageable pageable);
-	void createBatch(Batch batchName);
-	void updateBatch(Batch batchName);
+	Batch createBatch(Batch batchName);
+	Batch updateBatch(Batch batchName, Integer id);
 	Page<Person> getAllPeopleByBatchId(Pageable pageable, Integer Id);
 
 }

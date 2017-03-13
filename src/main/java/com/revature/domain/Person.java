@@ -40,7 +40,7 @@ public class Person  {
 	private PersonRole personRole;
 	
 	@JsonIgnore
-	@ManyToMany(cascade=CascadeType.ALL, mappedBy="persons")
+	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="persons")
 	private List<Batch> batches;
 	
 	public Person() {/*empty constructor needed*/}

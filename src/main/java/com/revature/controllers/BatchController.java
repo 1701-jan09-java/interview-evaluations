@@ -1,5 +1,7 @@
 package com.revature.controllers;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,37 +40,52 @@ public class BatchController {
 			if(batch != null){
 				return ResponseEntity.ok(batchLogic.getBatchById(value));
 			} else{
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 			}	
 		} catch(NumberFormatException e){
 			Batch batch = batchLogic.getBatchByName(id);
 			if(batch != null){
 				return ResponseEntity.ok(batchLogic.getBatchByName(id));
 			} else{
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 			}
 		}	
 	} 
 	
-	@RequestMapping(method = RequestMethod.PUT, value = "/batches")
-	public ResponseEntity<Batch> updateBatch(@RequestBody Batch newBatch){
-		Batch batch = batchLogic.getBatchById(newBatch.getId());
+	@RequestMapping(method = RequestMethod.DELETE, value = "/batches/{id}")
+	public ResponseEntity<String> deleteBatch(@PathVariable("id") Integer id){
+		Batch batch = batchLogic.getBatchById(id);
+		if(batch == null){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Batch " + id + " was not found");
+		} else{
+			batchLogic.deleteBatch(batch);
+			return ResponseEntity.ok("Batch " + id + " was deleted successfully.");
+		}
+		
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "/batches/{id}")
+	public ResponseEntity<Batch> updateBatch(@PathVariable Integer id, @RequestBody Batch newBatch){
+		Batch batch = batchLogic.getBatchById(id);
 		if(batch != null){
 			batchLogic.updateBatch(newBatch);
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
+			return ResponseEntity.ok(batch);
 		} else{
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/batches")
 	public ResponseEntity<Batch> createBatch(@RequestBody Batch newBatch){
-		Batch batch = batchLogic.getBatchByName(newBatch.getName());
-		if(batch != null){
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		//ToDo: Call validation methods
+		Batch batch = batchLogic.getBatchById(newBatch.getId());
+		if(newBatch.getId() != null && newBatch.getId() != 0){
+			throw new ConstraintViolationException("", null);
+		} else if(batch != null){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(batch);
 		} else{
 			batchLogic.createBatch(newBatch);
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
+			return ResponseEntity.ok(newBatch);
 		}
 		
 	}
@@ -76,7 +93,7 @@ public class BatchController {
 	@RequestMapping(method = RequestMethod.GET, value = "/batches/{id}/members")
 	public ResponseEntity<Page<Person>> getAllBatchMembers(@PageableDefault(size=10) 
 		@SortDefaults({@SortDefault(sort="lastName"), @SortDefault(sort="firstName")}) 
-		Pageable pageable, @PathVariable("id") int id){
+		Pageable pageable, @PathVariable("id") Integer id){
 		return ResponseEntity.ok(batchLogic.getAllPeopleByBatchId(pageable, id));
 	}
 		
