@@ -1,20 +1,20 @@
 package com.revature.services;
 
+import com.revature.domain.Batch;
+import com.revature.domain.Person;
+import com.revature.repositories.BatchRepository;
+import com.revature.validation.JsonValidation;
+import com.revature.validation.exceptions.NotFoundException;
 import java.util.List;
-
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.revature.domain.Batch;
-import com.revature.domain.Person;
-import com.revature.repositories.BatchRepository;
 
 @Service
 @Transactional(readOnly=false, isolation=Isolation.READ_COMMITTED)
@@ -26,19 +26,33 @@ public class BatchLogicImpl implements BatchLogic {
 	@Autowired
 	private PersonLogic personLogic;
 	
+	@Autowired
+	private JsonValidation validation;
+	
+	@PersistenceContext
+    private EntityManager entityManager;
+	
 	@Override
 	public Batch getBatchByName(String batchName) {
 		Batch batch = dao.findByNameIgnoreCase(batchName);
+		
+		if (batch == null) {
+			throw new NotFoundException("Batch with name " + batchName + " not found");
+		}
+		
 		return batch;
 	}
 
 	@Override
 	public Batch getBatchById(int batchId) {
-		
-		//ToDo: add validation check
 		Batch batch = dao.findOne(batchId);
-		return batch;
+		
+		if (batch == null) {
+			throw new NotFoundException("Batch with id " + batchId + " not found");
 		}
+		
+		return batch;
+	}
 
 	@Override
 	public String deleteBatch(Integer id) {
@@ -54,33 +68,37 @@ public class BatchLogicImpl implements BatchLogic {
 	}
 
 	@Override
-	public Batch createBatch(Batch batchName) {
-		dao.save(batchName);
-		return batchName;
+	public Batch createBatch(Batch batch) {
+		validation.validateBatchFields(batch);
+		dao.save(batch);
+		return batch;
 	}
 
 	@Override
 	public Batch updateBatch(Batch batchName, Integer id) {
-		//Todo: validation
-		Batch batch = dao.findOne(id);
+		
+		Batch batch = getBatchById(id);
 		
 		if(batchName.getName() != null || batchName.getName().equals("")){
 			batch.setName(batchName.getName());
 		}
 		
 		if(batchName.getPersons() != null){
-			
+			// add the things
 		}
-			
-			
-		dao.save(batchName);
-		return batchName;
+		
+		
+		dao.saveAndFlush(batch);
+		entityManager.refresh(batch);
+		return batch;
 	}
 
 	@Override
 	public Page<Person> getAllPeopleByBatchId(Pageable pageable, Integer id) {
-		 Batch batch = dao.findOne(id);
-		 List<Person> personList = batch.getPersons();
+		
+		Batch batch = getBatchById(id);
+		
+		List<Person> personList = batch.getPersons();
 		Page<Person> personPage = new PageImpl<Person>(personList, pageable, personList.size());
 		return personPage;
 	}

@@ -1,5 +1,6 @@
 package com.revature.validation;
 
+import com.revature.domain.Batch;
 import com.revature.domain.Eval;
 import com.revature.domain.EvalComment;
 import com.revature.domain.QuestionComment;
@@ -195,6 +196,16 @@ public class JsonValidation {
                     + " [QuestionPool id: " + qp.getId() + "]", null);
         }
     }
+	
+	public void validateBatchFields(Batch batch) {
+		
+		validateIdNotSpecified(batch.getId());
+		
+		if (batch.getName() == null) {
+			throw new ConstraintViolationException("Missing required field "
+                    + "name (String)", null);
+		}
+	}
 
     public void validateIdNotSpecified(Integer id) {
         if(id != null && id != 0) {
