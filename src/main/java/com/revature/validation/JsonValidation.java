@@ -1,7 +1,19 @@
 package com.revature.validation;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.revature.domain.Eval;
 import com.revature.domain.EvalComment;
+import com.revature.domain.Person;
+import com.revature.domain.PersonRole;
 import com.revature.domain.QuestionComment;
 import com.revature.domain.QuestionEval;
 import com.revature.domain.QuestionPool;
@@ -9,13 +21,11 @@ import com.revature.repositories.BatchRepository;
 import com.revature.repositories.EvalRepository;
 import com.revature.repositories.EvalTypeRepository;
 import com.revature.repositories.PersonRepository;
+import com.revature.repositories.PersonRoleRepository;
 import com.revature.repositories.QuestionCommentRepository;
 import com.revature.repositories.QuestionEvalRepository;
 import com.revature.repositories.QuestionRepository;
 import com.revature.repositories.SubjectRepository;
-import javax.validation.ConstraintViolationException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class JsonValidation {
@@ -43,6 +53,10 @@ public class JsonValidation {
 
     @Autowired
     private BatchRepository batchDao;
+    
+    @Autowired
+	private PersonRoleRepository personRoleDao;
+    
 
     public void validateQuestionPoolFields(QuestionPool question) {
 
@@ -257,6 +271,66 @@ public class JsonValidation {
             throw new ConstraintViolationException(
                     "Question with id " + qpId + " does not exist",null);
         }
+    }
+    
+    public void validatePersonFields(Person person){
+    	
+    	List<Integer> roleIds = new ArrayList<>();
+		List<PersonRole> roleList = personRoleDao.findAll();
+		System.out.println(roleList);
+		
+		// iterate thru the list of possible personRoles
+		// will be used with for loop below
+		Iterator<PersonRole> iterator = roleList.iterator();
+		while(iterator.hasNext()) {
+			PersonRole role = iterator.next();
+			roleIds.add(role.getId());
+		}
+		
+		if (person.getFirstName() == null) {
+			throw new ConstraintViolationException("Missing required field firstName (String)", null);
+		}
+		
+		if (person.getLastName() == null) {
+			throw new ConstraintViolationException("Missing required field lastName (String)", null);
+		}
+		if (person.getPersonRole() == null) {
+			throw new ConstraintViolationException("Missing required field PersonRole (PersonRole)", null);
+		}
+		
+		// make sure the inputted role is valid role
+		// by matching the personrole id with list values - must match one
+		boolean isValid = false;
+		for (Integer roll : roleIds) {
+				if (person.getPersonRole().getId() == roll) {
+				isValid = true;
+			} 	
+		}	
+		if (!isValid) {
+			throw new ConstraintViolationException("Invalid field personRole (PersonRole)", null);
+		}
+    	
+    }
+    
+    public void validatePersonRole(PersonRole personRole){
+    	
+    	if(personRole == null){
+			throw new ConstraintViolationException("Invalid PersonRole Field", null);
+		}
+    }
+    
+    public Person validatePersonById(int id){
+    	Person p = null;
+		
+		try {
+			
+			p = personDao.findOne(id);
+			
+		} catch (EntityNotFoundException e) {
+			
+			return p;
+		}
+		return p;
     }
 
 }
