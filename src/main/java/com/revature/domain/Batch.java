@@ -1,12 +1,17 @@
 package com.revature.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -26,13 +31,24 @@ public class Batch implements Serializable  {
 	
 	@Column(name="b_name")
 	private String name;
+	
+	@ManyToMany(cascade=CascadeType.ALL)
+	@JoinTable(name="ie_person_batch", joinColumns=@JoinColumn(name="batch_id"), inverseJoinColumns=@JoinColumn(name="person_id"))
+	private List<Person> persons;
 
-	public Batch() {/*empty constructor needed*/}
+	public Batch() {}
 		
-	public Batch(int id, String name) {
+	public Batch(String name) {
 		super();
-		this.id = id;
 		this.name = name;
+	}
+	
+	public List<Person> getPersons(){
+		return persons;
+	}
+	
+	public void setPersons(List<Person> people){
+		this.persons = people;
 	}
 
 	public int getId() {
@@ -81,10 +97,8 @@ public class Batch implements Serializable  {
 
 	@Override
 	public String toString() {
-		return "Batch [id=" + id + ", name=" + name + "]";
+		return "Batch [id=" + id + ", name=" + name+ "]";
 	}
-	
-	
-	
+
 
 }

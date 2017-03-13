@@ -1,61 +1,59 @@
 package com.revature.services;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.domain.Person;
-import com.revature.log.IntEvalLogger;
+import com.revature.domain.PersonRole;
 import com.revature.repositories.PersonRepository;
+import com.revature.repositories.PersonRoleRepository;
 
 
 @Service
 @Transactional(readOnly=false, isolation=Isolation.READ_COMMITTED)
 public class PersonLogicImpl implements PersonLogic {
 
-
 	@Autowired
 	private PersonRepository dao;
-
+	
+	@Autowired
+	private PersonRoleRepository daoRole;
 	
 	@Override
-	public List<Person> getPersonByFirstName(String firstName) {
+	public Page<Person> getPersonByFirstName(Pageable pageable, String firstName) {
 		
-		return  dao.findByFirstName(firstName);
+		return dao.findAllByFirstNameIgnoreCase(pageable, firstName);
 
 	}
 
 	@Override
-	public List<Person> getPersonByLastName(String lastName) {
+	public Page<Person> getPersonByLastName(Pageable pageable, String lastName) {
 		
-		return dao.findByLastName(lastName);
-	}
-	
-
-
-	@Override
-	public List<Person> getPersonsByPersonRole(int personRole) {
-		
-		return dao.findByPersonRole(personRole);
-	
+		return dao.findAllByLastNameIgnoreCase(pageable, lastName);
 	}
 
 	@Override
-	public List<Person> getAllTrainees() {
-		
-		return dao.findByPersonRole(1);
+	public Page<Person> getAllTrainees(Pageable pageable) {
+		PersonRole personRole = new PersonRole(1, "Trainee");
+		return dao.findAllByPersonRole(pageable, personRole);
 
 	}
 
 	@Override
-	public List<Person> getAllTrainers() {
-		
-		return dao.findByPersonRole(2);
+	public Page<Person> getAllTrainers(Pageable pageable) {
+		PersonRole personRole = new PersonRole(2, "Trainer");
+		return dao.findAllByPersonRole(pageable, personRole);
 
 	}
 
@@ -65,82 +63,113 @@ public class PersonLogicImpl implements PersonLogic {
 		Person p = null;
 		
 		try {
-			 
-			p = dao.getOne(id);
-			IntEvalLogger.LOGGER.info("This is my P: "+p);
-			 
-		 } catch (EntityNotFoundException e) {		
-			 
-			 p = new Person("Persondoes","Notexist",0);
-			 p.setId(0);
-			 IntEvalLogger.LOGGER.info("setting P to new person");
-			 return p;
-		 }
-		 return p;
-	}
-
-	@Override
-	public List<Person> getAllPersons() {
-		return dao.findAll();
-	}
-
-	@Override
-	public void savePerson(Person p) {
-		dao.save(p);
-	}
-
-	@Override
-	public Person updatePerson(Person p, String firstname, String lastname, int role) {	
-		
-		if (!"".equals(firstname)) {
 			
-			 IntEvalLogger.LOGGER.info("changing first to " + firstname);
-			 p.setFirstName(firstname);
-			 
-		} else {
+			p = dao.findOne(id);
 			
-			IntEvalLogger.LOGGER.info("no change to first " + p.getFirstName());
-			p.setFirstName(p.getFirstName());
+		} catch (EntityNotFoundException e) {
+			
+			return p;
 		}
-		
-		
-		
-		if (!"".equals(lastname)) {
-			
-			 IntEvalLogger.LOGGER.info("changing last to " + lastname);
-			 p.setLastName(lastname);
-			 
-		} else {
-			
-			IntEvalLogger.LOGGER.info("no change to last " + p.getLastName());
-			p.setLastName(p.getLastName());
-		}
-		
-		
-	   
-		if (role != 0) {
-			
-			IntEvalLogger.LOGGER.info("changing role to " + role);
-			p.setPersonRole(role);
-			 
-		} else {
-			
-			IntEvalLogger.LOGGER.info("no change to role " + p.getPersonRole());
-			p.setPersonRole(p.getPersonRole());
-			
-		}	    
-		
-		dao.save(p);
 		
 		return p;
 	}
 
 	@Override
+	public Page<Person> getAllPersons(Pageable pageable) {
+		return dao.findAll(pageable);
+	}
+
+	@Override
+	public Person updatePerson(Person p) {
+		dao.save(p);
+		return p;
+	}
+	
+
+
+	@Override
 	public void deletePerson(Person p) {
-		
 		dao.delete(p.getId());
 	}
 
+	@Override
+	public Page<Person> getByFirstNameAndLastName(Pageable pageable, String firstName, String lastName) {
+		return dao.findAllByFirstNameAndLastNameAllIgnoreCase(pageable, firstName, lastName);
+	}
 
+	@Override
+	public Person createPerson(Person person) {
+		
+		List<Integer> roleIds = new ArrayList<>();
+		List<PersonRole> roleList = daoRole.findAll();
+		System.out.println(roleList);
+				
+		Iterator<PersonRole> iterator = roleList.iterator();
+		
+		while(iterator.hasNext()) {
+			PersonRole role = iterator.next();
+			roleIds.add(role.getId());
+		}
+		
+		System.out.println(roleIds);
+		
+		
+		if (person.getFirstName() == null) {
+			throw new ConstraintViolationException("Missing required field firstName (String)", null);
+		}
+		
+		if (person.getLastName() == null) {
+			throw new ConstraintViolationException("Missing required field lastName (String)", null);
+		}
+		if (person.getPersonRole() == null) {
+			throw new ConstraintViolationException("Missing required field PersonRole (PersonRole)", null);
+		}
+		
+		boolean isValid = false;
+		
+
+		for (Integer roll : roleIds) {
+				
+			if (person.getPersonRole().getId() == roll) {
+					
+				isValid = true;
+			} 
+				
+		}	
+		
+		if (!isValid) {
+			
+			throw new ConstraintViolationException("Invalid field personRole (PersonRole)", null);
+		}		
+				
+		dao.save(person);
+		return person;
+	}
+
+	@Override
+	public Page<Person> getAllPersonsByPersonRole(Pageable pageable, PersonRole personRole) {
+		
+		if(personRole == null){
+			throw new ConstraintViolationException("Invalid PersonRole Field", null);
+		}
+		
+		return dao.findAllByPersonRole(pageable, personRole);
+	}
+
+	@Override
+	public Page<Person> getPersonsByFirstnameAndPersonRole(Pageable pageable, String firstname, PersonRole personRole) {
+		return dao.findAllByFirstNameIgnoreCaseAndPersonRole(pageable, firstname, personRole);
+	}
+
+	@Override
+	public Page<Person> getPersonsByLastnameAndPersonRole(Pageable pageable, String lastname, PersonRole personRole) {
+		return dao.findAllByLastNameIgnoreCaseAndPersonRole(pageable, lastname, personRole);
+	}
+
+	@Override
+	public Page<Person> getPersonsByFirstnameAndLastnameAndPersonRole(Pageable pageable, String firstname,
+			String lastname, PersonRole personRole) {
+		return dao.findAllByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndPersonRole(pageable, firstname, lastname, personRole);
+	}
 
 }

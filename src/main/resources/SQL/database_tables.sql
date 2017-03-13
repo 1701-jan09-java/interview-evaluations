@@ -58,6 +58,15 @@ CREATE TABLE ie_question_comment (
     qc_eid INTEGER NOT NULL,FOREIGN KEY(qc_eid) REFERENCES ie_question_eval(qe_id)
 );
 
+CREATE TABLE ie_person_batch (
+  join_id INTEGER,
+  person_id INTEGER NOT NULL,
+  batch_id INTEGER NOT NULL,
+  PRIMARY KEY(join_id),
+  FOREIGN KEY(person_id) REFERENCES ie_person(p_id),
+  FOREIGN KEY(batch_id) REFERENCES ie_batch(b_id)
+);
+
 -- Sequences
 CREATE SEQUENCE batch_seq
 START WITH 100
@@ -95,5 +104,7 @@ CREATE SEQUENCE subject_seq
 START WITH 100
 INCREMENT BY 1;
 
-
+CREATE SEQUENCE person_batch_seq
+START WITH 100
+INCREMENT BY 1;
  
