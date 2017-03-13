@@ -164,7 +164,7 @@ public class PersonController {
 				String message = pers.getFirstName() + " " + pers.getLastName() + " was deleted.";
 				return ResponseEntity.ok(message);
 			} else {
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 			
 			
