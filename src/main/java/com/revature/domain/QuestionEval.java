@@ -31,7 +31,7 @@ public class QuestionEval implements Serializable {
 	@JoinColumn(name="qe_qpid")
 	private QuestionPool questionPool;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy="questionEval", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="questionEval", cascade = CascadeType.ALL)
 	private List<QuestionComment> comments;
 	
 	public QuestionEval(){}

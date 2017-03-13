@@ -18,6 +18,6 @@ public interface QuestionLogic {
 
     QuestionPool updateQuestionUsed(Integer id);
 
-	QuestionPool deleteQuestion(Integer id);
+	String deleteQuestion(Integer id);
 
 }

@@ -42,7 +42,7 @@ public class QuestionEvalLogicImpl implements QuestionEvalLogic{
     @Override
 	@Transactional
 	public QuestionEval createQuestionEval(QuestionEval qEval, Integer evalId) {
-        validation.validateQuestionEvaluationFieldsExistingEval(qEval);
+        validation.validateQuestionEvaluationFieldsExistingEval(qEval,evalId);
 		
 		qEval.setEval(evalDao.findOne(evalId));
         if (qEval.getEval() == null) {
@@ -124,6 +124,8 @@ public class QuestionEvalLogicImpl implements QuestionEvalLogic{
 			currQEval.setKnowledgeScore(qEval.getKnowledgeScore());
 		}
 
+		validation.validateScores(currQEval);
+		
         dao.saveAndFlush(currQEval);
         entityManager.refresh(currQEval);
 
@@ -149,16 +151,14 @@ public class QuestionEvalLogicImpl implements QuestionEvalLogic{
 //DELETE-----------------------------------
 	@Override
 	public String deleteQuestionEval(Integer qEvalId) {
-        validation.validateQuestionEvalExists(qEvalId);
-        QuestionEval qEval = dao.findOne(qEvalId);
+        QuestionEval qEval = getQuestionEvalById(qEvalId);
         dao.delete(qEval);
 		return "Question Eval: " + qEvalId + " - DELETED";
 	}
 
 	@Override
 	public String deleteComment(Integer qCommentId) {
-        validation.validateQuestionCommentExists(qCommentId);
-        QuestionComment qComment = commentDao.findOne(qCommentId);
+        QuestionComment qComment = getCommentById(qCommentId);
 		commentDao.delete(qComment);
 		return "Question Comment: " + qCommentId + " - DELETED";
 	}

@@ -139,20 +139,19 @@ public class JsonValidation {
         validateScores(question);
     }
 
-    public void validateQuestionEvaluationFieldsExistingEval(QuestionEval question) {
+    public void validateQuestionEvaluationFieldsExistingEval(QuestionEval question, Integer evalId) {
 
         if(
-            question.getEval() == null
-            || question.getEval().getId() == null
-            || question.getEval().getId() == 0
+            evalId == null
+            || evalId == 0
         ){
             throw new ConstraintViolationException("Missing required field "
                     + "eval.id (Integer)", null);
 		}
 
-        if (evalDao.findOne(question.getEval().getId()) == null) {
+        if (evalDao.findOne(evalId) == null) {
             throw new ConstraintViolationException("Evaluation with id "
-                    + question.getEval().getId() + " does not exist", null);
+                    + evalId + " does not exist", null);
         }
 
         validateQuestionEvaluationFields(question);

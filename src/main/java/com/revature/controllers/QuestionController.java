@@ -57,7 +57,7 @@ public class QuestionController {
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "{questionId}")
-	public ResponseEntity<QuestionPool> deleteQuestion(@PathVariable Integer questionId){
+	public ResponseEntity<String> deleteQuestion(@PathVariable Integer questionId){
 		return ResponseEntity.ok(questionLogic.deleteQuestion(questionId));
 	}
 }

@@ -80,10 +80,8 @@ public class QuestionLogicImpl implements QuestionLogic{
 	@Override
 	@Transactional
 	public QuestionPool updateQuestion(QuestionPool question, Integer questionId) {
-        
-        validation.validateQuestionPoolExists(questionId);
 
-        QuestionPool currQuestion = dao.findOne(questionId);
+        QuestionPool currQuestion = getQuestionById(questionId);
 
 		if(question.getQuestionText() != null){
 			currQuestion.setQuestionText(question.getQuestionText());
@@ -105,14 +103,16 @@ public class QuestionLogicImpl implements QuestionLogic{
 			currQuestion.setDateLastUsed(question.getDateLastUsed());
 		}
 
-		return dao.save(question);
+		dao.saveAndFlush(currQuestion);
+		entityManager.refresh(currQuestion);
+		return currQuestion;
 	}
 
     @Override
 	@Transactional
 	public QuestionPool updateQuestionUsed(Integer questionId) {
-
-        // verify that question exists in question pool
+		
+		// validate that question exists
         validation.validateQuestionPoolExists(questionId);
 
         QuestionPool question = getQuestionById(questionId);
@@ -125,11 +125,10 @@ public class QuestionLogicImpl implements QuestionLogic{
 //DELETE-----------------------------------
 	@Override
 	@Transactional
-	public QuestionPool deleteQuestion(Integer questionId) {
-        validation.validateQuestionPoolExists(questionId);
-		QuestionPool question = dao.findOne(questionId);
+	public String deleteQuestion(Integer questionId) {
+		QuestionPool question = getQuestionById(questionId);
 		dao.delete(question);
-		return question;
+		return "Question: " + questionId + " - DELETED";
 	}
 
 }
