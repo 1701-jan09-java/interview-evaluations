@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,9 @@ public class BatchLogicImpl implements BatchLogic {
 	@Autowired
 	private BatchRepository dao;
 	
+	@Autowired
+	private PersonLogic personLogic;
+	
 	@Override
 	public Batch getBatchByName(String batchName) {
 		Batch batch = dao.findByNameIgnoreCase(batchName);
@@ -29,13 +34,17 @@ public class BatchLogicImpl implements BatchLogic {
 
 	@Override
 	public Batch getBatchById(int batchId) {
+		
+		//ToDo: add validation check
 		Batch batch = dao.findOne(batchId);
 		return batch;
 		}
 
 	@Override
-	public void deleteBatch(Batch batchName) {
-		dao.delete(batchName);	
+	public String deleteBatch(Integer id) {
+		Batch batch = getBatchById(id);
+		dao.delete(batch);
+		return "Batch: " + id + " - DELETED";
 	}
 	
 
@@ -45,15 +54,27 @@ public class BatchLogicImpl implements BatchLogic {
 	}
 
 	@Override
-	public void createBatch(Batch batchName) {
+	public Batch createBatch(Batch batchName) {
 		dao.save(batchName);
-		
+		return batchName;
 	}
 
 	@Override
-	public void updateBatch(Batch batchName) {
-		dao.save(batchName);
+	public Batch updateBatch(Batch batchName, Integer id) {
+		//Todo: validation
+		Batch batch = dao.findOne(id);
 		
+		if(batchName.getName() != null || batchName.getName().equals("")){
+			batch.setName(batchName.getName());
+		}
+		
+		if(batchName.getPersons() != null){
+			
+		}
+			
+			
+		dao.save(batchName);
+		return batchName;
 	}
 
 	@Override
