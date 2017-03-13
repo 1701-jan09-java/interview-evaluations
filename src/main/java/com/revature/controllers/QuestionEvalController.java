@@ -4,7 +4,6 @@ import com.revature.domain.QuestionComment;
 import com.revature.domain.QuestionEval;
 import com.revature.services.QuestionEvalLogic;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,16 +54,8 @@ public class QuestionEvalController {
 		return ResponseEntity.ok(questionEvalLogic.updateQuestionEval(qEval,questionId));
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE, value = "delete/{id}")
-	public ResponseEntity<String> deleteQuestionEval(@PathVariable ("id") int id){
-		
-		QuestionEval currQEval = questionEvalLogic.getQuestionEvalById(id);
-		
-		if(currQEval == null){
-			System.out.println("QuestionEval with id " + id + " not found");
-	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		
-		return ResponseEntity.ok(questionEvalLogic.deleteQuestionEval(id));
+	@RequestMapping(method = RequestMethod.DELETE, value = "{questionId}")
+	public ResponseEntity<String> deleteQuestionEval(@PathVariable int questionId){
+		return ResponseEntity.ok(questionEvalLogic.deleteQuestionEval(questionId));
 	}
 }

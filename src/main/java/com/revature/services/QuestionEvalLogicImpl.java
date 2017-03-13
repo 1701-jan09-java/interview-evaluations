@@ -42,7 +42,7 @@ public class QuestionEvalLogicImpl implements QuestionEvalLogic{
     @Override
 	@Transactional
 	public QuestionEval createQuestionEval(QuestionEval qEval, Integer evalId) {
-        validation.validateQuestionEvaluationFields(qEval);
+        validation.validateQuestionEvaluationFieldsExistingEval(qEval);
 		
 		qEval.setEval(evalDao.findOne(evalId));
         if (qEval.getEval() == null) {
@@ -56,7 +56,7 @@ public class QuestionEvalLogicImpl implements QuestionEvalLogic{
 			});
 		}
 
-        // also increment question usage count and update date last used
+        // increment question usage count and update date last used
         questionLogic.updateQuestionUsed(qEval.getQuestionPool().getId());
 
 		dao.saveAndFlush(qEval);
@@ -148,15 +148,18 @@ public class QuestionEvalLogicImpl implements QuestionEvalLogic{
 
 //DELETE-----------------------------------
 	@Override
-	public String deleteQuestionEval(Integer id) {
-		QuestionEval qEval = dao.findOne(id);
-		dao.delete(qEval);
-		return "Question Eval: " + id + " - DELETED";
+	public String deleteQuestionEval(Integer qEvalId) {
+        validation.validateQuestionEvalExists(qEvalId);
+        QuestionEval qEval = dao.findOne(qEvalId);
+        dao.delete(qEval);
+		return "Question Eval: " + qEvalId + " - DELETED";
 	}
 
 	@Override
-	public String deleteComment(Integer id) {
-		commentDao.delete(getCommentById(id));
-		return "Question Comment: " + id + " - DELETED";
+	public String deleteComment(Integer qCommentId) {
+        validation.validateQuestionCommentExists(qCommentId);
+        QuestionComment qComment = commentDao.findOne(qCommentId);
+		commentDao.delete(qComment);
+		return "Question Comment: " + qCommentId + " - DELETED";
 	}
 }

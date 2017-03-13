@@ -2,10 +2,11 @@ package com.revature.services;
 
 import com.revature.domain.QuestionPool;
 import com.revature.repositories.QuestionRepository;
-import com.revature.repositories.SubjectRepository;
+import com.revature.validation.JsonValidation;
 import com.revature.validation.exceptions.NotFoundException;
 import java.sql.Date;
-import javax.validation.ConstraintViolationException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +20,12 @@ public class QuestionLogicImpl implements QuestionLogic{
 	
 	@Autowired
 	private QuestionRepository dao;
-	
-	@Autowired
-	private SubjectRepository subjectDao;
+
+    @Autowired
+    private JsonValidation validation;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
 	
 //CREATE-----------------------------------
@@ -29,27 +33,14 @@ public class QuestionLogicImpl implements QuestionLogic{
 	@Transactional
 	public QuestionPool createQuestion(QuestionPool question) {
 		
-		if (question.getMaxCommunicationScore() == null) {
-			throw new ConstraintViolationException("Missing required field maxCommunicationScore (Integer)", null);
-		}
-		
-		if (question.getMaxKnowledgeScore() == null) {
-			throw new ConstraintViolationException("Missing required field maxKnowledgeScore (Integer)", null);
-		}
-		
-		if (question.getQuestionText() == null) {
-			throw new ConstraintViolationException("Missing required field questionText (String)", null);
-		}
-		
-		if (question.getSubject() == null || question.getSubject().getId() == null) {
-			throw new ConstraintViolationException("Missing required field subject.id (Integer)", null);
-		}
+		validation.validateQuestionPoolFields(question);
 		
 		question.setUseCount(0);
-		question = dao.save(question);
-		// retrieve subject text - not auto filled
-		question.getSubject().setSubject(subjectDao.findOne(question.getSubject().getId()).getSubject());
-		return question;
+        question.setDateLastUsed(null);
+		question = dao.saveAndFlush(question);
+        entityManager.refresh(question);
+
+        return question;
 	}
 
 //RETRIEVE---------------------------------
@@ -88,7 +79,32 @@ public class QuestionLogicImpl implements QuestionLogic{
 //UPDATE-----------------------------------
 	@Override
 	@Transactional
-	public QuestionPool updateQuestion(QuestionPool question) {
+	public QuestionPool updateQuestion(QuestionPool question, Integer questionId) {
+        
+        validation.validateQuestionPoolExists(questionId);
+
+        QuestionPool currQuestion = dao.findOne(questionId);
+
+		if(question.getQuestionText() != null){
+			currQuestion.setQuestionText(question.getQuestionText());
+		}
+		if(question.getMaxCommunicationScore() != null){
+            // TODO Add logic to find questions that use this and scale scores based on new maximum
+			currQuestion.setMaxCommunicationScore(question.getMaxCommunicationScore());
+		}
+		if(question.getMaxKnowledgeScore() != null){
+			currQuestion.setMaxKnowledgeScore(question.getMaxKnowledgeScore());
+		}
+		if(question.getSubject() != null){
+			currQuestion.setSubject(question.getSubject());
+		}
+		if(question.getUseCount() != null){
+			currQuestion.setUseCount(question.getUseCount());
+		}
+		if(question.getDateLastUsed() != null){
+			currQuestion.setDateLastUsed(question.getDateLastUsed());
+		}
+
 		return dao.save(question);
 	}
 
@@ -96,16 +112,10 @@ public class QuestionLogicImpl implements QuestionLogic{
 	@Transactional
 	public QuestionPool updateQuestionUsed(Integer questionId) {
 
-        QuestionPool question;
-
         // verify that question exists in question pool
-        try {
-             question = getQuestionById(questionId);
-        } catch (NotFoundException ex) {
-            throw new ConstraintViolationException(
-                    "Question with id " + questionId + " does not exist",null);
-        }
-        
+        validation.validateQuestionPoolExists(questionId);
+
+        QuestionPool question = getQuestionById(questionId);
         question.setUseCount(question.getUseCount()+1);
         Date date = new Date((new java.util.Date()).getTime());
         question.setDateLastUsed(date);
@@ -115,8 +125,9 @@ public class QuestionLogicImpl implements QuestionLogic{
 //DELETE-----------------------------------
 	@Override
 	@Transactional
-	public QuestionPool deleteQuestion(int id) {
-		QuestionPool question = dao.findOne(id);
+	public QuestionPool deleteQuestion(Integer questionId) {
+        validation.validateQuestionPoolExists(questionId);
+		QuestionPool question = dao.findOne(questionId);
 		dao.delete(question);
 		return question;
 	}

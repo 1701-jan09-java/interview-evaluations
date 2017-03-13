@@ -3,16 +3,13 @@ package com.revature.services;
 import com.revature.domain.Eval;
 import com.revature.domain.EvalComment;
 import com.revature.domain.QuestionEval;
-import com.revature.repositories.BatchRepository;
 import com.revature.repositories.EvalCommentRepository;
 import com.revature.repositories.EvalRepository;
-import com.revature.repositories.PersonRepository;
 import com.revature.validation.JsonValidation;
 import com.revature.validation.exceptions.NotFoundException;
 import java.sql.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,12 +28,6 @@ public class EvalLogicImpl implements EvalLogic {
 	private EvalCommentRepository commentDao;
 
     @Autowired
-    private PersonRepository personDao;
-
-    @Autowired
-    private BatchRepository batchDao;
-
-    @Autowired
     private QuestionLogic questionLogic;
 
     @Autowired
@@ -52,25 +43,7 @@ public class EvalLogicImpl implements EvalLogic {
 		
 		System.out.println(eval);
 		
-		if(eval.getId() != null && eval.getId() != 0) {
-			throw new ConstraintViolationException("Id is automatically generated - do not include in post request", null);
-		}
-		
-		if(eval.getTrainee() == null || eval.getTrainee().getId() == 0){
-			throw new ConstraintViolationException("Missing required field trainee.id (Integer)", null);
-		}
-		
-		if(eval.getWeek() == null || eval.getWeek() == 0){
-			throw new ConstraintViolationException("Missing required field week (Integer)", null);
-		}
-		
-		if(eval.getEvalType() == null || eval.getEvalType().getId() == 0){
-			throw new ConstraintViolationException("Missing required field evalType.id (Integer)", null);
-		}
-		
-		if(eval.getBatch() == null || eval.getBatch().getId() == 0){
-			throw new ConstraintViolationException("Missing required field batch.id (Integer)", null);
-		}
+		validation.validateEvalFields(eval);
 
         Date date = new Date((new java.util.Date()).getTime());
 		eval.setDate(date);
@@ -80,24 +53,17 @@ public class EvalLogicImpl implements EvalLogic {
 		if (eval.getQuestions() != null) {
 			eval.getQuestions().forEach((question) -> {
 				question.setEval(eval);
-				// also set qEval of question comments
+				validation.validateQuestionEvaluationFields(question);
+
+                // also set qEval of question comments
 				if (question.getComments() != null) {
 					question.getComments().forEach((comment) -> {
 						comment.setQuestionEval(question);
 					});
 				}
 
-                if (question.getQuestionPool() == null) {
-                    throw new ConstraintViolationException("Missing required field questionPool.id (Integer) "
-                            + "in questionEval with id " + question.getId(), null);
-                }
-
                 // increment question usage count and update date last used
                 questionLogic.updateQuestionUsed(question.getQuestionPool().getId());
-
-                // verify that scores are valid
-                validation.validateScores(question);
-
 			});
 		}
 		
@@ -122,19 +88,10 @@ public class EvalLogicImpl implements EvalLogic {
 	@Transactional
 	public EvalComment createComment(EvalComment comment, Integer evalId) {
 		
-		if(comment.getId() != null && comment.getId() != 0) {
-			throw new ConstraintViolationException("Id is automatically generated - do not include in post request", null);
-		}
-		
-		if (comment.getCommentText() == null) {
-			throw new ConstraintViolationException("Missing required field commentText (String)", null);
-		}
-		
 		comment.setEval(dao.findOne(evalId));
-		System.out.println(comment.getEval());
-		if (comment.getEval() == null) {
-			throw new ConstraintViolationException("Evaluation " + evalId + " does not exist", null);
-		}
+
+        validation.validateEvalExists(evalId);
+		validation.validateEvalCommentFields(comment);
 		
 		return commentDao.save(comment);
 	}
@@ -156,53 +113,70 @@ public class EvalLogicImpl implements EvalLogic {
 	}
 	
 	@Override
-	public Page<Eval> getEvalsByBatch(Pageable pageable, Integer batchId, String evalType){
+	public Page<Eval> getEvalsByBatch(Pageable pageable, Integer batchId,
+            String evalType){
 
-        checkBatch(batchId);
+        validation.validateBatchExists(batchId);
+        
         Page<Eval> evals;
 		if ("both".equalsIgnoreCase(evalType)) {
 			evals = dao.findAllByBatchId(pageable, batchId);
 		} else {
-			evals = dao.findAllByBatchIdAndEvalTypeDescriptionIgnoreCase(pageable, batchId, evalType);
+			evals = dao.findAllByBatchIdAndEvalTypeDescriptionIgnoreCase(
+                    pageable, batchId, evalType);
 		}
         calculateAllTotalScores(evals);
         return evals;
 	}
 	
 	@Override
-	public Page<Eval> getEvalsByWeek(Pageable pageable, Integer batchId, Integer num, String evalType){
+	public Page<Eval> getEvalsByWeek(Pageable pageable, Integer batchId,
+            Integer num, String evalType){
 
-        checkBatch(batchId);
+        validation.validateBatchExists(batchId);
 
-		if ("both".equalsIgnoreCase(evalType)) {
-			return dao.findAllByBatchIdAndWeek(pageable, batchId, num);
+		Page<Eval> evals;
+        if ("both".equalsIgnoreCase(evalType)) {
+			evals = dao.findAllByBatchIdAndWeek(pageable, batchId, num);
 		} else {
-			return dao.findAllByBatchIdAndWeekAndEvalTypeDescriptionIgnoreCase(pageable, batchId, num, evalType);
+			evals = dao.findAllByBatchIdAndWeekAndEvalTypeDescriptionIgnoreCase(
+                    pageable, batchId, num, evalType);
 		}
+        calculateAllTotalScores(evals);
+        return evals;
 	}
 	
 	@Override
-	public Page<Eval> getEvalsByPerson(Pageable pageable, Integer id, String evalParam) {
+	public Page<Eval> getEvalsByPerson(Pageable pageable, Integer traineeId, String evalParam) {
         
-        checkTrainee(id);
+        validation.validateTraineeExists(traineeId);
 
+        Page<Eval> evals;
 		if ("both".equalsIgnoreCase(evalParam)) {
-			return dao.findAllByTraineeId(pageable, id);
+			evals = dao.findAllByTraineeId(pageable, traineeId);
 		} else {
-			return dao.findAllByTraineeIdAndEvalTypeDescriptionIgnoreCase(pageable, id, evalParam);
+			evals = dao.findAllByTraineeIdAndEvalTypeDescriptionIgnoreCase(
+                    pageable, traineeId, evalParam);
 		}
+        calculateAllTotalScores(evals);
+        return evals;
 	}
 	
 	@Override
-	public Page<Eval> getPersonEvalsByWeek(Pageable pageable, Integer traineeId, Integer num, String evalParam) {
+	public Page<Eval> getPersonEvalsByWeek(Pageable pageable, Integer traineeId,
+            Integer num, String evalParam) {
 
-        checkTrainee(traineeId);
-
+        validation.validateTraineeExists(traineeId);
+        
+        Page<Eval> evals;
 		if ("both".equalsIgnoreCase(evalParam)) {
-			return dao.findAllByTraineeIdAndWeek(pageable, traineeId, num);
+			evals = dao.findAllByTraineeIdAndWeek(pageable, traineeId, num);
 		} else {
-			return dao.findAllByTraineeIdAndWeekAndEvalTypeDescriptionIgnoreCase(pageable, traineeId, num, evalParam);
+			evals = dao.findAllByTraineeIdAndWeekAndEvalTypeDescriptionIgnoreCase(
+                    pageable, traineeId, num, evalParam);
 		}
+        calculateAllTotalScores(evals);
+        return evals;
 	}
 	
 	@Override
@@ -224,18 +198,22 @@ public class EvalLogicImpl implements EvalLogic {
 		Eval currEval = getEvalById(id);
 		
 		if(eval.getBatch() != null){
+            validation.validateBatchExists(eval.getBatch().getId());
 			currEval.setBatch(eval.getBatch());
 		}
 		if(eval.getDate() != null){
 			currEval.setDate(eval.getDate());
 		}
 		if(eval.getEvalType() != null){
+            validation.validateEvalTypeExists(eval.getEvalType().getId());
 			currEval.setEvalType(eval.getEvalType());
 		}
 		if(eval.getTrainee() != null){
+            validation.validateTraineeExists(eval.getTrainee().getId());
 			currEval.setTrainee(eval.getTrainee());
 		}
 		if(eval.getWeek() != null){
+            validation.validateWeek(eval.getWeek());
 			currEval.setWeek(eval.getWeek());
 		}
         
@@ -252,8 +230,6 @@ public class EvalLogicImpl implements EvalLogic {
 		
 		if(comment.getCommentText() != null){
 			currComment.setCommentText(comment.getCommentText());
-		} else {
-			throw new ConstraintViolationException("Missing required field commentText (String)", null);
 		}
 		
 		return commentDao.save(currComment);
@@ -279,18 +255,7 @@ public class EvalLogicImpl implements EvalLogic {
 	}
 
     // private utility methods
-    private void checkTrainee(Integer id) {
-        if (personDao.findOne(id) == null) {
-            throw new ConstraintViolationException("Trainee with id " + id + " does not exist", null);
-        }
-    }
     
-    private void checkBatch(Integer id) {
-        if (batchDao.findOne(id) == null) {
-            throw new ConstraintViolationException("Batch with id " + id + " does not exist", null);
-        }
-    }
-
     private void calculateTotalScores(Eval eval) {
         int communicationScore = 0;
         int knowledgeScore = 0;

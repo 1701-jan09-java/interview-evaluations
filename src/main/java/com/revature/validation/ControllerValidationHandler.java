@@ -15,15 +15,15 @@ public class ControllerValidationHandler {
 	@ExceptionHandler(ConstraintViolationException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody
-	public String processValidationError(ConstraintViolationException ex) {
-		return ex.getMessage();
+	public String processValidationConstraintViolation(ConstraintViolationException ex) {
+		return "Constraint Violation: " + ex.getMessage();
 	  // return status code
 	}
   
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody
-	public String processValidationError2(HttpMessageNotReadableException ex) {
+	public String processValidationUnreadable(HttpMessageNotReadableException ex) {
 		return ex.getMessage();
 	  // return status code
 	}
@@ -31,7 +31,7 @@ public class ControllerValidationHandler {
     @ExceptionHandler(NotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ResponseBody
-	public String processValidationError2(NotFoundException ex) {
+	public String NotFoundError(NotFoundException ex) {
 		return ex.getMessage();
 	  // return status code
 	}

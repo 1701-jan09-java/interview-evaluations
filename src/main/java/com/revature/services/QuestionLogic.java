@@ -14,10 +14,10 @@ public interface QuestionLogic {
 	
 	QuestionPool createQuestion(QuestionPool question);
 
-	QuestionPool updateQuestion(QuestionPool question);
+	QuestionPool updateQuestion(QuestionPool question, Integer id);
 
     QuestionPool updateQuestionUsed(Integer id);
 
-	QuestionPool deleteQuestion(int id);
+	QuestionPool deleteQuestion(Integer id);
 
 }
