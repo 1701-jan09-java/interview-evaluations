@@ -1,11 +1,10 @@
 package com.revature.repositories;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import com.revature.domain.QuestionEval;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.revature.domain.QuestionEval;
-
 @Repository
-public interface QuestionEvalRepository extends PagingAndSortingRepository<QuestionEval, Integer> {
+public interface QuestionEvalRepository extends JpaRepository<QuestionEval, Integer> {
 
 }

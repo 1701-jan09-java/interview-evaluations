@@ -1,15 +1,10 @@
 package com.revature.services;
 
-import com.revature.domain.QuestionComment;
-import com.revature.domain.QuestionEval;
 import com.revature.domain.QuestionPool;
-import com.revature.repositories.EvalRepository;
-import com.revature.repositories.QuestionCommentRepository;
-import com.revature.repositories.QuestionEvalRepository;
 import com.revature.repositories.QuestionRepository;
 import com.revature.repositories.SubjectRepository;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import com.revature.validation.exceptions.NotFoundException;
+import java.sql.Date;
 import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,19 +21,8 @@ public class QuestionLogicImpl implements QuestionLogic{
 	private QuestionRepository dao;
 	
 	@Autowired
-	private QuestionEvalRepository qEvalDao;
-	
-	@Autowired
-	private QuestionCommentRepository commentDao;
-	
-	@Autowired
 	private SubjectRepository subjectDao;
-	
-	@Autowired
-	private EvalRepository evalDao;
-	
-	@PersistenceContext
-    private EntityManager entityManager;
+
 	
 //CREATE-----------------------------------
 	@Override
@@ -68,51 +52,6 @@ public class QuestionLogicImpl implements QuestionLogic{
 		return question;
 	}
 
-	@Override
-	@Transactional
-	public QuestionComment createComment(QuestionComment comment) {
-		return commentDao.save(comment);
-	}
-	
-	@Override
-	@Transactional
-	public QuestionComment createComment(QuestionComment comment, Integer questionId) {
-		comment.setQuestionEval(qEvalDao.findOne(questionId));
-		return commentDao.save(comment);
-	}
-	
-	@Override
-	@Transactional
-	public QuestionEval createQuestionEval(QuestionEval qEval, Integer evalId) {
-		
-		System.out.println(qEval);
-		
-		if(qEval.getCommunicationScore() == null){
-			throw new ConstraintViolationException("Missing required field communicationScore (Integer)", null);
-		}
-		if(qEval.getKnowledgeScore() == null){
-			throw new ConstraintViolationException("Missing required field knowledgeScore (Integer)", null);
-		}
-		if(qEval.getQuestionPool() == null){
-			throw new ConstraintViolationException("Missing required field questionPool (QuestionPool)", null);
-		}
-		
-		qEval.setEval(evalDao.findOne(evalId));
-		qEvalDao.save(qEval);
-		
-		// Set eval property of comments so cascade works
-		if (qEval.getComments() != null) {
-			qEval.getComments().forEach((comment) -> {
-				comment.setQuestionEval(qEval);
-			});
-		}
-		
-		entityManager.flush();
-		entityManager.refresh(qEval);
-		
-		return qEval;
-	}
-
 //RETRIEVE---------------------------------
 	@Override
 	public Page<QuestionPool> getAllQuestions(Pageable pageable, String subject) {
@@ -137,17 +76,13 @@ public class QuestionLogicImpl implements QuestionLogic{
 	
 	@Override
 	public QuestionPool getQuestionById(Integer id) {
-		return dao.findOne(id);
-	}
-	
-	@Override
-	public QuestionComment getCommentById(Integer id) {
-		return commentDao.findOne(id);
-	}
-	
-	@Override
-	public QuestionEval getQuestionEvalById(Integer id) {
-		return qEvalDao.findOne(id);
+        QuestionPool question = dao.findOne(id);
+
+        if (question == null) {
+            throw new NotFoundException("Question with id " + id + " not found");
+        }
+
+		return question;
 	}
 
 //UPDATE-----------------------------------
@@ -156,15 +91,25 @@ public class QuestionLogicImpl implements QuestionLogic{
 	public QuestionPool updateQuestion(QuestionPool question) {
 		return dao.save(question);
 	}
-	
-	@Override
-	public QuestionComment updateComment(QuestionComment comment) {
-		return commentDao.save(comment);
-	}
 
-	@Override
-	public QuestionEval updateQuestionEval(QuestionEval qEval) {
-		return qEvalDao.save(qEval);
+    @Override
+	@Transactional
+	public QuestionPool updateQuestionUsed(Integer questionId) {
+
+        QuestionPool question;
+
+        // verify that question exists in question pool
+        try {
+             question = getQuestionById(questionId);
+        } catch (NotFoundException ex) {
+            throw new ConstraintViolationException(
+                    "Question with id " + questionId + " does not exist",null);
+        }
+        
+        question.setUseCount(question.getUseCount()+1);
+        Date date = new Date((new java.util.Date()).getTime());
+        question.setDateLastUsed(date);
+        return dao.save(question);
 	}
 
 //DELETE-----------------------------------
@@ -174,20 +119,6 @@ public class QuestionLogicImpl implements QuestionLogic{
 		QuestionPool question = dao.findOne(id);
 		dao.delete(question);
 		return question;
-	}
-
-	@Override
-	public QuestionComment deleteComment(int id) {
-		QuestionComment comment = commentDao.findOne(id);
-		commentDao.delete(comment);
-		return comment;
-	}
-
-	@Override
-	public String deleteQuestionEval(int id) {
-		QuestionEval qEval = qEvalDao.findOne(id);
-		qEvalDao.delete(qEval);
-		return "Question Eval: " + qEval.getId() + " - DELETED";
 	}
 
 }

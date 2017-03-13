@@ -1,14 +1,13 @@
 package com.revature.repositories;
 
+import com.revature.domain.Eval;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.revature.domain.Eval;
-import com.revature.domain.EvalComment;
 
 @Repository
-public interface EvalRepository extends PagingAndSortingRepository<Eval, Integer> {
+public interface EvalRepository extends JpaRepository<Eval, Integer> {
 
 	Page<Eval> findAllByBatchId(Pageable pageable, int id);
 	

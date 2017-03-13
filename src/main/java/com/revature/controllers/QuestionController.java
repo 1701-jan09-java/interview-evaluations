@@ -2,22 +2,21 @@ package com.revature.controllers;
 
 import com.revature.domain.QuestionPool;
 import com.revature.services.QuestionLogic;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.*;
 import org.springframework.data.web.SortDefault.SortDefaults;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value="/api/v1/questions")
 public class QuestionController {
 	
 	@Autowired
-	QuestionLogic questionLogic;
+	private QuestionLogic questionLogic;
 	
 	@RequestMapping(method = RequestMethod.GET, value="/{id}")
 	public ResponseEntity<QuestionPool> getQuestionById(@PathVariable("id") Integer id){
@@ -88,7 +87,7 @@ public class QuestionController {
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/delete/{id}")
-	public ResponseEntity<QuestionPool> deleteQuestion(@PathVariable ("id") int id){
+	public ResponseEntity<QuestionPool> deleteQuestion(@PathVariable ("id") Integer id){
 		QuestionPool currQuestion = questionLogic.getQuestionById(id);
 		
 		if(currQuestion == null){
