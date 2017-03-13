@@ -27,8 +27,11 @@ public class BatchController {
 	@Autowired
 	private BatchLogic batchLogic;
 	
-	@Autowired
-	private PersonLogic personLogic;
+	@RequestMapping(method = RequestMethod.GET, value = "batches")
+	public ResponseEntity<Page<Batch>> getBatches(Pageable pageable) {
+		
+		return ResponseEntity.ok(batchLogic.getAllBatches(pageable));
+	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/batches/{id}")
 	public ResponseEntity<Batch> getBatch(@PathVariable("id") String id){

@@ -154,8 +154,8 @@ public class PersonController {
 		
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE, value = "persons")
-	public ResponseEntity<String> deletePerson(int pId){
+	@RequestMapping(method = RequestMethod.DELETE, value = "persons/{pId}")
+	public ResponseEntity<String> deletePerson(@PathVariable("pId") Integer pId){
 	
 			Person pers = personLogic.getPersonById(pId);
 			
@@ -164,7 +164,7 @@ public class PersonController {
 				String message = pers.getFirstName() + " " + pers.getLastName() + " was deleted.";
 				return ResponseEntity.ok(message);
 			} else {
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 			
 			
