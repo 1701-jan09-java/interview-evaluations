@@ -1,14 +1,13 @@
 package com.revature.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.revature.domain.QuestionComment;
 import com.revature.domain.QuestionPool;
-import com.revature.repositories.QuestionCommentRepository;
-import com.revature.repositories.QuestionEvalRepository;
 import com.revature.repositories.QuestionRepository;
-import com.revature.repositories.SubjectRepository;
-import javax.validation.ConstraintViolationException;
+import com.revature.validation.JsonValidation;
+import com.revature.validation.exceptions.NotFoundException;
+import java.sql.Date;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,55 +20,27 @@ public class QuestionLogicImpl implements QuestionLogic{
 	
 	@Autowired
 	private QuestionRepository dao;
-	
-	@Autowired
-	private QuestionEvalRepository qEvalDao;
-	
-	@Autowired
-	private QuestionCommentRepository commentDao;
-	
-	@Autowired
-	private SubjectRepository subjectDao;
+
+    @Autowired
+    private JsonValidation validation;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
 	
 //CREATE-----------------------------------
 	@Override
 	@Transactional
 	public QuestionPool createQuestion(QuestionPool question) {
 		
-		if (question.getMaxCommunicationScore() == null) {
-			throw new ConstraintViolationException("Missing required field maxCommunicationScore (Integer)", null);
-		}
-		
-		if (question.getMaxKnowledgeScore() == null) {
-			throw new ConstraintViolationException("Missing required field maxKnowledgeScore (Integer)", null);
-		}
-		
-		if (question.getQuestionText() == null) {
-			throw new ConstraintViolationException("Missing required field questionText (String)", null);
-		}
-		
-		if (question.getSubject() == null || question.getSubject().getId() == null) {
-			throw new ConstraintViolationException("Missing required field subject.id (Integer)", null);
-		}
+		validation.validateQuestionPoolFields(question);
 		
 		question.setUseCount(0);
-		question = dao.save(question);
-		// retrieve subject text - not auto filled
-		question.getSubject().setSubject(subjectDao.findOne(question.getSubject().getId()).getSubject());
-		return question;
-	}
+        question.setDateLastUsed(null);
+		question = dao.saveAndFlush(question);
+        entityManager.refresh(question);
 
-	@Override
-	@Transactional
-	public QuestionComment createComment(QuestionComment comment) {
-		return commentDao.save(comment);
-	}
-	
-	@Override
-	@Transactional
-	public QuestionComment createComment(QuestionComment comment, Integer questionId) {
-		comment.setQuestionEval(qEvalDao.findOne(questionId));
-		return commentDao.save(comment);
+        return question;
 	}
 
 //RETRIEVE---------------------------------
@@ -96,41 +67,68 @@ public class QuestionLogicImpl implements QuestionLogic{
 	
 	@Override
 	public QuestionPool getQuestionById(Integer id) {
-		return dao.findOne(id);
-	}
-	
-	@Override
-	public QuestionComment getCommentById(Integer id) {
-		return commentDao.findOne(id);
+        QuestionPool question = dao.findOne(id);
+
+        if (question == null) {
+            throw new NotFoundException("Question with id " + id + " not found");
+        }
+
+		return question;
 	}
 
 //UPDATE-----------------------------------
 	@Override
 	@Transactional
-	public QuestionPool updateQuestion(QuestionPool question) {
-		return dao.save(question);
+	public QuestionPool updateQuestion(QuestionPool question, Integer questionId) {
+
+        QuestionPool currQuestion = getQuestionById(questionId);
+
+		if(question.getQuestionText() != null){
+			currQuestion.setQuestionText(question.getQuestionText());
+		}
+		if(question.getMaxCommunicationScore() != null){
+            // TODO Add logic to find questions that use this and scale scores based on new maximum
+			currQuestion.setMaxCommunicationScore(question.getMaxCommunicationScore());
+		}
+		if(question.getMaxKnowledgeScore() != null){
+			currQuestion.setMaxKnowledgeScore(question.getMaxKnowledgeScore());
+		}
+		if(question.getSubject() != null){
+			currQuestion.setSubject(question.getSubject());
+		}
+		if(question.getUseCount() != null){
+			currQuestion.setUseCount(question.getUseCount());
+		}
+		if(question.getDateLastUsed() != null){
+			currQuestion.setDateLastUsed(question.getDateLastUsed());
+		}
+
+		dao.saveAndFlush(currQuestion);
+		entityManager.refresh(currQuestion);
+		return currQuestion;
 	}
-	
-	@Override
-	public QuestionComment updateComment(QuestionComment comment) {
-		return commentDao.save(comment);
+
+    @Override
+	@Transactional
+	public QuestionPool updateQuestionUsed(Integer questionId) {
+		
+		// validate that question exists
+        validation.validateQuestionPoolExists(questionId);
+
+        QuestionPool question = getQuestionById(questionId);
+        question.setUseCount(question.getUseCount()+1);
+        Date date = new Date((new java.util.Date()).getTime());
+        question.setDateLastUsed(date);
+        return dao.save(question);
 	}
 
 //DELETE-----------------------------------
 	@Override
 	@Transactional
-	public QuestionPool deleteQuestion(int id) {
-		QuestionPool question = dao.findOne(id);
+	public String deleteQuestion(Integer questionId) {
+		QuestionPool question = getQuestionById(questionId);
 		dao.delete(question);
-		return question;
-	}
-
-	@Override
-	public QuestionComment deleteComment(int id) {
-		QuestionComment comment = commentDao.findOne(id);
-		commentDao.delete(comment);
-		System.out.println(comment);
-		return comment;
+		return "Question: " + questionId + " - DELETED";
 	}
 
 }

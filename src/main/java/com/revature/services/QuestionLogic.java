@@ -1,7 +1,5 @@
 package com.revature.services;
 
-import com.revature.domain.Eval;
-import com.revature.domain.QuestionComment;
 import com.revature.domain.QuestionPool;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,18 +14,10 @@ public interface QuestionLogic {
 	
 	QuestionPool createQuestion(QuestionPool question);
 
-	QuestionPool updateQuestion(QuestionPool question);
+	QuestionPool updateQuestion(QuestionPool question, Integer id);
 
-	QuestionPool deleteQuestion(int id);
+    QuestionPool updateQuestionUsed(Integer id);
 
-	QuestionComment getCommentById(Integer id);
-
-	QuestionComment createComment(QuestionComment comment);
-	
-	QuestionComment createComment(QuestionComment comment, Integer questionId);
-
-	QuestionComment updateComment(QuestionComment comment);
-
-	QuestionComment deleteComment(int id);
+	String deleteQuestion(Integer id);
 
 }

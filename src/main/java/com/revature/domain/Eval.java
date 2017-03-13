@@ -1,11 +1,10 @@
 package com.revature.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @SuppressWarnings("serial")
@@ -37,12 +36,25 @@ public class Eval implements Serializable{
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="e_batch")
 	private Batch batch;
-	@OneToMany(mappedBy="eval")
+	
+	@OneToMany(mappedBy="eval", cascade = CascadeType.ALL)
 	private List<QuestionEval> questions;
 	
-	@OneToMany(mappedBy="eval")
+	@OneToMany(mappedBy="eval", cascade = CascadeType.ALL)
 	private List<EvalComment> comments;
-
+	
+	@Transient
+	private int evalKnowledgeScore;
+	
+	@Transient
+	private int evalMaxKnowledgeScore;
+	
+	@Transient
+	private int evalCommunicationScore;
+	
+	@Transient
+	private int evalMaxCommunicationScore;
+	
 	public Eval() {/*empty constructor needed*/}
 
 	public Eval(Integer week, Date date, EvalType evalType, Person trainee, Batch batch,
@@ -121,6 +133,38 @@ public class Eval implements Serializable{
 		this.comments = comments;
 	}
 
+	public int getEvalKnowledgeScore() {
+		return evalKnowledgeScore;
+	}
+
+	public void setEvalKnowledgeScore(int evalKnowledgeScore) {
+		this.evalKnowledgeScore = evalKnowledgeScore;
+	}
+
+	public int getEvalMaxKnowledgeScore() {
+		return evalMaxKnowledgeScore;
+	}
+
+	public void setEvalMaxKnowledgeScore(int evalMaxKnowledgeScore) {
+		this.evalMaxKnowledgeScore = evalMaxKnowledgeScore;
+	}
+
+	public int getEvalCommunicationScore() {
+		return evalCommunicationScore;
+	}
+
+	public void setEvalCommunicationScore(int evalCommunicationScore) {
+		this.evalCommunicationScore = evalCommunicationScore;
+	}
+
+	public int getEvalMaxCommunicationScore() {
+		return evalMaxCommunicationScore;
+	}
+
+	public void setEvalMaxCommunicationScore(int evalMaxCommunicationScore) {
+		this.evalMaxCommunicationScore = evalMaxCommunicationScore;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="ie_question_eval")
 public class QuestionEval implements Serializable {
@@ -30,7 +31,7 @@ public class QuestionEval implements Serializable {
 	@JoinColumn(name="qe_qpid")
 	private QuestionPool questionPool;
 	
-	@OneToMany(mappedBy="questionEval")
+	@OneToMany(mappedBy="questionEval", cascade = CascadeType.ALL)
 	private List<QuestionComment> comments;
 	
 	public QuestionEval(){}
@@ -140,7 +141,7 @@ public class QuestionEval implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "QuestionEval{" + "id=" + id + ", communicationScore=" + communicationScore + ", knowledgeScore=" + knowledgeScore + ", eval.id=" + eval.getId() + ", questionPool=" + questionPool + ", comments=" + comments + '}';
+		return "QuestionEval{" + "id=" + id + ", communicationScore=" + communicationScore + ", knowledgeScore=" + knowledgeScore + ", questionPool=" + questionPool + ", comments=" + comments + '}';
 	}	
 	
 }
