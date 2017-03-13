@@ -1,6 +1,7 @@
 package com.revature.controllers;
 
 import com.revature.domain.Eval;
+import com.revature.domain.EvalComment;
 import com.revature.services.EvalLogic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,56 +18,87 @@ public class EvalController {
 	@Autowired
 	private EvalLogic evalLogic;
 
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
-	public ResponseEntity<Eval> getEvaluation(@PathVariable("id") Integer id) {
-
-		return ResponseEntity.ok(evalLogic.getEvalById(id));
+	@RequestMapping(method = RequestMethod.GET, value = "/{evalId}")
+	public ResponseEntity<Eval> getEvaluation(@PathVariable Integer evalId) {
+		return ResponseEntity.ok(evalLogic.getEvalById(evalId));
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/batches/{id}/week/{num}")
+	@RequestMapping(method = RequestMethod.GET, value = "/batches/{batchId}/week/{weekNumber}")
 	public ResponseEntity<Page<Eval>> getEvalsByWeek(
-			@PathVariable("id") Integer id
-			, @PathVariable("num") Integer num
-			, @RequestParam(defaultValue="both") String type
+			@PathVariable Integer batchId
+			, @PathVariable Integer weekNumber
+			, @RequestParam(defaultValue="both") String evalType
 			, @PageableDefault(size = 10)
 				@SortDefault.SortDefaults({@SortDefault(sort = "trainee.id"), @SortDefault(sort = "evalType")})
 				Pageable pageable
 	){
-		return ResponseEntity.ok(evalLogic.getEvalsByWeek(pageable,id,num,type));
+		return ResponseEntity.ok(evalLogic.getEvalsByWeek(pageable,batchId,weekNumber,evalType));
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/batches/{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/batches/{batchId}")
 	public ResponseEntity<Page<Eval>> getEvalsByBatch(
-			@PathVariable("id") Integer id
-			, @RequestParam(defaultValue="both") String type
+			@PathVariable Integer batchId
+			, @RequestParam(defaultValue="both") String evalType
 			, @PageableDefault(size = 10)
 				@SortDefault.SortDefaults({@SortDefault(sort = "trainee.id"), @SortDefault(sort = "evalType")})
 				Pageable pageable
 	){
-		return ResponseEntity.ok(evalLogic.getEvalsByBatch(pageable,id,type));
+		return ResponseEntity.ok(evalLogic.getEvalsByBatch(pageable,batchId,evalType));
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/trainees/{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/trainees/{traineeId}")
 	public ResponseEntity<Page<Eval>> getEvalsByPerson(
-			@PathVariable("id") Integer id
-			, @RequestParam(defaultValue="both") String type
+			@PathVariable Integer traineeId
+			, @RequestParam(defaultValue="both") String evalType
 			, @PageableDefault(size = 10)
 				@SortDefault.SortDefaults({@SortDefault(sort = "trainee.id"), @SortDefault(sort = "evalType")})
 				Pageable pageable
 	){
-		return ResponseEntity.ok(evalLogic.getEvalsByPerson(pageable,id,type));
+		return ResponseEntity.ok(evalLogic.getEvalsByPerson(pageable,traineeId,evalType));
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/trainees/{id}/week/{num}")
+	@RequestMapping(method = RequestMethod.GET, value = "/trainees/{traineeId}/week/{weekNumber}")
 	public ResponseEntity<Page<Eval>> getTraineeEvalsByWeek(
-			@PathVariable("id") Integer id
-			, @PathVariable("num") Integer num
-			, @RequestParam(defaultValue="both") String type
+			@PathVariable Integer traineeId
+			, @PathVariable Integer weekNumber
+			, @RequestParam(defaultValue="both") String evalType
 			, @PageableDefault(size = 10)
 				@SortDefault.SortDefaults({@SortDefault(sort = "trainee.id"), @SortDefault(sort = "evalType")})
 				Pageable pageable
 	){
-		return ResponseEntity.ok(evalLogic.getPersonEvalsByWeek(pageable,id,num,type));
+		return ResponseEntity.ok(evalLogic.getPersonEvalsByWeek(pageable,traineeId,weekNumber,evalType));
 	}
 	
+//EVAL CUD---------------------------------------------
+	@RequestMapping(method = RequestMethod.POST, value = "")
+	public ResponseEntity<Eval> addEval(@RequestBody Eval eval){
+		return ResponseEntity.ok(evalLogic.createEval(eval));
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "{evalId}")
+	public ResponseEntity<Eval> updateEval(@RequestBody Eval eval, @PathVariable Integer evalId){
+		return ResponseEntity.ok(evalLogic.updateEval(eval, evalId));
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "{evalId}")
+	public ResponseEntity<String> deleteEval(@PathVariable Integer evalId){
+		return ResponseEntity.ok(evalLogic.deleteEval(evalId));
+	}
+	
+	
+//COMMENT CUD------------------------------------------
+	@RequestMapping(method = RequestMethod.POST, value = "{evalId}/comments")
+	public ResponseEntity<EvalComment> addEvalComment(@RequestBody EvalComment comment, @PathVariable Integer evalId){
+		return ResponseEntity.ok(evalLogic.createComment(comment, evalId));
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "{evalId}/comments/{commentId}")
+	public ResponseEntity<EvalComment> updateEvalComments(@RequestBody EvalComment comment, @PathVariable Integer commentId){
+		return ResponseEntity.ok(evalLogic.updateComment(comment, commentId));
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "{evalId}/comments/{commentId}")
+	public ResponseEntity<String> deleteEvalComment(@PathVariable Integer commentId){
+		return ResponseEntity.ok(evalLogic.deleteComment(commentId));
+	}
 }

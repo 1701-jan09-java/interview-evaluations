@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.revature.domain.Batch;
+import com.revature.domain.Person;
 
 public interface BatchLogic {
 	
@@ -13,6 +14,6 @@ public interface BatchLogic {
 	Page<Batch> getAllBatches(Pageable pageable);
 	void createBatch(Batch batchName);
 	void updateBatch(Batch batchName);
-	
+	Page<Person> getAllPeopleByBatchId(Pageable pageable, Integer Id);
 
 }

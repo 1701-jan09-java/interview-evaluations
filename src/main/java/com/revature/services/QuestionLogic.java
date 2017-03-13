@@ -9,4 +9,15 @@ public interface QuestionLogic {
 	Page<QuestionPool> getAllQuestions(Pageable pageable, String subject);
 	
 	Page<QuestionPool> searchQuestions(Pageable pageable, String text, String subject);
+	
+	QuestionPool getQuestionById(Integer id);
+	
+	QuestionPool createQuestion(QuestionPool question);
+
+	QuestionPool updateQuestion(QuestionPool question, Integer id);
+
+    QuestionPool updateQuestionUsed(Integer id);
+
+	String deleteQuestion(Integer id);
+
 }

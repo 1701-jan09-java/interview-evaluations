@@ -5,6 +5,7 @@ import java.sql.Date;
 
 import javax.persistence.*;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="ie_question_pool")
 public class QuestionPool implements Serializable {
@@ -14,23 +15,23 @@ public class QuestionPool implements Serializable {
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="questionPoolSeq")
 	@SequenceGenerator(allocationSize=1, name="questionPoolSeq", sequenceName="question_pool_seq")
 	private Integer id;
-	
+
 	@Column(name="qp_question_text")
 	private String questionText;
-	
+
 	@Column(name="qp_max_communication_score")
 	private Integer maxCommunicationScore;
-	
+
 	@Column(name="qp_max_knowledge_score")
 	private Integer maxKnowledgeScore;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="qp_sid")
 	private Subject subject;
-	
+
 	@Column(name="qp_count")
 	private Integer useCount;
-	
+
 	@Column(name="qp_last_date_used")
 	private Date dateLastUsed;
 	
@@ -79,11 +80,11 @@ public class QuestionPool implements Serializable {
 		this.maxKnowledgeScore = maxKnowledgeScore;
 	}
 
-	public Subject getSubjectId() {
+	public Subject getSubject() {
 		return subject;
 	}
 
-	public void setSubjectId(Subject subject) {
+	public void setSubject(Subject subject) {
 		this.subject = subject;
 	}
 
