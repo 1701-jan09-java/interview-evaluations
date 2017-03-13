@@ -1,10 +1,12 @@
 package com.revature.services;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolationException;
 
-import org.apache.log4j.BasicConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,11 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.revature.domain.Batch;
 import com.revature.domain.Person;
 import com.revature.domain.PersonRole;
-import com.revature.log.IntEvalLogger;
 import com.revature.repositories.PersonRepository;
+import com.revature.repositories.PersonRoleRepository;
 
 
 @Service
@@ -25,6 +26,9 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Autowired
 	private PersonRepository dao;
+	
+	@Autowired
+	private PersonRoleRepository daoRole;
 	
 	@Override
 	public Page<Person> getPersonByFirstName(Pageable pageable, String firstName) {
@@ -90,20 +94,82 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Override
 	public Page<Person> getByFirstNameAndLastName(Pageable pageable, String firstName, String lastName) {
-		return dao.findAllByFirstNameAndLastNameIgnoreCase(pageable, firstName, lastName);
+		return dao.findAllByFirstNameAndLastNameAllIgnoreCase(pageable, firstName, lastName);
 	}
 
 	@Override
-
 	public Person createPerson(Person person) {
+		
+		List<Integer> roleIds = new ArrayList<>();
+		List<PersonRole> roleList = daoRole.findAll();
+		System.out.println(roleList);
+				
+		Iterator<PersonRole> iterator = roleList.iterator();
+		
+		while(iterator.hasNext()) {
+			PersonRole role = iterator.next();
+			roleIds.add(role.getId());
+		}
+		
+		System.out.println(roleIds);
+		
+		
+		if (person.getFirstName() == null) {
+			throw new ConstraintViolationException("Missing required field firstName (String)", null);
+		}
+		
+		if (person.getLastName() == null) {
+			throw new ConstraintViolationException("Missing required field lastName (String)", null);
+		}
+		if (person.getPersonRole() == null) {
+			throw new ConstraintViolationException("Missing required field PersonRole (PersonRole)", null);
+		}
+		
+		boolean isValid = false;
+		
 
+		for (Integer roll : roleIds) {
+				
+			if (person.getPersonRole().getId() == roll) {
+					
+				isValid = true;
+			} 
+				
+		}	
+		
+		if (!isValid) {
+			
+			throw new ConstraintViolationException("Invalid field personRole (PersonRole)", null);
+		}		
+				
 		dao.save(person);
 		return person;
 	}
 
 	@Override
 	public Page<Person> getAllPersonsByPersonRole(Pageable pageable, PersonRole personRole) {
+		
+		if(personRole == null){
+			throw new ConstraintViolationException("Invalid PersonRole Field", null);
+		}
+		
 		return dao.findAllByPersonRole(pageable, personRole);
+	}
+
+	@Override
+	public Page<Person> getPersonsByFirstnameAndPersonRole(Pageable pageable, String firstname, PersonRole personRole) {
+		return dao.findAllByFirstNameIgnoreCaseAndPersonRole(pageable, firstname, personRole);
+	}
+
+	@Override
+	public Page<Person> getPersonsByLastnameAndPersonRole(Pageable pageable, String lastname, PersonRole personRole) {
+		return dao.findAllByLastNameIgnoreCaseAndPersonRole(pageable, lastname, personRole);
+	}
+
+	@Override
+	public Page<Person> getPersonsByFirstnameAndLastnameAndPersonRole(Pageable pageable, String firstname,
+			String lastname, PersonRole personRole) {
+		return dao.findAllByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndPersonRole(pageable, firstname, lastname, personRole);
 	}
 
 }
