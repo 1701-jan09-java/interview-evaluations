@@ -161,7 +161,6 @@ public class PersonController {
 			
 			if (pers != null) {
 				personLogic.deletePerson(pers);
-//				String message = pers.getFirstName() + " " + pers.getLastName() + " was deleted.";
 				return ResponseEntity.ok(pers);
 			} else {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
