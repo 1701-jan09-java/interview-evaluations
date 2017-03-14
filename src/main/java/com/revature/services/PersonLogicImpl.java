@@ -6,6 +6,8 @@ import com.revature.domain.PersonRole;
 import com.revature.repositories.PersonRepository;
 import com.revature.validation.JsonValidation;
 import com.revature.validation.exceptions.NotFoundException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,9 @@ public class PersonLogicImpl implements PersonLogic {
 	
 	@Autowired
     private JsonValidation validation;
+	
+	@PersistenceContext
+    private EntityManager entityManager;
 	
 	@Override
 	public Page<Person> getPersonByFirstName(Pageable pageable, String firstName) {
@@ -56,10 +61,20 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Override
 	public Person updatePerson(Person p) {
-		validation.validatePersonFields(p);
-		getPersonById(p.getId());
-		dao.save(p);
-		return p;
+		Person updatedPerson = getPersonById(p.getId());
+		if (p.getFirstName() != null) {
+			updatedPerson.setFirstName(p.getFirstName());
+		}
+		if (p.getLastName() != null) {
+			updatedPerson.setLastName(p.getLastName());
+		}
+		if (p.getPersonRole() != null) {
+			validation.validatePersonRoleExists(p.getPersonRole().getId());
+			updatedPerson.setPersonRole(p.getPersonRole());
+		}
+		dao.saveAndFlush(updatedPerson);
+		entityManager.refresh(updatedPerson);
+		return updatedPerson;
 	}
 	
 
@@ -78,7 +93,8 @@ public class PersonLogicImpl implements PersonLogic {
 	public Person createPerson(Person person) {
 		validation.validateIdNotSpecified(person.getId());
 		validation.validatePersonFields(person);				
-		dao.save(person);
+		dao.saveAndFlush(person);
+		entityManager.refresh(person);
 		return person;
 	}
 

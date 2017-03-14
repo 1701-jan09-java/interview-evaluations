@@ -110,10 +110,10 @@ public class PersonController {
 		return ResponseEntity.ok(personLogic.createPerson(newPerson));
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value = "persons/{personId")
+	@RequestMapping(method = RequestMethod.PUT, value = "persons/{personId}")
 	public ResponseEntity<Person> modifyPerson(@RequestBody Person updatedPerson, @PathVariable Integer personId){
-		personLogic.updatePerson(updatedPerson);
-		return ResponseEntity.ok(updatedPerson);
+		updatedPerson.setId(personId);
+		return ResponseEntity.ok(personLogic.updatePerson(updatedPerson));
 				
 	}
 	
