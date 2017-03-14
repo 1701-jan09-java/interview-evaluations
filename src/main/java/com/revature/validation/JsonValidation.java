@@ -1,5 +1,11 @@
 package com.revature.validation;
 
+
+import com.revature.domain.Batch;
+import com.revature.domain.Eval;
+import com.revature.domain.EvalComment;
+import com.revature.domain.Person;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +20,7 @@ import com.revature.domain.Eval;
 import com.revature.domain.EvalComment;
 import com.revature.domain.Person;
 import com.revature.domain.PersonRole;
+
 import com.revature.domain.QuestionComment;
 import com.revature.domain.QuestionEval;
 import com.revature.domain.QuestionPool;
@@ -209,6 +216,16 @@ public class JsonValidation {
                     + " [QuestionPool id: " + qp.getId() + "]", null);
         }
     }
+	
+	public void validateBatchFields(Batch batch) {
+		
+		validateIdNotSpecified(batch.getId());
+		
+		if (batch.getName() == null) {
+			throw new ConstraintViolationException("Missing required field "
+                    + "name (String)", null);
+		}
+	}
 
     public void validateIdNotSpecified(Integer id) {
         if(id != null && id != 0) {
@@ -332,5 +349,25 @@ public class JsonValidation {
 		}
 		return p;
     }
+
+	public void validateTraineeInBatch(Integer personId, Integer batchId) {
+		Person person = personDao.findOne(personId);
+		Batch batch = batchDao.findOne(batchId);
+        if (!batch.getPersons().contains(person)) {
+			throw new ConstraintViolationException("Trainee with id " + personId
+                    + " is not in batch " + batchId, null); 
+		}
+	}
+	
+	public void validateIntegerArray(Integer[] integers) {
+		if (integers.length == 0) {
+			throw new ConstraintViolationException("Array can not be empty",null);
+		} 
+		for (Integer integer : integers) {
+			if (integer == null) {
+				throw new ConstraintViolationException("Id can not be null",null);
+			}
+		}
+	}
 
 }

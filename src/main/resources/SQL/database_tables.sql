@@ -108,3 +108,4 @@ CREATE SEQUENCE person_batch_seq
 START WITH 100
 INCREMENT BY 1;
  
+ALTER TABLE ONLY ie_person_batch ALTER COLUMN join_id SET DEFAULT nextval('person_batch_seq');
