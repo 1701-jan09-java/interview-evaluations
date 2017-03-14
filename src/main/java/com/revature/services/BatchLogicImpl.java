@@ -5,7 +5,8 @@ import com.revature.domain.Person;
 import com.revature.repositories.BatchRepository;
 import com.revature.validation.JsonValidation;
 import com.revature.validation.exceptions.NotFoundException;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,25 @@ public class BatchLogicImpl implements BatchLogic {
 		return "Batch: " + id + " - DELETED";
 	}
 	
+	@Override
+	public Batch removePersonsFromBatch(Integer batchId, Integer[] personIds) {
+		
+		validation.validateIntegerArray(personIds);
+		
+		Batch batch = getBatchById(batchId);
+		
+		Set<Person> persons = batch.getPersons();
+		
+		for (Integer personId : personIds) {
+			validation.validateTraineeInBatch(personId, batchId);
+			persons.remove(personLogic.getPersonById(personId));
+		}
+
+		dao.saveAndFlush(batch);
+		entityManager.refresh(batch);
+		
+		return batch;
+	}
 
 	@Override
 	public Page<Batch> getAllBatches(Pageable pageable) {
@@ -69,8 +89,31 @@ public class BatchLogicImpl implements BatchLogic {
 
 	@Override
 	public Batch createBatch(Batch batch) {
+		
 		validation.validateBatchFields(batch);
-		dao.save(batch);
+		
+		dao.saveAndFlush(batch);
+		entityManager.refresh(batch);
+		return batch;
+	}
+	
+	@Override
+	public Batch addPersonsToBatch(Integer batchId, Integer[] personIds) {
+		
+		validation.validateIntegerArray(personIds);
+		
+		Batch batch = getBatchById(batchId);
+		
+		Set<Person> persons = batch.getPersons();
+		
+		for (Integer personId : personIds) {
+			validation.validateTraineeExists(personId);
+			persons.add(personLogic.getPersonById(personId));
+		}
+
+		dao.saveAndFlush(batch);
+		entityManager.refresh(batch);
+		
 		return batch;
 	}
 
@@ -79,12 +122,12 @@ public class BatchLogicImpl implements BatchLogic {
 		
 		Batch batch = getBatchById(id);
 		
-		if(batchName.getName() != null || batchName.getName().equals("")){
+		if(batchName.getName() != null && !batchName.getName().equals("")){
 			batch.setName(batchName.getName());
 		}
 		
 		if(batchName.getPersons() != null){
-			// add the things
+			batch.setPersons(batchName.getPersons());
 		}
 		
 		
@@ -98,8 +141,9 @@ public class BatchLogicImpl implements BatchLogic {
 		
 		Batch batch = getBatchById(id);
 		
-		List<Person> personList = batch.getPersons();
-		Page<Person> personPage = new PageImpl<Person>(personList, pageable, personList.size());
+		Set<Person> personList = batch.getPersons();
+		Page<Person> personPage = new PageImpl<Person>((new ArrayList(personList)),
+				pageable, personList.size());
 		return personPage;
 	}
 

@@ -1,14 +1,10 @@
 package com.revature.controllers;
 
 import com.revature.domain.Batch;
-import com.revature.domain.Person;
 import com.revature.services.BatchLogic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.SortDefault;
-import org.springframework.data.web.SortDefault.SortDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,16 +26,16 @@ public class BatchController {
 		return ResponseEntity.ok(batchLogic.getAllBatches(pageable));
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/batches/{id}")
-	public ResponseEntity<Batch> getBatch(@PathVariable("id") String id){
+	@RequestMapping(method = RequestMethod.GET, value = "/batches/{batchId}")
+	public ResponseEntity<Batch> getBatch(@PathVariable String batchId){
 
 		Batch batch;
 
 		try{
-			int value = Integer.parseInt(id);
+			int value = Integer.parseInt(batchId);
 			batch = batchLogic.getBatchById(value);
 		} catch(NumberFormatException e){
-			batch = batchLogic.getBatchByName(id);
+			batch = batchLogic.getBatchByName(batchId);
 		}
 
 		return ResponseEntity.ok(batch);
@@ -60,11 +56,14 @@ public class BatchController {
 		return ResponseEntity.ok(batchLogic.createBatch(newBatch));
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/batches/{id}/members")
-	public ResponseEntity<Page<Person>> getAllBatchMembers(@PageableDefault(size=10) 
-		@SortDefaults({@SortDefault(sort="lastName"), @SortDefault(sort="firstName")}) 
-		Pageable pageable, @PathVariable("id") Integer id){
-		return ResponseEntity.ok(batchLogic.getAllPeopleByBatchId(pageable, id));
+	@RequestMapping(method = RequestMethod.POST, value = "/batches/{batchId}/members")
+	public ResponseEntity<Batch> addMembersToBatch(@PathVariable Integer batchId, @RequestBody Integer[] personIds){
+		return ResponseEntity.ok(batchLogic.addPersonsToBatch(batchId, personIds));
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "/batches/{batchId}/members")
+	public ResponseEntity<Batch> removeMembersFromBatch(@PathVariable Integer batchId, @RequestBody Integer[] personIds){
+		return ResponseEntity.ok(batchLogic.removePersonsFromBatch(batchId, personIds));
 	}
 		
 	

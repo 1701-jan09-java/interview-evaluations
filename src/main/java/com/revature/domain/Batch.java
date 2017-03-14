@@ -1,11 +1,9 @@
 package com.revature.domain;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,8 +12,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="ie_batch")
@@ -32,9 +28,9 @@ public class Batch {
 	@Column(name="b_name")
 	private String name;
 	
-	@ManyToMany(cascade=CascadeType.PERSIST, fetch= FetchType.EAGER)
+	@ManyToMany
 	@JoinTable(name="ie_person_batch", joinColumns=@JoinColumn(name="batch_id"), inverseJoinColumns=@JoinColumn(name="person_id"))
-	private List<Person> persons;
+	private Set<Person> persons;
 
 	public Batch() {}
 		
@@ -43,11 +39,11 @@ public class Batch {
 		this.name = name;
 	}
 	
-	public List<Person> getPersons(){
+	public Set<Person> getPersons(){
 		return persons;
 	}
 	
-	public void setPersons(List<Person> people){
+	public void setPersons(Set<Person> people){
 		this.persons = people;
 	}
 

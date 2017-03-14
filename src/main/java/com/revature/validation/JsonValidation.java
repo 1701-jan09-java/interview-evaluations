@@ -3,6 +3,7 @@ package com.revature.validation;
 import com.revature.domain.Batch;
 import com.revature.domain.Eval;
 import com.revature.domain.EvalComment;
+import com.revature.domain.Person;
 import com.revature.domain.QuestionComment;
 import com.revature.domain.QuestionEval;
 import com.revature.domain.QuestionPool;
@@ -269,5 +270,25 @@ public class JsonValidation {
                     "Question with id " + qpId + " does not exist",null);
         }
     }
+
+	public void validateTraineeInBatch(Integer personId, Integer batchId) {
+		Person person = personDao.findOne(personId);
+		Batch batch = batchDao.findOne(batchId);
+        if (!batch.getPersons().contains(person)) {
+			throw new ConstraintViolationException("Trainee with id " + personId
+                    + " is not in batch " + batchId, null); 
+		}
+	}
+	
+	public void validateIntegerArray(Integer[] integers) {
+		if (integers.length == 0) {
+			throw new ConstraintViolationException("Array can not be empty",null);
+		} 
+		for (Integer integer : integers) {
+			if (integer == null) {
+				throw new ConstraintViolationException("Id can not be null",null);
+			}
+		}
+	}
 
 }
