@@ -304,11 +304,11 @@ public class JsonValidation {
 			roleIds.add(role.getId());
 		}
 		
-		if (person.getFirstName() == null) {
+		if (person.getFirstName() == null || "".equals(person.getFirstName())) {
 			throw new ConstraintViolationException("Missing required field firstName (String)", null);
 		}
 		
-		if (person.getLastName() == null) {
+		if (person.getLastName() == null || "".equals(person.getLastName())) {
 			throw new ConstraintViolationException("Missing required field lastName (String)", null);
 		}
 		if (person.getPersonRole() == null) {
