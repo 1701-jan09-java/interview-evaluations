@@ -1,18 +1,17 @@
 package com.revature.services;
 
-import javax.persistence.EntityNotFoundException;
 
+import com.revature.domain.Person;
+import com.revature.domain.PersonRole;
+import com.revature.repositories.PersonRepository;
+import com.revature.validation.JsonValidation;
+import com.revature.validation.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.revature.domain.Person;
-import com.revature.domain.PersonRole;
-import com.revature.repositories.PersonRepository;
-import com.revature.validation.JsonValidation;
 
 
 
@@ -41,7 +40,13 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Override
 	public Person getPersonById(int id)  {
-		return validation.validatePersonById(id);
+		Person person = dao.findOne(id);
+		
+		if (person == null) {
+            throw new NotFoundException("Person with id " + id + " does not exist");
+        }
+		
+		return person;
 	}
 
 	@Override
@@ -51,6 +56,8 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Override
 	public Person updatePerson(Person p) {
+		validation.validatePersonFields(p);
+		getPersonById(p.getId());
 		dao.save(p);
 		return p;
 	}
@@ -69,6 +76,7 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Override
 	public Person createPerson(Person person) {
+		validation.validateIdNotSpecified(person.getId());
 		validation.validatePersonFields(person);				
 		dao.save(person);
 		return person;
