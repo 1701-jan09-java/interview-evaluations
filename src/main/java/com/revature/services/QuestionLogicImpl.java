@@ -128,7 +128,7 @@ public class QuestionLogicImpl implements QuestionLogic{
 	public String deleteQuestion(Integer questionId) {
 		QuestionPool question = getQuestionById(questionId);
 		dao.delete(question);
-		return "Question: " + questionId + " - DELETED";
+		return "{\"text\":\"Question: " + questionId + " - DELETED\"}";
 	}
 
 }

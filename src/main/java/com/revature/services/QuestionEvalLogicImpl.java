@@ -153,13 +153,13 @@ public class QuestionEvalLogicImpl implements QuestionEvalLogic{
 	public String deleteQuestionEval(Integer qEvalId) {
         QuestionEval qEval = getQuestionEvalById(qEvalId);
         dao.delete(qEval);
-		return "Question Eval: " + qEvalId + " - DELETED";
+		return "{\"text\":\"Question Eval: " + qEvalId + " - DELETED\"}";
 	}
 
 	@Override
 	public String deleteComment(Integer qCommentId) {
         QuestionComment qComment = getCommentById(qCommentId);
 		commentDao.delete(qComment);
-		return "Question Comment: " + qCommentId + " - DELETED";
+		return "{\"text\":\"Question Comment: " + qCommentId + " - DELETED\"}";
 	}
 }
