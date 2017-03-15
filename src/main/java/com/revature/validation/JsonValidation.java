@@ -5,22 +5,7 @@ import com.revature.domain.Batch;
 import com.revature.domain.Eval;
 import com.revature.domain.EvalComment;
 import com.revature.domain.Person;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.persistence.EntityNotFoundException;
-import javax.validation.ConstraintViolationException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.revature.domain.Eval;
-import com.revature.domain.EvalComment;
-import com.revature.domain.Person;
 import com.revature.domain.PersonRole;
-
 import com.revature.domain.QuestionComment;
 import com.revature.domain.QuestionEval;
 import com.revature.domain.QuestionPool;
@@ -33,6 +18,9 @@ import com.revature.repositories.QuestionCommentRepository;
 import com.revature.repositories.QuestionEvalRepository;
 import com.revature.repositories.QuestionRepository;
 import com.revature.repositories.SubjectRepository;
+import javax.validation.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class JsonValidation {
@@ -226,7 +214,25 @@ public class JsonValidation {
                     + "name (String)", null);
 		}
 	}
-
+	
+	public void validatePersonFields(Person person){
+		
+		if (person.getFirstName() == null || "".equals(person.getFirstName())) {
+			throw new ConstraintViolationException("Missing required field firstName (String)", null);
+		}
+		
+		if (person.getLastName() == null || "".equals(person.getLastName())) {
+			throw new ConstraintViolationException("Missing required field lastName (String)", null);
+		}
+		
+		if (person.getPersonRole() == null) {
+			throw new ConstraintViolationException("Missing required field personRole.id (Integer)", null);
+		}
+		
+		validatePersonRoleExists(person.getPersonRole().getId());
+    	
+    }
+    
     public void validateIdNotSpecified(Integer id) {
         if(id != null && id != 0) {
 			throw new ConstraintViolationException("Id is automatically "
@@ -289,65 +295,27 @@ public class JsonValidation {
                     "Question with id " + qpId + " does not exist",null);
         }
     }
-    
-    public void validatePersonFields(Person person){
-    	
-    	List<Integer> roleIds = new ArrayList<>();
-		List<PersonRole> roleList = personRoleDao.findAll();
-		System.out.println(roleList);
-		
-		// iterate thru the list of possible personRoles
-		// will be used with for loop below
-		Iterator<PersonRole> iterator = roleList.iterator();
-		while(iterator.hasNext()) {
-			PersonRole role = iterator.next();
-			roleIds.add(role.getId());
+
+	public void validatePersonRoleExists(Integer id) {
+		if (personRoleDao.findOne(id) == null) {
+			throw new ConstraintViolationException("PersonRole with id " 
+					+ id + "does not exist", null);
 		}
-		
-		if (person.getFirstName() == null || "".equals(person.getFirstName())) {
-			throw new ConstraintViolationException("Missing required field firstName (String)", null);
-		}
-		
-		if (person.getLastName() == null || "".equals(person.getLastName())) {
-			throw new ConstraintViolationException("Missing required field lastName (String)", null);
-		}
-		if (person.getPersonRole() == null) {
-			throw new ConstraintViolationException("Missing required field PersonRole (PersonRole)", null);
-		}
-		
-		// make sure the inputted role is valid role
-		// by matching the personrole id with list values - must match one
-		boolean isValid = false;
-		for (Integer roll : roleIds) {
-				if (person.getPersonRole().getId() == roll) {
-				isValid = true;
-			} 	
-		}	
-		if (!isValid) {
-			throw new ConstraintViolationException("Invalid field personRole (PersonRole)", null);
-		}
-    	
-    }
-    
+	}
+	
     public void validatePersonRole(PersonRole personRole){
     	
     	if(personRole == null){
 			throw new ConstraintViolationException("Invalid PersonRole Field", null);
-		}
+		}		
     }
+	
     
-    public Person validatePersonById(int id){
-    	Person p = null;
-		
-		try {
-			
-			p = personDao.findOne(id);
-			
-		} catch (EntityNotFoundException e) {
-			
-			return p;
-		}
-		return p;
+    public void validatePersonById(int id){
+        if (personDao.findOne(id) == null) {
+            throw new ConstraintViolationException(
+                    "Person with id " + id + " does not exist",null);
+        }
     }
 
 	public void validateTraineeInBatch(Integer personId, Integer batchId) {
