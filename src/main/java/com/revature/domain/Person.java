@@ -1,7 +1,8 @@
 package com.revature.domain;
 
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,9 +15,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="ie_person")
@@ -40,8 +38,8 @@ public class Person  {
 	private PersonRole personRole;
 	
 	@JsonIgnore
-	@ManyToMany(cascade=CascadeType.ALL, mappedBy="persons")
-	private List<Batch> batches;
+	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="persons")
+	private Set<Batch> batches;
 	
 	public Person() {/*empty constructor needed*/}
 
@@ -52,11 +50,11 @@ public class Person  {
 		this.personRole = personRole;
 	}
 	
-	public List<Batch> getBatches(){
+	public Set<Batch> getBatches(){
 		return batches;
 	}
 	
-	public void setBatches(List<Batch> batches){
+	public void setBatches(Set<Batch> batches){
 		this.batches = batches;
 	}
 

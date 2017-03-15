@@ -1,11 +1,10 @@
 package com.revature.repositories;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import com.revature.domain.EvalComment;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.revature.domain.EvalComment;
-
 @Repository
-public interface EvalCommentRepository extends PagingAndSortingRepository<EvalComment, Integer>{
+public interface EvalCommentRepository extends JpaRepository<EvalComment, Integer>{
 	
 }

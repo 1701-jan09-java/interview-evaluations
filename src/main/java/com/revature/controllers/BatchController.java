@@ -1,25 +1,19 @@
 package com.revature.controllers;
 
+import com.revature.domain.Batch;
+import com.revature.services.BatchLogic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.SortDefault;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.data.web.SortDefault.SortDefaults;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.revature.domain.Batch;
-import com.revature.domain.Person;
-import com.revature.services.BatchLogic;
-import com.revature.services.PersonLogic;
-
+@CrossOrigin
 @RestController
 @RequestMapping(value = "/api/v1/")
 public class BatchController {
@@ -29,70 +23,47 @@ public class BatchController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "batches")
 	public ResponseEntity<Page<Batch>> getBatches(Pageable pageable) {
-		
 		return ResponseEntity.ok(batchLogic.getAllBatches(pageable));
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/batches/{id}")
-	public ResponseEntity<Batch> getBatch(@PathVariable("id") String id){
-			
+	@RequestMapping(method = RequestMethod.GET, value = "/batches/{batchId}")
+	public ResponseEntity<Batch> getBatch(@PathVariable String batchId){
+
+		Batch batch;
+
 		try{
-			int value = Integer.parseInt(id);
-			Batch batch = batchLogic.getBatchById(value);
-			if(batch != null){
-				return ResponseEntity.ok(batchLogic.getBatchById(value));
-			} else{
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}	
+			int value = Integer.parseInt(batchId);
+			batch = batchLogic.getBatchById(value);
 		} catch(NumberFormatException e){
-			Batch batch = batchLogic.getBatchByName(id);
-			if(batch != null){
-				return ResponseEntity.ok(batchLogic.getBatchByName(id));
-			} else{
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
-		}	
+			batch = batchLogic.getBatchByName(batchId);
+		}
+
+		return ResponseEntity.ok(batch);
 	} 
 	
-	@RequestMapping(method = RequestMethod.PUT, value = "/batches")
-	public ResponseEntity<Batch> updateBatch(@RequestBody Batch newBatch){
-		Batch batch = batchLogic.getBatchById(newBatch.getId());
-		if(batch != null){
-			batchLogic.updateBatch(newBatch);
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
-		} else{
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+	@RequestMapping(method = RequestMethod.DELETE, value = "/batches/{batchId}")
+	public ResponseEntity<String> deleteBatch(@PathVariable Integer batchId){
+		return ResponseEntity.ok(batchLogic.deleteBatch(batchId));
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE, value = "/batches/{id}")
-	public ResponseEntity<Batch> deleteBatch(@PathVariable("id") int id){
-		Batch batch = batchLogic.getBatchById(id);
-		if(batch != null){
-			batchLogic.deleteBatch(batch);
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
-		} else{
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
+	@RequestMapping(method = RequestMethod.PUT, value = "/batches/{batchId}")
+	public ResponseEntity<Batch> updateBatch(@PathVariable Integer batchId, @RequestBody Batch newBatch){
+		return ResponseEntity.ok(batchLogic.updateBatch(newBatch, batchId));
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/batches")
 	public ResponseEntity<Batch> createBatch(@RequestBody Batch newBatch){
-		Batch batch = batchLogic.getBatchByName(newBatch.getName());
-		if(batch != null){
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		} else{
-			batchLogic.createBatch(newBatch);
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
-		}
-		
+		return ResponseEntity.ok(batchLogic.createBatch(newBatch));
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/batches/{id}/members")
-	public ResponseEntity<Page<Person>> getAllBatchMembers(@PageableDefault(size=10) 
-		@SortDefaults({@SortDefault(sort="lastName"), @SortDefault(sort="firstName")}) 
-		Pageable pageable, @PathVariable("id") int id){
-		return ResponseEntity.ok(batchLogic.getAllPeopleByBatchId(pageable, id));
+	@RequestMapping(method = RequestMethod.POST, value = "/batches/{batchId}/members")
+	public ResponseEntity<Batch> addMembersToBatch(@PathVariable Integer batchId, @RequestBody Integer[] personIds){
+		return ResponseEntity.ok(batchLogic.addPersonsToBatch(batchId, personIds));
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "/batches/{batchId}/members")
+	public ResponseEntity<Batch> removeMembersFromBatch(@PathVariable Integer batchId, @RequestBody Integer[] personIds){
+		return ResponseEntity.ok(batchLogic.removePersonsFromBatch(batchId, personIds));
 	}
 		
 	

@@ -1,12 +1,13 @@
 package com.revature.services;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
-import javax.persistence.EntityNotFoundException;
-import javax.validation.ConstraintViolationException;
-
+import com.revature.domain.Person;
+import com.revature.domain.PersonRole;
+import com.revature.repositories.PersonRepository;
+import com.revature.validation.JsonValidation;
+import com.revature.validation.exceptions.NotFoundException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,10 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.revature.domain.Person;
-import com.revature.domain.PersonRole;
-import com.revature.repositories.PersonRepository;
-import com.revature.repositories.PersonRoleRepository;
 
 
 @Service
@@ -28,7 +25,10 @@ public class PersonLogicImpl implements PersonLogic {
 	private PersonRepository dao;
 	
 	@Autowired
-	private PersonRoleRepository daoRole;
+    private JsonValidation validation;
+	
+	@PersistenceContext
+    private EntityManager entityManager;
 	
 	@Override
 	public Page<Person> getPersonByFirstName(Pageable pageable, String firstName) {
@@ -44,34 +44,14 @@ public class PersonLogicImpl implements PersonLogic {
 	}
 
 	@Override
-	public Page<Person> getAllTrainees(Pageable pageable) {
-		PersonRole personRole = new PersonRole(1, "Trainee");
-		return dao.findAllByPersonRole(pageable, personRole);
-
-	}
-
-	@Override
-	public Page<Person> getAllTrainers(Pageable pageable) {
-		PersonRole personRole = new PersonRole(2, "Trainer");
-		return dao.findAllByPersonRole(pageable, personRole);
-
-	}
-
-	@Override
 	public Person getPersonById(int id)  {
+		Person person = dao.findOne(id);
 		
-		Person p = null;
+		if (person == null) {
+            throw new NotFoundException("Person with id " + id + " does not exist");
+        }
 		
-		try {
-			
-			p = dao.findOne(id);
-			
-		} catch (EntityNotFoundException e) {
-			
-			return p;
-		}
-		
-		return p;
+		return person;
 	}
 
 	@Override
@@ -81,8 +61,20 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Override
 	public Person updatePerson(Person p) {
-		dao.save(p);
-		return p;
+		Person updatedPerson = getPersonById(p.getId());
+		if (p.getFirstName() != null) {
+			updatedPerson.setFirstName(p.getFirstName());
+		}
+		if (p.getLastName() != null) {
+			updatedPerson.setLastName(p.getLastName());
+		}
+		if (p.getPersonRole() != null) {
+			validation.validatePersonRoleExists(p.getPersonRole().getId());
+			updatedPerson.setPersonRole(p.getPersonRole());
+		}
+		dao.saveAndFlush(updatedPerson);
+		entityManager.refresh(updatedPerson);
+		return updatedPerson;
 	}
 	
 
@@ -99,60 +91,17 @@ public class PersonLogicImpl implements PersonLogic {
 
 	@Override
 	public Person createPerson(Person person) {
-		
-		List<Integer> roleIds = new ArrayList<>();
-		List<PersonRole> roleList = daoRole.findAll();
-		System.out.println(roleList);
-				
-		Iterator<PersonRole> iterator = roleList.iterator();
-		
-		while(iterator.hasNext()) {
-			PersonRole role = iterator.next();
-			roleIds.add(role.getId());
-		}
-		
-		System.out.println(roleIds);
-		
-		
-		if (person.getFirstName() == null) {
-			throw new ConstraintViolationException("Missing required field firstName (String)", null);
-		}
-		
-		if (person.getLastName() == null) {
-			throw new ConstraintViolationException("Missing required field lastName (String)", null);
-		}
-		if (person.getPersonRole() == null) {
-			throw new ConstraintViolationException("Missing required field PersonRole (PersonRole)", null);
-		}
-		
-		boolean isValid = false;
-		
-
-		for (Integer roll : roleIds) {
-				
-			if (person.getPersonRole().getId() == roll) {
-					
-				isValid = true;
-			} 
-				
-		}	
-		
-		if (!isValid) {
-			
-			throw new ConstraintViolationException("Invalid field personRole (PersonRole)", null);
-		}		
-				
-		dao.save(person);
+		validation.validateIdNotSpecified(person.getId());
+		validation.validatePersonFields(person);				
+		dao.saveAndFlush(person);
+		entityManager.refresh(person);
 		return person;
 	}
 
 	@Override
 	public Page<Person> getAllPersonsByPersonRole(Pageable pageable, PersonRole personRole) {
 		
-		if(personRole == null){
-			throw new ConstraintViolationException("Invalid PersonRole Field", null);
-		}
-		
+		validation.validatePersonRole(personRole);	
 		return dao.findAllByPersonRole(pageable, personRole);
 	}
 

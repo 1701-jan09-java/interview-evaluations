@@ -3,7 +3,6 @@ package com.revature.services;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.revature.domain.Batch;
 import com.revature.domain.Person;
 import com.revature.domain.PersonRole;
 
@@ -20,8 +19,6 @@ public interface PersonLogic {
 	Page<Person> getPersonByLastName(Pageable pageable, String lastName);
 	Person getPersonById(int id);
 	Page<Person> getAllPersonsByPersonRole(Pageable pageable, PersonRole personRole);
-	Page<Person> getAllTrainees(Pageable pageable);
-	Page<Person> getAllTrainers(Pageable pageable);
 	Page<Person> getPersonsByFirstnameAndPersonRole(Pageable pageable, String firstname, PersonRole personRole);
 	Page<Person> getPersonsByLastnameAndPersonRole(Pageable pageable, String firstname, PersonRole personRole);
 	Page<Person> getPersonsByFirstnameAndLastnameAndPersonRole(Pageable pageable, String firstname, String lastname, PersonRole personRole);

@@ -1,9 +1,7 @@
 package com.revature.domain;
 
-import java.io.Serializable;
-import java.util.List;
-
-import javax.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,26 +13,24 @@ import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 @Entity
 @Table(name="ie_batch")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Batch implements Serializable  {
+public class Batch {
 
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="batch_sequence")
 	@SequenceGenerator(allocationSize=1, name="batch_sequence", sequenceName="batch_seq")
 	@Column(name="b_id")
-	private int id;
+	private Integer id;
 	
 	@Column(name="b_name")
 	private String name;
 	
-	@ManyToMany(cascade=CascadeType.ALL)
+	@ManyToMany
 	@JoinTable(name="ie_person_batch", joinColumns=@JoinColumn(name="batch_id"), inverseJoinColumns=@JoinColumn(name="person_id"))
-	private List<Person> persons;
+	private Set<Person> persons;
 
 	public Batch() {}
 		
@@ -43,19 +39,19 @@ public class Batch implements Serializable  {
 		this.name = name;
 	}
 	
-	public List<Person> getPersons(){
+	public Set<Person> getPersons(){
 		return persons;
 	}
 	
-	public void setPersons(List<Person> people){
+	public void setPersons(Set<Person> people){
 		this.persons = people;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
