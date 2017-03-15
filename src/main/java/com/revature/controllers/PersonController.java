@@ -1,9 +1,11 @@
 package com.revature.controllers;
 
+import com.revature.domain.Person;
+import com.revature.services.PersonLogic;
+import com.revature.services.PersonRoleLogic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,10 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.revature.domain.Person;
-import com.revature.services.PersonLogic;
-import com.revature.services.PersonRoleLogic;
 
 @CrossOrigin
 @RestController
@@ -28,23 +26,9 @@ public class PersonController {
 	@Autowired
 	private PersonRoleLogic pRLogic;
 	
-	@RequestMapping(method = RequestMethod.GET, value = "persons/{id}")
-		public ResponseEntity<Person> getPersonById(@PathVariable("id") Integer id ){
-
-			Person person = personLogic.getPersonById(id);
-		
-			
-			if (person != null) {
-				
-				return ResponseEntity.ok(person);
-				
-			} else {
-				
-				System.out.println("ERROR!");				
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
-			
-			
+	@RequestMapping(method = RequestMethod.GET, value = "persons/{personId}")
+		public ResponseEntity<Person> getPersonById(@PathVariable Integer personId ){
+			return ResponseEntity.ok(personLogic.getPersonById(personId));
 	}
 		
 	
@@ -123,54 +107,21 @@ public class PersonController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "persons")
 	public ResponseEntity<Person> createPerson(@RequestBody Person newPerson){
-		
-		Person checker = personLogic.getPersonById(newPerson.getId());
-		if (checker != null){
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		} else {
-			System.out.println(newPerson);	
-			personLogic.createPerson(newPerson);
-			return ResponseEntity.ok(newPerson);
-		}
+		return ResponseEntity.ok(personLogic.createPerson(newPerson));
 	}
 	
-	
-
-	
-	@RequestMapping(method = RequestMethod.PUT, value = "persons")
-	public ResponseEntity<Person> modifyPerson(@RequestBody Person updatedPerson){
-	
-		Person person = personLogic.getPersonById(updatedPerson.getId());
-		
-		if(person != null) {			
-			personLogic.updatePerson(updatedPerson);
-			return ResponseEntity.ok(updatedPerson);			
-		} else {			
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
+	@RequestMapping(method = RequestMethod.PUT, value = "persons/{personId}")
+	public ResponseEntity<Person> modifyPerson(@RequestBody Person updatedPerson, @PathVariable Integer personId){
+		updatedPerson.setId(personId);
+		return ResponseEntity.ok(personLogic.updatePerson(updatedPerson));
 				
-		
-
-		
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE, value = "persons/{pId}")
-	public ResponseEntity<Person> deletePerson(@PathVariable("pId") Integer pId){
+	@RequestMapping(method = RequestMethod.DELETE, value = "persons/{personId}")
+	public ResponseEntity<Person> deletePerson(@PathVariable Integer personId){
 	
-			Person pers = personLogic.getPersonById(pId);
-			
-			if (pers != null) {
-				personLogic.deletePerson(pers);
-				return ResponseEntity.ok(pers);
-			} else {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
-			
-			
-			
+			Person pers = personLogic.getPersonById(personId);
+			personLogic.deletePerson(pers);
+			return ResponseEntity.ok(pers);	
 	}
-	
-	
-	
-
 }
