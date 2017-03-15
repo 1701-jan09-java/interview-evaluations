@@ -1,7 +1,11 @@
 package com.revature.validation;
 
+
+import com.revature.domain.Batch;
 import com.revature.domain.Eval;
 import com.revature.domain.EvalComment;
+import com.revature.domain.Person;
+import com.revature.domain.PersonRole;
 import com.revature.domain.QuestionComment;
 import com.revature.domain.QuestionEval;
 import com.revature.domain.QuestionPool;
@@ -9,6 +13,7 @@ import com.revature.repositories.BatchRepository;
 import com.revature.repositories.EvalRepository;
 import com.revature.repositories.EvalTypeRepository;
 import com.revature.repositories.PersonRepository;
+import com.revature.repositories.PersonRoleRepository;
 import com.revature.repositories.QuestionCommentRepository;
 import com.revature.repositories.QuestionEvalRepository;
 import com.revature.repositories.QuestionRepository;
@@ -43,6 +48,10 @@ public class JsonValidation {
 
     @Autowired
     private BatchRepository batchDao;
+    
+    @Autowired
+	private PersonRoleRepository personRoleDao;
+    
 
     public void validateQuestionPoolFields(QuestionPool question) {
 
@@ -195,7 +204,35 @@ public class JsonValidation {
                     + " [QuestionPool id: " + qp.getId() + "]", null);
         }
     }
-
+	
+	public void validateBatchFields(Batch batch) {
+		
+		validateIdNotSpecified(batch.getId());
+		
+		if (batch.getName() == null) {
+			throw new ConstraintViolationException("Missing required field "
+                    + "name (String)", null);
+		}
+	}
+	
+	public void validatePersonFields(Person person){
+		
+		if (person.getFirstName() == null || "".equals(person.getFirstName())) {
+			throw new ConstraintViolationException("Missing required field firstName (String)", null);
+		}
+		
+		if (person.getLastName() == null || "".equals(person.getLastName())) {
+			throw new ConstraintViolationException("Missing required field lastName (String)", null);
+		}
+		
+		if (person.getPersonRole() == null) {
+			throw new ConstraintViolationException("Missing required field personRole.id (Integer)", null);
+		}
+		
+		validatePersonRoleExists(person.getPersonRole().getId());
+    	
+    }
+    
     public void validateIdNotSpecified(Integer id) {
         if(id != null && id != 0) {
 			throw new ConstraintViolationException("Id is automatically "
@@ -258,5 +295,47 @@ public class JsonValidation {
                     "Question with id " + qpId + " does not exist",null);
         }
     }
+
+	public void validatePersonRoleExists(Integer id) {
+		if (personRoleDao.findOne(id) == null) {
+			throw new ConstraintViolationException("PersonRole with id " 
+					+ id + "does not exist", null);
+		}
+	}
+	
+    public void validatePersonRole(PersonRole personRole){
+    	
+    	if(personRole == null){
+			throw new ConstraintViolationException("Invalid PersonRole Field", null);
+		}		
+    }
+	
+    
+    public void validatePersonById(int id){
+        if (personDao.findOne(id) == null) {
+            throw new ConstraintViolationException(
+                    "Person with id " + id + " does not exist",null);
+        }
+    }
+
+	public void validateTraineeInBatch(Integer personId, Integer batchId) {
+		Person person = personDao.findOne(personId);
+		Batch batch = batchDao.findOne(batchId);
+        if (!batch.getPersons().contains(person)) {
+			throw new ConstraintViolationException("Trainee with id " + personId
+                    + " is not in batch " + batchId, null); 
+		}
+	}
+	
+	public void validateIntegerArray(Integer[] integers) {
+		if (integers.length == 0) {
+			throw new ConstraintViolationException("Array can not be empty",null);
+		} 
+		for (Integer integer : integers) {
+			if (integer == null) {
+				throw new ConstraintViolationException("Id can not be null",null);
+			}
+		}
+	}
 
 }
