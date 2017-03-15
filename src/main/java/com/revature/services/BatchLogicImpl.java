@@ -59,7 +59,7 @@ public class BatchLogicImpl implements BatchLogic {
 	public String deleteBatch(Integer id) {
 		Batch batch = getBatchById(id);
 		dao.delete(batch);
-		return "Batch: " + id + " - DELETED";
+		return "{\"text\":\"Batch: " + batch.getName() + " - DELETED\"}";
 	}
 	
 	@Override

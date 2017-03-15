@@ -242,7 +242,7 @@ public class EvalLogicImpl implements EvalLogic {
 		Eval eval = getEvalById(id);
 
 		dao.delete(eval);
-		return "Evaluation: " + id + " - DELETED";
+		return "{\"text\":\"Evaluation: " + id + " - DELETED\"}";
 	}
 	
 	@Override
@@ -251,7 +251,7 @@ public class EvalLogicImpl implements EvalLogic {
 		EvalComment comment = getCommentById(id);
 				
 		commentDao.delete(comment);
-		return "Evaluation Comment: " + id + " - DELETED";
+		return "{\"text\":\"Evaluation Comment: " + id + " - DELETED\"}";
 	}
 
     // private utility methods
