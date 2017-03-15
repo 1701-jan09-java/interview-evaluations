@@ -5,6 +5,7 @@ import java.sql.Date;
 
 import javax.persistence.*;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="ie_question_pool")
 public class QuestionPool implements Serializable {
