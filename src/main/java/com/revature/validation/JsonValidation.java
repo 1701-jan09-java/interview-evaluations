@@ -1,6 +1,11 @@
 package com.revature.validation;
 
 
+import javax.validation.ConstraintViolationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.revature.domain.Batch;
 import com.revature.domain.Eval;
 import com.revature.domain.EvalComment;
@@ -9,6 +14,7 @@ import com.revature.domain.PersonRole;
 import com.revature.domain.QuestionComment;
 import com.revature.domain.QuestionEval;
 import com.revature.domain.QuestionPool;
+import com.revature.domain.Subject;
 import com.revature.repositories.BatchRepository;
 import com.revature.repositories.EvalRepository;
 import com.revature.repositories.EvalTypeRepository;
@@ -18,9 +24,6 @@ import com.revature.repositories.QuestionCommentRepository;
 import com.revature.repositories.QuestionEvalRepository;
 import com.revature.repositories.QuestionRepository;
 import com.revature.repositories.SubjectRepository;
-import javax.validation.ConstraintViolationException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class JsonValidation {
@@ -335,6 +338,12 @@ public class JsonValidation {
 			if (integer == null) {
 				throw new ConstraintViolationException("Id can not be null",null);
 			}
+		}
+	}
+	
+	public void validateSubjectFields(Subject subject){
+		if (subject.getSubject() == null || "".equals(subject.getSubject())) {
+			throw new ConstraintViolationException("Missing required field subject (String)", null);
 		}
 	}
 
