@@ -12,7 +12,7 @@ public interface PersonLogic {
 
 	Person createPerson(Person person);
 
-	void deletePerson(Person person);
+	String deletePerson(int id);
 	Person updatePerson(Person p); 
 	Page<Person> getAllPersons(Pageable pageable);
 	Page<Person> getPersonByFirstName(Pageable pageable, String firstName);
