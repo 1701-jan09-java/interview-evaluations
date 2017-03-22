@@ -76,10 +76,7 @@ public class PersonController {
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "persons/{personId}")
-	public ResponseEntity<Person> deletePerson(@PathVariable Integer personId){
-	
-			Person pers = personLogic.getPersonById(personId);
-			personLogic.deletePerson(pers);
-			return ResponseEntity.ok(pers);	
+	public ResponseEntity<String> deletePerson(@PathVariable Integer personId){
+			return ResponseEntity.ok(personLogic.deletePerson(personId));	
 	}
 }

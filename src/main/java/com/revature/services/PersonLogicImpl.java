@@ -80,8 +80,10 @@ public class PersonLogicImpl implements PersonLogic {
 
 
 	@Override
-	public void deletePerson(Person p) {
-		dao.delete(p.getId());
+	public String deletePerson(int id) {
+		Person pers = getPersonById(id);
+		dao.delete(id);
+		return "{\"text\":\"Person: " + id + " - DELETED\"}";
 	}
 
 	@Override
