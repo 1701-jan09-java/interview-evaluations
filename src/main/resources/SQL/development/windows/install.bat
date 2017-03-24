@@ -1,7 +1,7 @@
 @echo off
 echo.
 
-REM set location of sql files
+REM set location of sql files 
 set sql_dir=%~dp0\sql
 
 REM check if postgres executables are on the path, prompt for directory if not
