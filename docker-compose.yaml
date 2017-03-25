@@ -10,7 +10,8 @@ services:
       - POSTGRES_PASSWORD=p4ssw0rd
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - ./sql:/docker-entrypoint-initdb.d       
+      - ./sql:/docker-entrypoint-initdb.d
+      - ./pgdata:/var/lib/postgresql/data/pgdata
   api:
     build: .
     ports:

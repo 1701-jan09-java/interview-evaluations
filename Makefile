@@ -1,23 +1,24 @@
-CONTAINER_ID = $(shell docker ps -aq --filter "name=inteval-dev")
+dev-api: build
+	docker-compose stop -t 0 api
+	docker-compose build api
+	docker-compose up -d api
 
-run: build stop
-	docker run --rm -d \
-	--name inteval-dev \
-	-p 8080:8080 \
-	-e INTEVAL_URL=$(INTEVAL_URL) \
-	-e INTEVAL_USER=$(INTEVAL_USER) \
-	-e INTEVAL_PASS=$(INTEVAL_PASS) \
-	revature/interview-evaluations:0.1
-
-stop:
-	docker rm -vf $(CONTAINER_ID) || true
+up: build
+	docker-compose up -d
 
 build:
 	mvn clean package -DskipTests=true
-	docker build -t revature/interview-evaluations:0.1 .
-	
+
 test:
 	mvn test
 
-init:
-	. src/main/resources/SQL/development/bash/pg_evaluations_install.sh 
+logs:
+	docker-compose logs -f api
+
+down:
+	docker-compose down
+
+clean: down
+	mvn clean
+	rm -rf pgdata/
+
