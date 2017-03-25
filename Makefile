@@ -20,8 +20,4 @@ test:
 	mvn test
 
 init:
-ifeq ($(OS),Windows_NT)
-	  . src/main/resources/SQL/development/windows/install.bat 
-else 
-	  . src/main/resources/SQL/development/bash/pg_evaluations_install.sh 
-endif
+  . src/main/resources/SQL/development/bash/pg_evaluations_install.sh 

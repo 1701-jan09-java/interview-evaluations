@@ -31,8 +31,8 @@ while true; do
     read -p "Set environment variables for database connection? (y/n): " yn
     case $yn in
         [Yy]* )
-			sed -i '' '/INTEVAL/d' ~/.bash_profile 
-			sed -i '' '/Evaluations Database environment variables/d' ~/.bash_profile
+			sed -i'.bak' '/INTEVAL/d' ~/.bash_profile 
+			sed -i'.bak' '/Evaluations Database environment variables/d' ~/.bash_profile
 			export INTEVAL_USER=evaluations
 			export INTEVAL_PASS=p4ssw0rd
 			export INTEVAL_URL=jdbc:postgresql://localhost:5432/evaluations
@@ -42,4 +42,3 @@ while true; do
         * ) echo "Please answer yes or no.";;
     esac
 done
-

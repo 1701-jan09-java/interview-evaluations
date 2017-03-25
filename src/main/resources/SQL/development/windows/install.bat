@@ -2,17 +2,24 @@
 echo.
 
 REM set location of sql files
-set sql_dir=%~dp0\sql
+set sql_dir=%~dp0sql
 
 REM check if postgres executables are on the path, prompt for directory if not
 where /q psql
 IF ERRORLEVEL 1 (
-    set /p pg_dir="Enter postgres root directory (e.g. "C:\Program Files\PostgreSQL\9.6"): "
-	set pg_bin=%pg_dir%"\bin
+    REM cmd does not set variables until after if block, so need to do this outside of block
+    goto :prompt_dir
 ) ELSE (
-	for /f "delims=" %%F in ('where psql') do set var=%%F
-    set pg_bin="
+    goto :no_prompt_dir
 )
+
+:prompt_dir
+    set /p pg_dir="Enter postgres root directory (e.g. C:\Program Files\PostgreSQL\9.6): "
+    REM Strip quotes
+    set pg_dir=%pg_dir:"=%
+	set PATH=%PATH%;%pg_dir%\bin
+
+:no_prompt_dir
 
 REM Prompt for postgres admin username and password
 set /p PGUSER="Enter postgres Admin Username: "
@@ -21,12 +28,12 @@ set PGPASSWORD=%password%
 echo.
 
 REM run sql commands to drop database and user if existing, create database, user, and tables, and fill tables
-%pg_bin%\psql" -d evaluations -a -f %sql_dir%\pg_kill_connections.sql
-%pg_bin%\dropdb" --if-exists evaluations
-%pg_bin%\psql" -d postgres -a -f %sql_dir%\pg_create_user.sql
-%pg_bin%\createdb" -O evaluations evaluations
-%pg_bin%\psql" -d evaluations -a -f %sql_dir%\pg_create_tables.sql
-%pg_bin%\psql" -d evaluations -a -f %sql_dir%\pg_fill_tables.sql
+psql -d evaluations -a -f %sql_dir%\pg_kill_connections.sql
+dropdb --if-exists evaluations
+psql -d postgres -a -f %sql_dir%\pg_create_user.sql
+createdb -O evaluations evaluations
+psql -d evaluations -a -f %sql_dir%\pg_create_tables.sql
+psql -d evaluations -a -f %sql_dir%\pg_fill_tables.sql
 echo.
 echo.
 
