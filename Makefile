@@ -20,4 +20,4 @@ test:
 	mvn test
 
 init:
-  . src/main/resources/SQL/development/bash/pg_evaluations_install.sh 
+	. src/main/resources/SQL/development/bash/pg_evaluations_install.sh 
