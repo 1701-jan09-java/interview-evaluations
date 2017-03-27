@@ -20,5 +20,5 @@ down:
 
 clean: down
 	mvn clean
-	rm -rf pgdata/
+	docker volume rm interviewevaluations_pgdata
 

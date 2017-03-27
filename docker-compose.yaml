@@ -11,7 +11,7 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - ./sql:/docker-entrypoint-initdb.d
-      - ./pgdata:/var/lib/postgresql/data/pgdata
+      - pgdata:/var/lib/postgresql/data/pgdata
   api:
     build: .
     ports:
@@ -22,5 +22,7 @@ services:
       - INTEVAL_PASS=p4ssw0rd
     depends_on:
       - db
+volumes:
+  pgdata:
 
 
