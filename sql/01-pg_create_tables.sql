@@ -81,7 +81,7 @@ CREATE TABLE ie_eval_comment
 (
 	ec_id INT4 PRIMARY KEY,
 	ec_text VARCHAR(5000) NOT NULL,
-	ec_eid INT4 NOT NULL, FOREIGN KEY(ec_eid) REFERENCES ie_eval(e_id)
+	ec_eid INT4 NOT NULL, FOREIGN KEY(ec_eid) REFERENCES ie_eval(e_id) ON DELETE CASCADE
 );
 
 CREATE TABLE ie_person_batch
