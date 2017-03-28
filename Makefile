@@ -26,6 +26,9 @@ test:
 
 logs:
 	docker-compose logs -f api
+	
+logs-db:
+	docker-compose logs -f db
 
 down:
 	docker-compose down
@@ -33,4 +36,3 @@ down:
 clean: down
 	mvn clean
 	docker volume rm interviewevaluations_pgdata
-
