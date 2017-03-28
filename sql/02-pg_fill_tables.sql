@@ -150,6 +150,8 @@ INSERT INTO ie_eval (e_id, e_week, e_date, e_eval_type, e_pid_trainee, e_batch) 
 INSERT INTO ie_eval (e_id, e_week, e_date, e_eval_type, e_pid_trainee, e_batch) VALUES (36, 5, '2017-02-13', 1, 3, 4);
 
 -- ie_eval_comment
+INSERT INTO ie_eval_comment (ec_id, ec_text, ec_eid) VALUES (1, 'Needs to work on core java.', 1);
+INSERT INTO ie_eval_comment (ec_id, ec_text, ec_eid) VALUES (2, 'Re-evaluate on SOAP.', 36);
 
 -- ie_question_eval
 INSERT INTO ie_question_eval (qe_id, qe_communication_score, qe_knowledge_score, qe_eid, qe_qpid) VALUES (1, 20, 17, 1, 1);
@@ -200,6 +202,14 @@ INSERT INTO ie_question_eval (qe_id, qe_communication_score, qe_knowledge_score,
 INSERT INTO ie_question_eval (qe_id, qe_communication_score, qe_knowledge_score, qe_eid, qe_qpid) VALUES (43, 20, 20, 34, 13);
 INSERT INTO ie_question_eval (qe_id, qe_communication_score, qe_knowledge_score, qe_eid, qe_qpid) VALUES (44, 5, 10, 34, 15);
 
--- add qc/panel
+INSERT INTO ie_question_eval (qe_id, qe_communication_score, qe_knowledge_score, qe_eid, qe_qpid) VALUES (45, 20, 20, 2, 2);
+INSERT INTO ie_question_eval (qe_id, qe_communication_score, qe_knowledge_score, qe_eid, qe_qpid) VALUES (46, 0, 0, 4, 3);
+INSERT INTO ie_question_eval (qe_id, qe_communication_score, qe_knowledge_score, qe_eid, qe_qpid) VALUES (47, 25, 25, 6, 3);
+
+INSERT INTO ie_question_eval (qe_id, qe_communication_score, qe_knowledge_score, qe_eid, qe_qpid) VALUES (48, 20, 20, 9, 5);
+INSERT INTO ie_question_eval (qe_id, qe_communication_score, qe_knowledge_score, qe_eid, qe_qpid) VALUES (49, 17, 20, 18, 11);
+INSERT INTO ie_question_eval (qe_id, qe_communication_score, qe_knowledge_score, qe_eid, qe_qpid) VALUES (50, 0, 0, 27, 17);
+INSERT INTO ie_question_eval (qe_id, qe_communication_score, qe_knowledge_score, qe_eid, qe_qpid) VALUES (51, 8, 8, 36, 20);
 
 -- ie_question_comment
+INSERT INTO ie_question_comment (qc_id, qc_comment_text, qc_eid) VALUES (1, 'Knew what it was but not how to implement it.', 1);
