@@ -64,7 +64,7 @@ CREATE TABLE ie_person
 	p_id INT4 PRIMARY KEY,
 	p_firstname VARCHAR(5000) NOT NULL,
 	p_lastname VARCHAR(5000) NOT NULL,
-	p_role INT4 NOT NULL, FOREIGN KEY(p_role) REFERENCES ie_person_role(pr_id)
+	p_role INT4 NOT NULL, FOREIGN KEY(p_role) REFERENCES ie_person_role(pr_id) ON DELETE CASCADE
 );
 
 CREATE TABLE ie_eval
@@ -72,9 +72,9 @@ CREATE TABLE ie_eval
 	e_id INT4 PRIMARY KEY,
 	e_week INT4 NOT NULL,
 	e_date DATE NOT NULL,
-	e_eval_type INT4 NOT NULL,FOREIGN KEY(e_eval_type) REFERENCES ie_eval_type(et_id),
-	e_pid_trainee INT4 NOT NULL, FOREIGN KEY(e_pid_trainee) REFERENCES ie_person(p_id),
-	e_batch INT4 NOT NULL, FOREIGN KEY(e_batch) REFERENCES ie_batch(b_id)
+	e_eval_type INT4 NOT NULL,FOREIGN KEY(e_eval_type) REFERENCES ie_eval_type(et_id) ON DELETE CASCADE,
+	e_pid_trainee INT4 NOT NULL, FOREIGN KEY(e_pid_trainee) REFERENCES ie_person(p_id) ON DELETE CASCADE,
+	e_batch INT4 NOT NULL, FOREIGN KEY(e_batch) REFERENCES ie_batch(b_id) ON DELETE CASCADE
 );
 
 CREATE TABLE ie_eval_comment
@@ -87,8 +87,8 @@ CREATE TABLE ie_eval_comment
 CREATE TABLE ie_person_batch
 (
 	join_id INT4 DEFAULT nextval('person_batch_seq'::regclass) PRIMARY KEY,
-	person_id INT4 NOT NULL, FOREIGN KEY(person_id) REFERENCES ie_person(p_id),
-	batch_id INT4 NOT NULL, FOREIGN KEY(batch_id) REFERENCES ie_batch(b_id)
+	person_id INT4 NOT NULL, FOREIGN KEY(person_id) REFERENCES ie_person(p_id) ON DELETE CASCADE,
+	batch_id INT4 NOT NULL, FOREIGN KEY(batch_id) REFERENCES ie_batch(b_id) ON DELETE CASCADE
 );
 
 CREATE TABLE ie_subject
@@ -103,7 +103,7 @@ CREATE TABLE ie_question_pool
 	qp_question_text VARCHAR(5000) NOT NULL,
 	qp_max_communication_score INT4 NOT NULL,
 	qp_max_knowledge_score INT4 NOT NULL,
-	qp_sid INT4 NOT NULL, FOREIGN KEY(qp_sid) REFERENCES ie_subject(s_id),
+	qp_sid INT4 NOT NULL, FOREIGN KEY(qp_sid) REFERENCES ie_subject(s_id) ON DELETE CASCADE,
 	qp_count INT4 DEFAULT 0 NOT NULL,
 	qp_last_date_used DATE
 );
@@ -113,13 +113,13 @@ CREATE TABLE ie_question_eval
 	qe_id INT4 PRIMARY KEY,
 	qe_communication_score INT4 NOT NULL,
 	qe_knowledge_score INT4 NOT NULL,
-	qe_eid INT4 NOT NULL, FOREIGN KEY(qe_eid) REFERENCES ie_eval(e_id),
-	qe_qpid INT4 NOT NULL, FOREIGN KEY(qe_qpid) REFERENCES ie_question_pool(qp_id)
+	qe_eid INT4 NOT NULL, FOREIGN KEY(qe_eid) REFERENCES ie_eval(e_id) ON DELETE CASCADE,
+	qe_qpid INT4 NOT NULL, FOREIGN KEY(qe_qpid) REFERENCES ie_question_pool(qp_id) ON DELETE CASCADE
 );
 
 CREATE TABLE ie_question_comment
 (
 	qc_id INT4 PRIMARY KEY,
 	qc_comment_text VARCHAR(5000) NOT NULL,
-	qc_eid INT4 NOT NULL, FOREIGN KEY(qc_eid) REFERENCES ie_question_eval(qe_id)
+	qc_eid INT4 NOT NULL, FOREIGN KEY(qc_eid) REFERENCES ie_question_eval(qe_id) ON DELETE CASCADE
 );
