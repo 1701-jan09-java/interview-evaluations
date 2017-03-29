@@ -1,0 +1,28 @@
+version: '3'
+services:
+  db:
+    image: postgres:9.5
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=evaluations
+      - POSTGRES_USER=evaluations
+      - POSTGRES_PASSWORD=p4ssw0rd
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data/pgdata
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - INTEVAL_URL=jdbc:postgresql://db:5432/evaluations
+      - INTEVAL_USER=evaluations
+      - INTEVAL_PASS=p4ssw0rd
+    depends_on:
+      - db
+volumes:
+  pgdata:
+
+
