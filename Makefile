@@ -1,24 +1,20 @@
-dev-api: build
-	docker-compose stop -t 0 api
-	docker-compose build api
+dev: build
 	docker-compose up -d api
 	
-run-i: build
-	docker-compose stop -t 0 api
-	docker-compose build api
+dev-i: build
 	docker-compose up api
 
 up: build
-	docker-compose up -d db
-	sleep 10
-	docker-compose up -d api
+	docker-compose up -d
 	
 up-i: build
-	docker-compose up db &
-	sleep 10
-	docker-compose up api
+	docker-compose up
 
-build:
+build: build-maven
+	docker-compose stop -t 0 api
+	docker-compose build api
+
+build-maven:
 	mvn clean package -DskipTests=true
 
 test:
@@ -29,6 +25,9 @@ logs:
 	
 logs-db:
 	docker-compose logs -f db
+
+logs-all:
+	docker-compose logs -f
 
 down:
 	docker-compose down
